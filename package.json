@@ -37,6 +37,7 @@
     "lucide-react": "^1.48.0",
     "motion": "^13.4.2",
     "next": "15.5.26",
+    "pdfjs-dist": "5",
     "pg-boss": "^12.34.0",
     "postgres": "^3.4.9",
     "react": "19",
