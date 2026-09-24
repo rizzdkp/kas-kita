@@ -84,7 +84,7 @@ export default async function LaporanPage({ searchParams }: PageProps) {
         />
       </div>
 
-      <TrendSection trend={r.trend} month={month} />
+      {process.env.KK_EXP ? null : <TrendSection trend={r.trend} month={month} />}
     </div>
   );
 }
