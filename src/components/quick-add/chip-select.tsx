@@ -31,11 +31,7 @@ export function ChipSelect({ field, value, onValueChange, groups, missing, missi
       <SelectPrimitive.Trigger
         aria-label={field}
         data-missing={missing || undefined}
-        className={cn(
-          chipClassName,
-          missing && "border border-dashed border-error text-error hover:bg-error/10",
-          disabled && "pointer-events-none",
-        )}
+        className={cn(chipClassName(missing), disabled && "pointer-events-none")}
       >
         {missing ? (
           <>

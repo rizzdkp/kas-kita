@@ -20,7 +20,7 @@ type FlowSectionProps = {
 };
 
 function ChangeLine({ percent, comparedTo }: { percent: number | null; comparedTo: string }) {
-  if (percent === null) return <span className="text-small text-secondary">Belum ada data {comparedTo}</span>;
+  if (percent === null) return <span className="text-small text-secondary">Tidak ada di {comparedTo}</span>;
   return <Delta percent={percent} comparedTo={comparedTo} />;
 }
 

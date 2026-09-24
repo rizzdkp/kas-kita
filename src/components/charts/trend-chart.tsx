@@ -1,7 +1,8 @@
 "use client";
 
-import { useId } from "react";
-import { Bar, BarChart, Cell, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { useEffect, useId, useState } from "react";
+import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import type { XAxisTickContentProps } from "recharts";
 import { formatCompact, formatRupiah, toSafeNumber } from "@/lib/money";
 import { ChartTooltipCard, ChartTooltipRow } from "./chart-tooltip";
 
@@ -21,6 +22,18 @@ function axisMoney(v: number): string {
   return formatCompact(BigInt(Math.round(v)));
 }
 
+function useNarrow(): boolean {
+  const [narrow, setNarrow] = useState(false);
+  useEffect(() => {
+    const query = window.matchMedia("(max-width: 599px)");
+    const update = () => setNarrow(query.matches);
+    update();
+    query.addEventListener("change", update);
+    return () => query.removeEventListener("change", update);
+  }, []);
+  return narrow;
+}
+
 /** Contoh warna seri di legenda dan tooltip: pemasukan isi penuh, pengeluaran garis putus-putus. */
 export function SeriesSwatch({ series }: { series: "income" | "expense" }) {
   return series === "income" ? (
@@ -33,6 +46,8 @@ export function SeriesSwatch({ series }: { series: "income" | "expense" }) {
 /** Tren 12 bulan: pemasukan text-primary, pengeluaran text-secondary berarsir dan bergaris putus-putus (DESIGN 8). */
 export function TrendChart({ points, summary, selected }: { points: TrendPoint[]; summary: string; selected: string }) {
   const hatchId = `hatch-${useId().replace(/:/g, "")}`;
+  const narrow = useNarrow();
+  const selectedIndex = points.findIndex((p) => p.month === selected);
   const rows: Row[] = points.map((p) => ({
     month: p.month,
     axisLabel: p.axisLabel,
@@ -66,8 +81,23 @@ export function TrendChart({ points, summary, selected }: { points: TrendPoint[]
               dataKey="axisLabel"
               tickLine={false}
               axisLine={false}
-              tick={{ fill: "var(--text-secondary)", fontSize: 12 }}
-              tickMargin={8}
+              tick={({ x, y, payload }: XAxisTickContentProps) =>
+                // layar sempit: label tiap 3 bulan dihitung mundur dari bulan terpilih supaya tidak bertumpuk
+                narrow && (selectedIndex - payload.index) % 3 !== 0 ? (
+                  <g />
+                ) : (
+                <text
+                  x={x}
+                  y={Number(y) + 12}
+                  textAnchor="middle"
+                  fontSize={12}
+                  fill={rows[payload.index]?.month === selected ? "var(--text-primary)" : "var(--text-secondary)"}
+                  fontWeight={rows[payload.index]?.month === selected ? 600 : 400}
+                >
+                  {payload.value}
+                </text>
+                )
+              }
               interval={0}
               minTickGap={0}
             />
@@ -93,11 +123,7 @@ export function TrendChart({ points, summary, selected }: { points: TrendPoint[]
                 );
               }}
             />
-            <Bar dataKey="income" fill="var(--text-primary)" radius={[4, 4, 0, 0]} isAnimationActive={false} maxBarSize={20}>
-              {rows.map((r) => (
-                <Cell key={r.month} fillOpacity={r.month === selected ? 1 : 0.55} />
-              ))}
-            </Bar>
+            <Bar dataKey="income" fill="var(--text-primary)" radius={[4, 4, 0, 0]} isAnimationActive={false} maxBarSize={20} />
             <Bar
               dataKey="expense"
               fill={`url(#${hatchId})`}

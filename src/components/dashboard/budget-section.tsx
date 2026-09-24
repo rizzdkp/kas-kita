@@ -11,11 +11,12 @@ import { SectionCard } from "./section-card";
 const STATE_TEXT = { on_track: "Sesuai", near: "Mendekati", over: "Lewat" } as const;
 
 /** Lima anggaran dengan persen terpakai tertinggi; penanda vertikal = hari ini (UX-FLOWS bagian 3.4). */
-export function BudgetSection({ budgets, scope }: { budgets: BudgetWithStatus[]; scope: Scope }) {
+export function BudgetSection({ budgets, scope, className }: { budgets: BudgetWithStatus[]; scope: Scope; className?: string }) {
   const elapsed = budgets[0]?.status.value.elapsedPercent;
   return (
     <SectionCard
       id="anggaran"
+      className={className}
       title="Anggaran"
       action={
         budgets.length ? (
@@ -47,12 +48,12 @@ export function BudgetSection({ budgets, scope }: { budgets: BudgetWithStatus[];
               const over = s.state === "over";
               return (
                 <li key={b.id} className="flex flex-col gap-2">
-                  <div className="flex items-baseline justify-between gap-3">
-                    <span className="min-w-0 text-body text-primary">
+                  <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+                    <span className="text-body text-primary">
                       {b.categoryName}
                       {b.isMandatory ? <span className="ml-2 text-caption text-secondary">Wajib</span> : null}
                     </span>
-                    <span className={`tabular shrink-0 text-small ${over ? "text-attention" : "text-secondary"}`}>
+                    <span className={`tabular ml-auto text-right text-small ${over ? "text-attention" : "text-secondary"}`}>
                       {STATE_TEXT[s.state]}
                       {s.fasterThanUsual ? ", lebih cepat dari biasa" : ""} · {s.usedPercent === null ? "-" : formatPercent(s.usedPercent)}
                     </span>

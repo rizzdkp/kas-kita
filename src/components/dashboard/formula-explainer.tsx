@@ -3,10 +3,10 @@
 import { Calculator } from "lucide-react";
 import { formatDateWithYear, parseDateKey } from "@/lib/dates";
 import { formatRupiah } from "@/lib/money";
-import { buttonClassName } from "@/components/ui/button";
 import { cn } from "@/components/ui/cn";
 import { Icon } from "@/components/ui/icon";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Tooltip } from "@/components/ui/tooltip";
 
 export type FormulaInputs = Record<string, bigint | number | string>;
 
@@ -41,20 +41,24 @@ export function formatFormulaInput(value: bigint | number | string): string {
 
 /** Panel "Cara menghitung" (PRD bagian 6): rumus dan angka asli setiap metrik di bagian itu. */
 export function FormulaExplainer({ title, items, trigger = "button", className }: FormulaExplainerProps) {
+  const triggerNode = (
+    <SheetTrigger
+      className={cn(
+        trigger === "button"
+          ? "-ml-2 inline-flex h-11 items-center gap-2 rounded-md px-2 text-small text-secondary hover:bg-surface-sunken hover:text-primary sm:h-8"
+          : "inline-flex size-11 items-center justify-center rounded-sm text-secondary hover:bg-surface-sunken hover:text-primary sm:size-8",
+        "transition-colors duration-(--dur-fast) ease-(--ease-out)",
+        className,
+      )}
+      aria-label={trigger === "icon" ? `Cara menghitung ${title.toLowerCase()}` : undefined}
+    >
+      <Icon icon={Calculator} size={16} className="shrink-0" />
+      {trigger === "button" ? "Cara menghitung" : null}
+    </SheetTrigger>
+  );
   return (
     <Sheet>
-      <SheetTrigger
-        className={cn(
-          trigger === "button"
-            ? buttonClassName("ghost", "-ml-2 h-11 px-2 text-small sm:h-8")
-            : buttonClassName("ghost", "size-11 px-0 sm:size-8"),
-          className,
-        )}
-        aria-label={trigger === "icon" ? `Cara menghitung ${title.toLowerCase()}` : undefined}
-      >
-        <Icon icon={Calculator} size={16} />
-        {trigger === "button" ? "Cara menghitung" : null}
-      </SheetTrigger>
+      {trigger === "icon" ? <Tooltip content="Cara menghitung">{triggerNode}</Tooltip> : triggerNode}
       <SheetContent title={title} description="Dihitung app dari data kalian, bukan AI.">
         <div className="flex flex-col gap-4">
           {items.map((item) => (

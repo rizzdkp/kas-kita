@@ -7,6 +7,7 @@ import { transactionHref } from "@/components/reports/transaction-link";
 import type { CategoryTotal } from "@/server/metrics/category-breakdown";
 import type { Metric } from "@/server/metrics/types";
 import { FormulaExplainer } from "./formula-explainer";
+import { scopedHref } from "./links";
 import { OwnerLegend } from "./owner-split";
 import { ownerOrder, ownerStyle, type People } from "./people";
 import { SectionCard } from "./section-card";
@@ -18,6 +19,7 @@ type CategorySectionProps = {
   scope: Scope;
   people: People;
   range: { from: string; to: string; label: string };
+  className?: string;
 };
 
 function share(part: bigint, whole: bigint): number {
@@ -25,13 +27,14 @@ function share(part: bigint, whole: bigint): number {
 }
 
 /** Batang horizontal berurutan, label penuh; Gabungan bersegmen per pemilik (UX-FLOWS bagian 3.5). */
-export function CategorySection({ categories, scope, people, range }: CategorySectionProps) {
+export function CategorySection({ categories, scope, people, range, className }: CategorySectionProps) {
   const rows = categories.value.slice(0, MAX_ROWS);
   const max = rows[0]?.total ?? 0n;
   const segmented = scope === "all";
   return (
     <SectionCard
       id="pengeluaran-kategori"
+      className={className}
       title="Pengeluaran per kategori"
       action={
         <FormulaExplainer
@@ -81,7 +84,7 @@ export function CategorySection({ categories, scope, people, range }: CategorySe
             })}
           </ul>
           {categories.value.length > MAX_ROWS ? (
-            <Link href={scopedLaporan(scope)} className="self-start text-small text-accent underline">
+            <Link href={scopedHref("/laporan", scope)} className="self-start text-small text-accent underline">
               Lihat semua kategori di Laporan
             </Link>
           ) : null}
@@ -91,6 +94,3 @@ export function CategorySection({ categories, scope, people, range }: CategorySe
   );
 }
 
-function scopedLaporan(scope: Scope): string {
-  return scope === "me" ? "/laporan" : `/laporan?scope=${scope}`;
-}

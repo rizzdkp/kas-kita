@@ -44,7 +44,10 @@ export function TransactionList({ initialPage, filters, people, onOpen, renderTr
 
   const rows = useMemo(() => {
     if (!patches) return page.rows;
-    return page.rows.filter((r) => !patches.removed.has(r.id)).map((r) => patches.replaced.get(r.id) ?? r);
+    return page.rows.filter((r) => !patches.removed.has(r.id)).map((r) => {
+      const p = patches.replaced.get(r.id);
+      return p && p.version >= r.version ? p : r;
+    });
   }, [page.rows, patches]);
 
   const hasMore = page.nextCursor !== null;

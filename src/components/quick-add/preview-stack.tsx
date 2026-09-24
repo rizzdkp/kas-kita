@@ -32,7 +32,6 @@ function isInteractive(target: EventTarget | null): boolean {
  */
 export function PreviewStack({ items, ctx, colors, now, saving, error, onChange, onRemove, onSave, onCancel }: PreviewStackProps) {
   const saveRef = useRef<HTMLButtonElement | null>(null);
-  const regionRef = useRef<HTMLDivElement | null>(null);
   const reasonId = useId();
   const count = items.length;
   const missingPerItem = items.map((i) => missingFields(i, ctx));
@@ -45,8 +44,6 @@ export function PreviewStack({ items, ctx, colors, now, saving, error, onChange,
   // fokus pindah ke kartu supaya Enter langsung menyimpan dan Esc membatalkan
   useEffect(() => {
     saveRef.current?.focus();
-    // hanya saat kartu muncul pertama kali
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
@@ -63,7 +60,6 @@ export function PreviewStack({ items, ctx, colors, now, saving, error, onChange,
 
   return (
     <div
-      ref={regionRef}
       role="region"
       aria-label={count > 1 ? `Pratinjau ${count} transaksi` : "Pratinjau transaksi"}
       tabIndex={-1}

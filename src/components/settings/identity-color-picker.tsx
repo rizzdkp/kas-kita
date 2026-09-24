@@ -3,12 +3,12 @@
 import { useId } from "react";
 import * as RadioGroup from "@radix-ui/react-radio-group";
 import { Check } from "lucide-react";
-import { IDENTITY_COLORS, type IdentityColor } from "@/server/db/schema/users";
+import type { IdentityColor } from "@/server/db/schema/users";
 import { identityColorVar } from "@/components/identity/identity-colors";
 import { cn } from "@/components/ui/cn";
 import { Icon } from "@/components/ui/icon";
 import { selectWithArrows } from "@/components/ui/radio-arrows";
-import { IDENTITY_COLOR_NAMES } from "./identity-color-names";
+import { IDENTITY_COLOR_NAMES, IDENTITY_COLOR_ORDER as IDENTITY_COLORS } from "./identity-color-names";
 
 type IdentityColorPickerProps = {
   value: IdentityColor;

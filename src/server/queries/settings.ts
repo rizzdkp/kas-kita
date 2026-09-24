@@ -1,4 +1,4 @@
-import { eq, isNull, sql } from "drizzle-orm";
+import { and, eq, isNull, sql } from "drizzle-orm";
 import type { PgTable } from "drizzle-orm/pg-core";
 import type { Viewer } from "@/server/auth/viewer";
 import { db as defaultDb, type DbOrTx } from "@/server/db/client";
@@ -9,13 +9,13 @@ export function needsOnboarding(viewer: Viewer): boolean {
   return viewer.user.onboardedAt === null;
 }
 
-/** Pengguna kedua cukup mengisi profil kalau akun rumah tangga sudah dibuat pengguna pertama. */
-export async function hasHouseholdAccounts(db: DbOrTx = defaultDb): Promise<boolean> {
+/** Akun aktif rumah tangga; pengguna kedua cukup mengisi profil kalau sudah ada akun. */
+export async function countHouseholdAccounts(db: DbOrTx = defaultDb): Promise<number> {
   const [row] = await db
     .select({ n: sql<number>`count(*)::int` })
     .from(schema.accounts)
-    .where(isNull(schema.accounts.deletedAt));
-  return (row?.n ?? 0) > 0;
+    .where(and(isNull(schema.accounts.deletedAt), isNull(schema.accounts.archivedAt)));
+  return row?.n ?? 0;
 }
 
 // tabel rumah tangga yang ikut ekspor; kredensial, sesi, dan kunci AI sengaja tidak ada

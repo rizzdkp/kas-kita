@@ -79,7 +79,7 @@ export function TransactionFormFields({ values, onChange, errors, options, mode,
           <GroupedSelect
             value={values.categoryId}
             onValueChange={(categoryId) => onChange({ categoryId })}
-            groups={[{ options: categoryOptions(options.categories[values.kind]) }]}
+            groups={[{ options: categoryOptions(options.categories[values.kind === "income" ? "income" : "expense"]) }]}
             placeholder="Pilih kategori"
           />
         </Field>

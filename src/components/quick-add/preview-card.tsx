@@ -58,14 +58,6 @@ function AccountChip({ account, colors }: { account: QuickAddContextAccount; col
   );
 }
 
-function Dot() {
-  return (
-    <span aria-hidden className="text-tertiary">
-      ·
-    </span>
-  );
-}
-
 type PreviewCardProps = {
   item: PreviewItem;
   ctx: QuickAddContextData;
@@ -95,13 +87,14 @@ export function PreviewCard({ item, ctx, colors, now, index, total, onChange, on
 
   return (
     <section
+      role="group"
       aria-label={label}
       aria-describedby={item.error ? errorId : undefined}
       data-testid="quick-add-card"
       className="flex flex-col gap-2 border-b border-border px-3 py-3 last:border-b-0 sm:px-4"
     >
       <div className="flex items-start gap-2">
-        <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-1 gap-y-1">
+        <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1.5">
           <ChipSelect
             field="Jenis"
             value={item.kind}
@@ -110,9 +103,7 @@ export function PreviewCard({ item, ctx, colors, now, index, total, onChange, on
             missing={missing.has("kind")}
             missingText="Pilih jenis"
           />
-          <Dot />
           <AmountEditor amount={item.amount} onChange={(amount) => onChange({ amount })} />
-          <Dot />
           <ChipSelect
             field={item.kind === "transfer" ? "Dari akun" : "Akun"}
             value={item.accountId}
@@ -140,8 +131,7 @@ export function PreviewCard({ item, ctx, colors, now, index, total, onChange, on
             </>
           ) : item.kind !== null ? (
             <>
-              <Dot />
-              <ChipSelect
+                  <ChipSelect
                 field="Kategori"
                 value={item.categoryId}
                 onValueChange={(categoryId) => onChange({ categoryId })}
@@ -151,12 +141,10 @@ export function PreviewCard({ item, ctx, colors, now, index, total, onChange, on
               />
             </>
           ) : null}
-          <Dot />
           <DateEditor value={item.occurredAt} now={now} onChange={(occurredAt) => onChange({ occurredAt })} />
           {item.kind === "expense" ? (
             <>
-              <Dot />
-              <ChipSelect
+                  <ChipSelect
                 field="Untuk"
                 value={recipient}
                 onValueChange={(v) => onChange({ recipient: v as Party })}

@@ -1,4 +1,5 @@
 import type { Scope } from "@/lib/scope";
+import type { TransactionFilters } from "@/server/queries/transactions";
 import type { TransactionKind } from "./types";
 
 /**
@@ -106,4 +107,25 @@ export function hasActiveFilters(q: TransactionQuery): boolean {
 /** Kunci stabil untuk mereset daftar saat filter atau cakupan berubah. */
 export function queryKey(scope: Scope, q: TransactionQuery): string {
   return JSON.stringify([scope, q.accountId, q.categoryId, q.kind, q.from, q.to, q.q.trim(), q.createdBy, q.tag, q.view]);
+}
+
+// uuid yang tidak mungkin ada: tag yang tidak dikenal harus menghasilkan daftar kosong, bukan semua transaksi
+const NO_MATCH = "00000000-0000-0000-0000-000000000000";
+
+/** Terjemahkan query URL ke filter listTransactions; tag boleh id atau nama. */
+export function toServerFilters(scope: Scope, q: TransactionQuery, tags: ReadonlyArray<{ id: string; name: string }>): TransactionFilters {
+  const tag = q.tag ? (tags.find((t) => t.id === q.tag || t.name.toLowerCase() === q.tag?.toLowerCase())?.id ?? NO_MATCH) : null;
+  return {
+    scope,
+    accountIds: q.accountId ? [q.accountId] : undefined,
+    categoryIds: q.categoryId ? [q.categoryId] : undefined,
+    kinds: q.kind ? [q.kind] : undefined,
+    from: q.from ?? undefined,
+    to: q.to ?? undefined,
+    createdBy: q.createdBy ? [q.createdBy] : undefined,
+    tagIds: tag ? [tag] : undefined,
+    q: q.q.trim() || undefined,
+    status: q.view === "draft" ? "draft" : undefined,
+    deleted: q.view === "deleted" || undefined,
+  };
 }

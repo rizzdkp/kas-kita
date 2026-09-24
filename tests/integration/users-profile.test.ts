@@ -5,7 +5,7 @@ import { createAccountRow, createHousehold, type Household } from "../helpers/fi
 import { auditLog, users } from "@/server/db/schema";
 import { ValidationError } from "@/server/errors";
 import { markOnboarded, updateProfile } from "@/server/mutations/users";
-import { exportHouseholdData, hasHouseholdAccounts, needsOnboarding, serializeExport } from "@/server/queries/settings";
+import { exportHouseholdData, countHouseholdAccounts, needsOnboarding, serializeExport } from "@/server/queries/settings";
 
 let h: Household;
 
@@ -102,10 +102,10 @@ describe("pengenalan", () => {
     expect(audit[0]!.diff).toEqual({ onboarded_at: [null, now.toISOString()] });
   });
 
-  it("hasHouseholdAccounts menandai pengguna kedua cukup mengisi profil", async () => {
-    expect(await hasHouseholdAccounts(testDb)).toBe(false);
+  it("countHouseholdAccounts menandai pengguna kedua cukup mengisi profil", async () => {
+    expect(await countHouseholdAccounts(testDb)).toBe(0);
     await createAccountRow(testDb, { name: "BCA", type: "bank", ownerId: h.rizz.user.id });
-    expect(await hasHouseholdAccounts(testDb)).toBe(true);
+    expect(await countHouseholdAccounts(testDb)).toBe(1);
   });
 });
 

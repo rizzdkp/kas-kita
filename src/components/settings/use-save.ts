@@ -5,8 +5,8 @@ import { useToast } from "@/components/ui/toast";
 import type { ActionError, ActionResult } from "@/server/actions/result";
 
 type SaveOptions<T> = {
-  /** Bawaan "Tersimpan" (COPY: tombol Simpan, toast Tersimpan). */
-  successTitle?: string;
+  /** Bawaan "Tersimpan" (COPY: tombol Simpan, toast Tersimpan); null kalau pemanggil menampilkan toast sendiri. */
+  successTitle?: string | null;
   onSuccess?: (data: T) => void;
   /** Kalau diisi, error tidak ditampilkan sebagai toast; misalnya error field ditaruh di bawah input. */
   onError?: (error: ActionError) => void;
@@ -21,7 +21,7 @@ export function useSave() {
     startTransition(async () => {
       const result = await run();
       if (result.ok) {
-        toast.show({ title: options.successTitle ?? "Tersimpan" });
+        if (options.successTitle !== null) toast.show({ title: options.successTitle ?? "Tersimpan" });
         options.onSuccess?.(result.data);
         return;
       }
@@ -35,4 +35,10 @@ export function useSave() {
 
 export function firstFieldError(error: ActionError | null, field: string): string | null {
   return error?.fieldErrors?.[field]?.[0] ?? null;
+}
+
+/** Pesan umum hanya kalau error tidak menempel di salah satu field yang terlihat di form. */
+export function formLevelError(error: ActionError | null, fields: readonly string[]): string | null {
+  if (!error) return null;
+  return fields.some((f) => error.fieldErrors?.[f]?.length) ? null : error.error;
 }

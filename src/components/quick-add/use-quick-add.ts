@@ -156,5 +156,6 @@ export function useQuickAdd(ctx: QuickAddContextData, showToast: (options: Toast
     remove,
     save,
     cancel: () => close(true),
+    dismiss: () => close(false),
   };
 }

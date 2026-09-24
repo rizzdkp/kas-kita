@@ -3,6 +3,8 @@
 import { useState, type KeyboardEvent, type ReactNode } from "react";
 import { dateKey, formatRelativeDay, formatTime, jakartaDate, toJakarta } from "@/lib/dates";
 import { formatAmountInput, formatRupiah, parseAmount } from "@/lib/money";
+import { PenLine } from "lucide-react";
+import { Icon } from "@/components/ui/icon";
 import { AmountInput } from "@/components/money/amount-input";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
@@ -126,7 +128,12 @@ export function NoteEditor({ note, onChange }: { note: string | null; onChange: 
   return (
     <EditorShell
       field="Catatan"
-      chip={note ? <span className="max-w-64 truncate">{note}</span> : <span className="text-secondary">Tambah catatan</span>}
+      chip={
+        <>
+          <Icon icon={PenLine} size={16} className="shrink-0 text-secondary" />
+          {note ? <span className="max-w-64 truncate">{note}</span> : <span className="text-secondary">Tambah catatan</span>}
+        </>
+      }
       onOpen={() => setText(note ?? "")}
       onCommit={() => onChange(text.trim() ? text.trim() : null)}
     >

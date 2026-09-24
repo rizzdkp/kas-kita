@@ -15,10 +15,16 @@ type FieldChipProps = Omit<ComponentPropsWithRef<"button">, "children"> & {
   children?: ReactNode;
 };
 
-export const chipClassName =
-  "inline-flex min-h-11 items-center gap-1.5 rounded-sm px-2 text-left text-control text-primary sm:min-h-8 " +
-  "transition-colors duration-(--dur-fast) ease-(--ease-out) hover:bg-surface-sunken " +
-  "data-[state=open]:bg-surface-sunken";
+// isian sunken memberi tanda bisa diklik tanpa pemisah titik yang menggantung saat baris patah
+const chipBase =
+  "inline-flex min-h-11 items-center gap-1.5 rounded-sm border px-2.5 text-left text-control sm:min-h-8 " +
+  "transition-colors duration-(--dur-fast) ease-(--ease-out)";
+const chipFilled = "border-transparent bg-surface-sunken text-primary hover:border-border-strong data-[state=open]:border-border-strong";
+const chipMissing = "border-dashed border-error text-error hover:bg-error/10 data-[state=open]:bg-error/10";
+
+export function chipClassName(missing: boolean | undefined): string {
+  return `${chipBase} ${missing ? chipMissing : chipFilled}`;
+}
 
 /** Satu field di kartu pratinjau; klik untuk mengubah. */
 export function FieldChip({ field, missing = false, missingText, children, className, ...rest }: FieldChipProps) {
@@ -27,8 +33,7 @@ export function FieldChip({ field, missing = false, missingText, children, class
       type="button"
       data-missing={missing || undefined}
       className={cn(
-        chipClassName,
-        missing && "border border-dashed border-error text-error hover:bg-error/10",
+        chipClassName(missing),
         className,
       )}
       {...rest}

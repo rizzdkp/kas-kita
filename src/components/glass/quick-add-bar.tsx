@@ -91,7 +91,8 @@ export function QuickAddBar({
     const node = inputRef.current;
     if (!node) return;
     node.style.height = "auto";
-    node.style.height = `${Math.min(node.scrollHeight, 96)}px`;
+    // placeholder panjang tidak boleh ikut menumbuhkan bar
+    if (text) node.style.height = `${Math.min(node.scrollHeight, 96)}px`;
   }, [text]);
 
   const placeholder = forPartner ? `Catat untuk ${partnerName}, misalnya makan 40rb` : "kopi 25rb gopay";
@@ -142,7 +143,7 @@ export function QuickAddBar({
           enterKeyHint="done"
           aria-keyshortcuts="/ Control+K Meta+K"
           aria-describedby={`${inputId}-hint`}
-          className="block max-h-24 min-w-0 flex-1 resize-none bg-transparent py-3.5 text-body font-medium text-primary outline-none placeholder:text-secondary disabled:opacity-(--disabled-opacity)"
+          className="block max-h-24 min-w-0 flex-1 resize-none bg-transparent py-3.5 placeholder-shown:overflow-hidden placeholder-shown:text-ellipsis placeholder-shown:whitespace-nowrap text-body font-medium text-primary outline-none placeholder:text-secondary disabled:opacity-(--disabled-opacity)"
         />
         <span id={`${inputId}-hint`} className="sr-only">
           Enter untuk pratinjau. Shift+Enter untuk baris baru, satu transaksi per baris.
