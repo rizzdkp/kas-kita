@@ -1,0 +1,29 @@
+services:
+  caddy:
+    image: caddy:2
+    ports: ["80:80", "443:443"]
+    environment:
+      APP_DOMAIN: ${APP_DOMAIN}
+    volumes:
+      - ./docker/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+    restart: unless-stopped
+    depends_on: [app]
+
+  app:
+    image: ghcr.io/${GHCR_USER:-rizzdkp}/kas-kita:${APP_VERSION:-latest}
+    env_file: .env
+    command: ["node", "server.js"]
+    volumes: ["attachments:/data/attachments"]
+    depends_on: [db]
+    restart: unless-stopped
+    logging: { driver: json-file, options: { max-size: "10m", max-file: "5" } }
+
+  db:
+    image: postgres:16
+    env_file: .env.db
+    volumes: ["pgdata:/var/lib/postgresql/data"]
+    restart: unless-stopped
+    logging: { driver: json-file, options: { max-size: "10m", max-file: "5" } }
+
+volumes: { caddy_data: {}, attachments: {}, pgdata: {} }

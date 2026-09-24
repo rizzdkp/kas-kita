@@ -15,6 +15,20 @@
       "when": 1790239957404,
       "tag": "0001_guards",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1790240374015,
+      "tag": "0002_auth",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1790241631603,
+      "tag": "0003_split_sum",
+      "breakpoints": true
     }
   ]
 }

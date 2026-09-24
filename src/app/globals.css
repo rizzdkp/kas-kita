@@ -1,0 +1,164 @@
+@import "tailwindcss";
+@import "../styles/tokens.css";
+@import "../styles/glass.css" layer(components);
+@import "../styles/motion.css" layer(components);
+
+/* dokumen spesifikasi menyebut nama kelas sebagai contoh; jangan jadikan utilitas */
+@source not "../../docs";
+
+/* utilitas Tailwind hanya menghasilkan nilai token; palet, radius, dan skala bawaan dimatikan */
+@theme inline {
+  --color-*: initial;
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-sunken: var(--surface-sunken);
+  --color-primary: var(--text-primary);
+  --color-secondary: var(--text-secondary);
+  --color-tertiary: var(--text-tertiary);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-on-accent: var(--on-accent);
+  --color-positive: var(--positive);
+  --color-attention: var(--attention);
+  --color-due-soon: var(--due-soon);
+  --color-error: var(--error);
+  --color-scrim: var(--scrim);
+  --color-glass-active: var(--glass-fill-active);
+  --color-identity-violet: var(--identity-violet);
+  --color-identity-rose: var(--identity-rose);
+  --color-identity-gold: var(--identity-gold);
+  --color-identity-ocean: var(--identity-ocean);
+  --color-identity-plum: var(--identity-plum);
+  --color-identity-slate: var(--identity-slate);
+
+  --radius-*: initial;
+  --radius-xs: var(--radius-xs);
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-card: var(--radius-card);
+  --radius-glass-bar: var(--radius-glass-bar);
+  --radius-pill: var(--radius-pill);
+
+  --shadow-*: initial;
+  --shadow-glass: var(--glass-shadow);
+
+  --font-*: initial;
+  --font-sans: var(--font-family-base);
+
+  --breakpoint-*: initial;
+  --breakpoint-sm: 600px;
+  --breakpoint-lg: 1024px;
+
+  --text-*: initial;
+  --text-hero: 3rem;
+  --text-hero--line-height: 3.25rem;
+  --text-hero--font-weight: 600;
+  --text-hero--letter-spacing: -0.02em;
+  --text-hero-sm: 2.5rem;
+  --text-hero-sm--line-height: 2.75rem;
+  --text-hero-sm--font-weight: 600;
+  --text-hero-sm--letter-spacing: -0.02em;
+  --text-large: 1.75rem;
+  --text-large--line-height: 2.125rem;
+  --text-large--font-weight: 600;
+  --text-large--letter-spacing: -0.01em;
+  --text-title: 1.75rem;
+  --text-title--line-height: 2.25rem;
+  --text-title--font-weight: 600;
+  --text-section: 1.25rem;
+  --text-section--line-height: 1.75rem;
+  --text-section--font-weight: 600;
+  --text-card: 1rem;
+  --text-card--line-height: 1.5rem;
+  --text-card--font-weight: 500;
+  --text-body: 1rem;
+  --text-body--line-height: 1.5rem;
+  --text-small: 0.875rem;
+  --text-small--line-height: 1.25rem;
+  --text-control: 0.9375rem;
+  --text-control--line-height: 1.25rem;
+  --text-control--font-weight: 500;
+  --text-caption: 0.75rem;
+  --text-caption--line-height: 1rem;
+}
+
+@layer base {
+  html {
+    background: var(--canvas);
+    color: var(--text-primary);
+    font-family: var(--font-family-base);
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    caret-color: var(--accent);
+    accent-color: var(--accent);
+    scrollbar-color: var(--scrollbar-thumb) transparent;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    min-height: 100dvh;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    background: var(--canvas);
+  }
+
+  ::selection {
+    background: var(--selection);
+    color: inherit;
+  }
+
+  /* Safari belum membaca scrollbar-color */
+  ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    border: 3px solid transparent;
+    border-radius: var(--radius-pill);
+    background-clip: content-box;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--scrollbar-thumb-hover);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  a {
+    text-underline-offset: 0.2em;
+    text-decoration-thickness: 1px;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  /* angka tabular di semua elemen angka (DESIGN 3) */
+  table,
+  time,
+  input[inputmode="decimal"],
+  input[inputmode="numeric"],
+  .tabular {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1, "cv11" 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      scroll-behavior: auto !important;
+    }
+  }
+}

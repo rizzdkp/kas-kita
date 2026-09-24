@@ -1,4 +1,4 @@
-import { boolean, pgTable, smallint, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import { boolean, pgTable, smallint, text, timestamp, uniqueIndex, uuid } from "drizzle-orm/pg-core";
 import { id, timestamps } from "./common";
 
 export const IDENTITY_COLORS = ["violet", "rose", "gold", "ocean", "plum", "slate"] as const;
@@ -18,7 +18,10 @@ export const users = pgTable("users", {
   periodMode: text("period_mode").$type<"calendar" | "payday_cycle">().notNull().default("calendar"),
   onboardedAt: timestamp("onboarded_at", { withTimezone: true }),
   ...timestamps,
-});
+}, (t) => [
+  // dua pengguna tidak boleh memakai warna identitas yang sama (DESIGN.md 2.2)
+  uniqueIndex("users_identity_color_unique").on(t.identityColor),
+]);
 
 export const sessions = pgTable("sessions", {
   id: id(),

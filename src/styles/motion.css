@@ -1,0 +1,96 @@
+/*
+ * Gerak lapisan sementara (dialog, sheet, menu, toast). Durasi dan easing dari tokens.css.
+ * Sheet dan dialog tumbuh dari pemicunya lewat --origin-x / --origin-y yang diisi komponen.
+ */
+
+@keyframes kk-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes kk-fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes kk-morph-in {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes kk-morph-out {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(0.96); }
+}
+
+@keyframes kk-pop-in {
+  from { opacity: 0; transform: translateY(-4px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes kk-toast-in {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes kk-spin {
+  to { transform: rotate(360deg); }
+}
+
+.kk-scrim[data-state="open"] {
+  animation: kk-fade-in var(--dur-base) var(--ease-out);
+}
+.kk-scrim[data-state="closed"] {
+  animation: kk-fade-out var(--dur-fast) var(--ease-out) forwards;
+}
+
+.kk-morph {
+  transform-origin: var(--origin-x, 50%) var(--origin-y, 50%);
+}
+.kk-morph[data-state="open"] {
+  animation: kk-morph-in var(--dur-spring) var(--ease-spring-glass);
+}
+.kk-morph[data-state="closed"] {
+  animation: kk-morph-out var(--dur-fast) var(--ease-out) forwards;
+}
+
+.kk-pop[data-state="open"],
+.kk-pop[data-state="delayed-open"],
+.kk-pop[data-state="instant-open"] {
+  animation: kk-pop-in var(--dur-base) var(--ease-out);
+}
+.kk-pop[data-state="closed"] {
+  animation: kk-fade-out var(--dur-fast) var(--ease-out) forwards;
+}
+
+.kk-toast[data-state="open"] {
+  animation: kk-toast-in var(--dur-base) var(--ease-out);
+}
+.kk-toast[data-state="closed"] {
+  animation: kk-fade-out var(--dur-fast) var(--ease-out) forwards;
+}
+
+.kk-spin {
+  animation: kk-spin 900ms linear infinite;
+}
+
+/* semua pegas menjadi crossfade 120ms */
+@media (prefers-reduced-motion: reduce) {
+  .kk-scrim[data-state="open"],
+  .kk-morph[data-state="open"],
+  .kk-pop[data-state="open"],
+  .kk-pop[data-state="delayed-open"],
+  .kk-pop[data-state="instant-open"],
+  .kk-toast[data-state="open"] {
+    animation: kk-fade-in var(--dur-fast) linear;
+  }
+  .kk-scrim[data-state="closed"],
+  .kk-morph[data-state="closed"],
+  .kk-pop[data-state="closed"],
+  .kk-toast[data-state="closed"] {
+    animation: kk-fade-out var(--dur-fast) linear forwards;
+  }
+  .kk-spin {
+    animation: none;
+  }
+}
