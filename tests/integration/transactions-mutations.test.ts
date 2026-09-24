@@ -104,6 +104,17 @@ describe("audit", () => {
     expect(detail.tags.map((x) => x.name)).toEqual(["dapur", "mingguan"]);
   });
 
+  it("edit satu field tidak mereset field lain ke default", async () => {
+    const t = await createTransaction(
+      h.rizz,
+      { kind: "expense", amount: 10_000n, accountId: bcaId, categoryId: cats.coffee.id, occurredAt: at, beneficiary: "shared", source: "quick_add" },
+      testDb,
+    );
+    const u = await updateTransaction(h.rizz, { id: t.id, version: 1, patch: { note: "kopi" } }, testDb);
+    expect(u).toMatchObject({ beneficiary: "shared", source: "quick_add", note: "kopi" });
+    expect((await auditFor(t.id))[1]!.diff).toEqual({ note: [null, "kopi"] });
+  });
+
   it("transaksi terhapus masuk Baru dihapus dan tidak terhitung di daftar biasa", async () => {
     const t = await createTransaction(h.rizz, { kind: "expense", amount: 10_000n, accountId: bcaId, categoryId: cats.coffee.id, occurredAt: at }, testDb);
     await deleteTransaction(h.rizz, { id: t.id, version: 1 }, testDb);
