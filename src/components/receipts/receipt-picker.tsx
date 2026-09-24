@@ -55,7 +55,7 @@ export function ReceiptPicker({ vision, error, onFile }: ReceiptPickerProps) {
           dragging ? "border-accent bg-surface-sunken" : "border-border-strong bg-surface",
         )}
       >
-        <Icon icon={ImageUp} size={32} className="text-secondary" />
+        <Icon icon={ImageUp} size={24} className="text-secondary" />
         <div className="flex max-w-[44ch] flex-col gap-1">
           <p className="text-card text-primary">Seret foto struk ke sini</p>
           <p className="text-small text-secondary">
