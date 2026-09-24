@@ -1,8 +1,10 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect as baseExpect, test, type Page } from "@playwright/test";
 import { loginAs } from "./helpers/session";
 
 // alur utama halaman Transaksi: F-IN-1, F-HIST-1, F-HIST-2, F-HIST-3; menulis ke DB dev dengan catatan unik
 test.describe.configure({ mode: "serial" });
+// server dev bisa mengompilasi ulang di tengah tes; batas bawaan 5 detik terlalu ketat
+const expect = baseExpect.configure({ timeout: 15_000 });
 
 const marker = `E2E ${Date.now().toString(36)}`;
 let txId = "";
@@ -61,7 +63,7 @@ test("detail menampilkan riwayat setelah edit", async ({ page, context }) => {
   const form = page.getByRole("dialog", { name: "Ubah transaksi" });
   await form.getByLabel("Nominal").fill("42.000");
   await form.getByRole("button", { name: "Simpan" }).click();
-  await expect(form).toBeHidden({ timeout: 15_000 });
+  await expect(form).toBeHidden();
 
   const history = detail.getByRole("region", { name: "Riwayat" });
   await expect(history).toContainText("mengubah");

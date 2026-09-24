@@ -39,7 +39,7 @@ function viewOptions(draftCount: number) {
   ];
 }
 
-type Patches = { key: string; removed: Set<string>; replaced: Map<string, TransactionListRow> };
+type Patches = { key: string; removed: Set<string>; replaced: Map<string, TransactionListRow>; added: Map<string, TransactionListRow> };
 
 export function TransactionsView({ scope, query, filters, initialPage, formOptions, tags, draftCount }: TransactionsViewProps) {
   const router = useRouter();
@@ -50,7 +50,7 @@ export function TransactionsView({ scope, query, filters, initialPage, formOptio
   const [formScope, setFormScope] = useState<Scope | null>(null);
   const people = formOptions.people;
   const listKey = queryKey(scope, query);
-  const [patches, setPatches] = useState<Patches>(() => ({ key: listKey, removed: new Set(), replaced: new Map() }));
+  const [patches, setPatches] = useState<Patches>(() => ({ key: listKey, removed: new Set(), replaced: new Map(), added: new Map() }));
   const activePatches = patches.key === listKey ? patches : undefined;
   const openId = params.get("id");
 
@@ -86,8 +86,8 @@ export function TransactionsView({ scope, query, filters, initialPage, formOptio
   const patch = useCallback(
     (fn: (p: Patches) => void) => {
       setPatches((prev) => {
-        const base = prev.key === listKey ? prev : { key: listKey, removed: new Set<string>(), replaced: new Map<string, TransactionListRow>() };
-        const next = { key: listKey, removed: new Set(base.removed), replaced: new Map(base.replaced) };
+        const base = prev.key === listKey ? prev : { key: listKey, removed: new Set<string>(), replaced: new Map(), added: new Map() };
+        const next: Patches = { key: listKey, removed: new Set(base.removed), replaced: new Map(base.replaced), added: new Map(base.added) };
         fn(next);
         return next;
       });
@@ -103,11 +103,14 @@ export function TransactionsView({ scope, query, filters, initialPage, formOptio
           if (leavesView) p.removed.add(change.row.id);
           else p.replaced.set(change.row.id, change.row);
         } else if (change.type === "deleted") {
+          p.added.delete(change.id);
           if (query.view !== "deleted") p.removed.add(change.id);
         } else if (query.view === "deleted") {
           p.removed.add(change.id);
         } else {
           p.removed.delete(change.id);
+          // urungkan hapus: baris dikembalikan tanpa menunggu daftar dimuat ulang dari server
+          if (change.row) p.added.set(change.id, change.row);
         }
       });
     },

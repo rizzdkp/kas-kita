@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { listTransactionsAction } from "@/server/actions/transactions";
 import type { TransactionFilters, TransactionListRow, TransactionPage } from "@/server/queries/transactions";
-import { groupByDay, itemSizes, mergeFirstPage, ROW_HEIGHT } from "./group-rows";
+import { groupByDay, insertRows, itemSizes, mergeFirstPage, ROW_HEIGHT } from "./group-rows";
 import { TransactionRow } from "./transaction-row";
 import type { People } from "./types";
 import { useWindowVirtualizer } from "./use-window-virtualizer";
@@ -25,7 +25,12 @@ type TransactionListProps = {
   /** Ditampilkan kalau halaman pertama kosong. */
   empty: ReactNode;
   /** Perubahan lokal (hapus, ubah) tanpa menunggu muat ulang. */
-  patches?: { removed: ReadonlySet<string>; replaced: ReadonlyMap<string, TransactionListRow> };
+  patches?: {
+    removed: ReadonlySet<string>;
+    replaced: ReadonlyMap<string, TransactionListRow>;
+    /** Baris yang dipulihkan; disisipkan kalau belum ada di halaman yang dimuat. */
+    added?: ReadonlyMap<string, TransactionListRow>;
+  };
   /** Total per hari; dimatikan di Baru dihapus karena jumlah transaksi terhapus tidak bermakna. */
   showDayTotals?: boolean;
 };
@@ -46,11 +51,12 @@ export function TransactionList({ initialPage, filters, people, onOpen, renderTr
 
   const rows = useMemo(() => {
     if (!patches) return page.rows;
-    return page.rows.filter((r) => !patches.removed.has(r.id)).map((r) => {
+    const list = page.rows.filter((r) => !patches.removed.has(r.id)).map((r) => {
       const p = patches.replaced.get(r.id);
       return p && p.version >= r.version ? p : r;
     });
-  }, [page.rows, patches]);
+    return insertRows(list, patches.added, page.nextCursor !== null);
+  }, [page.rows, page.nextCursor, patches]);
 
   const hasMore = page.nextCursor !== null;
   const items = useMemo(() => groupByDay(rows, hasMore), [rows, hasMore]);

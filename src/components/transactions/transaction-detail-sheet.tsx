@@ -21,7 +21,10 @@ import { HistoryPanel } from "./transaction-history";
 import { rowText } from "./transaction-row";
 import type { People, TransactionFormOptions } from "./types";
 
-export type DetailChange = { type: "updated"; row: TransactionListRow } | { type: "deleted" | "restored"; id: string };
+export type DetailChange =
+  | { type: "updated"; row: TransactionListRow }
+  | { type: "deleted"; id: string }
+  | { type: "restored"; id: string; row?: TransactionListRow };
 
 type TransactionDetailSheetProps = {
   /** Transaksi yang dibuka; null = tertutup. */
@@ -62,14 +65,14 @@ export function TransactionDetailSheet({ id, onClose, people, scope, formOptions
 
   const detail = data?.detail.id === id ? data.detail : null;
 
-  const restore = async (txId: string) => {
+  const restore = async (txId: string, row?: TransactionListRow) => {
     const result = await restoreTransactionAction({ id: txId });
     if (!result.ok) {
       toast.show({ title: result.error });
       return false;
     }
     toast.show({ title: "Transaksi dipulihkan" });
-    onChange?.({ type: "restored", id: txId });
+    onChange?.({ type: "restored", id: txId, row: row ? { ...row, deletedAt: null } : undefined });
     return true;
   };
 
@@ -85,9 +88,10 @@ export function TransactionDetailSheet({ id, onClose, people, scope, formOptions
       return;
     }
     const txId = detail.id;
+    const snapshot: TransactionListRow = { ...detail, version: result.data.version + 1 };
     onChange?.({ type: "deleted", id: txId });
     onClose();
-    toast.show({ title: "Transaksi dihapus", action: { label: "Urungkan", onAction: () => void restore(txId) } });
+    toast.show({ title: "Transaksi dihapus", action: { label: "Urungkan", onAction: () => void restore(txId, snapshot) } });
   };
 
   const text = detail ? rowText(detail, people) : null;

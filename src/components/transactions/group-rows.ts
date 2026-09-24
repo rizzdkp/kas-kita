@@ -77,3 +77,22 @@ export function mergeFirstPage(
   });
   return { rows: [...fresh.rows, ...older], nextCursor: loaded.nextCursor };
 }
+
+function newerFirst(a: TransactionListRow, b: TransactionListRow): number {
+  const t = b.occurredAt.getTime() - a.occurredAt.getTime();
+  return t !== 0 ? t : a.id < b.id ? 1 : a.id > b.id ? -1 : 0;
+}
+
+/** Sisipkan baris yang belum ada sesuai urutan daftar; baris di luar rentang yang sudah dimuat dibiarkan ke halaman berikutnya. */
+export function insertRows(
+  rows: TransactionListRow[],
+  extra: ReadonlyMap<string, TransactionListRow> | undefined,
+  hasMore: boolean,
+): TransactionListRow[] {
+  if (!extra || extra.size === 0) return rows;
+  const ids = new Set(rows.map((r) => r.id));
+  const last = rows[rows.length - 1];
+  const missing = [...extra.values()].filter((r) => !ids.has(r.id) && !(hasMore && last && newerFirst(r, last) > 0));
+  if (missing.length === 0) return rows;
+  return [...rows, ...missing].sort(newerFirst);
+}
