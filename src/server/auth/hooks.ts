@@ -11,7 +11,7 @@ const TOTP_PATH = "/two-factor/verify-totp";
 const PASSKEY_LOGIN_PATH = "/passkey/verify-authentication";
 const PASSKEY_REGISTER_PATH = "/passkey/verify-registration";
 
-export const INVALID_CREDENTIALS_MESSAGE = "Email atau password salah.";
+export const INVALID_CREDENTIALS_MESSAGE = "Email atau password salah. Cek lagi, atau masuk dengan passkey.";
 export const INVALID_TOTP_MESSAGE = "Kode dari aplikasi autentikator salah. Cek jam di ponselmu lalu coba lagi.";
 
 type HookContext = Parameters<Parameters<typeof createAuthMiddleware>[0]>[0];

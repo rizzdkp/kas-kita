@@ -83,8 +83,9 @@ export function NotificationsPanel({ onUnreadChange, partnerName, inPopover = tr
         </div>
       ) : state.feed.items.length === 0 ? (
         <p className="py-2 text-control text-secondary">
-          Belum ada notifikasi. Kabar muncul di sini saat {partnerName ?? "partner"} mengubah data milikmu, tagihan jatuh tempo 3 hari lagi, atau anggaran wajib
-          lewat.
+          {partnerName
+            ? `Belum ada notifikasi. Kabar muncul di sini saat ${partnerName} mengubah data milikmu, tagihan jatuh tempo 3 hari lagi, atau anggaran wajib lewat.`
+            : "Belum ada notifikasi. Kabar muncul di sini saat tagihan jatuh tempo 3 hari lagi atau anggaran wajib lewat."}
         </p>
       ) : (
         <ul aria-label="Daftar notifikasi" className="-mx-2 flex max-h-[min(420px,60dvh)] flex-col overflow-y-auto">

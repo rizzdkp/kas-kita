@@ -20,7 +20,7 @@ export function Hero({ label, safe, payday, todayNote = false }: HeroProps) {
   const parts: Array<[string, bigint]> = [
     ["Saldo likuid", c.liquid],
     ["Tagihan sebelum gajian", c.billsDue],
-    ["Setoran target", c.goalSetAsides],
+    ["Setoran target sampai gajian", c.goalSetAsides],
   ];
   if (c.mandatoryRemaining > 0n) parts.push(["Sisa anggaran wajib", c.mandatoryRemaining]);
   return (

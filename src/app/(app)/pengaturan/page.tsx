@@ -69,11 +69,11 @@ export default async function PengaturanPage() {
         <SettingsSection id="ai" title="AI">
           <div className="flex max-w-[65ch] flex-col gap-2">
             <p className="text-body text-primary">
-              Foto struk dan teks transaksi dikirim ke penyedia yang kamu pasang di sini. Angka di dashboard selalu dihitung app, bukan AI.
+              Foto struk dan teks transaksi dikirim ke penyedia yang kamu pasang di sini. Angka di Ringkasan selalu dihitung Kas Kita, bukan AI.
             </p>
             <p className="text-small text-secondary">
-              Pemasangan penyedia AI (alamat server, API key, dan pilihan model) hadir di tahap berikutnya. Sampai saat itu belum ada data yang dikirim ke
-              penyedia mana pun, dan quick-add membaca teksmu dengan parser di app.
+              Pengaturan penyedia AI belum tersedia di versi ini. Sampai tersedia, tidak ada data yang dikirim ke penyedia AI mana pun, dan Kas Kita
+              membaca teks di bar bawah sendiri, tanpa AI.
             </p>
           </div>
         </SettingsSection>

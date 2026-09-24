@@ -7,7 +7,7 @@ import type { MonthlyReport } from "@/server/queries/reports";
 
 function Change({ current, previous, comparedTo }: { current: bigint; previous: bigint; comparedTo: string }) {
   const p = percentOf(current - previous, previous);
-  if (p === null) return <span className="text-small text-secondary">Tidak ada di {comparedTo}</span>;
+  if (p === null) return <span className="text-small text-secondary">Tidak ada pembanding di {comparedTo}</span>;
   return <Delta percent={p} comparedTo={comparedTo} />;
 }
 

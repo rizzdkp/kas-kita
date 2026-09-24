@@ -41,7 +41,7 @@ export function Sidebar({ pathname, expanded, onExpandedChange }: SidebarProps) 
           type="button"
           onClick={() => onExpandedChange(!expanded)}
           aria-expanded={expanded}
-          aria-label={expanded ? "Lipat sidebar" : "Buka sidebar"}
+          aria-label={expanded ? "Lipat navigasi" : "Buka navigasi"}
           className={cn(
             ITEM_RADIUS,
             "inline-flex size-10 shrink-0 items-center justify-center text-secondary hover:bg-surface-sunken hover:text-primary lg:hidden",

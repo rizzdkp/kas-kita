@@ -74,7 +74,7 @@ export function PreviewCard({ item, ctx, colors, now, index, total, onChange, on
   const missing = new Set(missingFields(item, ctx));
   const account = accountById(ctx, item.accountId);
   const recipient = effectiveRecipient(item, account);
-  const recipientName: Record<Party, string> = { me: "Saya", partner: ctx.partnerName ?? "Partner", shared: "Bersama" };
+  const recipientName: Record<Party, string> = { me: "Kamu", partner: ctx.partnerName ?? "Partner", shared: "Bersama" };
   const recipientGroups: ChipOptionGroup[] = [
     {
       options: (account?.owner === "shared" ? (["shared"] as Party[]) : (["me", "partner", "shared"] as Party[]))

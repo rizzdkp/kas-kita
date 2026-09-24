@@ -30,7 +30,7 @@ export function TransactionFormFields({ values, onChange, errors, options, mode,
   const forPartner = mode === "create" && partner !== null && account?.ownerId === partner.id;
 
   const beneficiaryOptions: Array<{ value: BeneficiaryChoice; label: string }> = [
-    { value: "me", label: "Saya" },
+    { value: "me", label: "Kamu" },
     ...(partner ? [{ value: "partner" as const, label: partner.name }] : []),
     { value: "shared", label: "Bersama" },
   ];

@@ -16,7 +16,7 @@ export const CSV_HEADER = [
 ] as const;
 
 const KIND_TEXT = { income: "Pemasukan", expense: "Pengeluaran", transfer: "Transfer" } as const;
-const STATUS_TEXT = { confirmed: "Terkonfirmasi", draft: "Draf" } as const;
+const STATUS_TEXT = { confirmed: "Terkonfirmasi", draft: "Perlu dikonfirmasi" } as const;
 
 // sel yang diawali = + - @ dieksekusi sebagai rumus oleh spreadsheet (CSV injection)
 const FORMULA_START = /^[=+\-@\t\r]/;

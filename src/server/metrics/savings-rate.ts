@@ -5,7 +5,7 @@ import type { Metric } from "./types";
 export function savingsRate(income: bigint, expense: bigint): Metric<number | null> {
   return {
     value: income === 0n ? null : percentOf(income - expense, income),
-    formula: "Rasio tabungan = (pemasukan - pengeluaran) / pemasukan",
+    formula: "Rasio tabungan = (pemasukan − pengeluaran) / pemasukan",
     inputs: { Pemasukan: income, Pengeluaran: expense, Selisih: income - expense },
   };
 }

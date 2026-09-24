@@ -81,7 +81,7 @@ test("hapus lalu urungkan", async ({ page, context }) => {
   const confirm = page.getByRole("dialog", { name: "Hapus transaksi ini?" });
   await expect(confirm).toContainText("Transaksi masuk ke Baru dihapus dan bisa dipulihkan selama 30 hari.");
   await confirm.getByRole("button", { name: "Hapus transaksi" }).click();
-  await expect(page.getByText("Transaksi dihapus")).toBeVisible();
+  await expect(page.getByText("Terhapus", { exact: true })).toBeVisible();
   await expect(row(page)).toHaveCount(0);
 
   await page.getByRole("button", { name: "Urungkan" }).click();

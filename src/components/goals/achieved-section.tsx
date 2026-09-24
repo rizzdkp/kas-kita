@@ -4,10 +4,11 @@ import { ChevronDown, CircleCheck, MoreHorizontal, RotateCcw, Trash2 } from "luc
 import { listSurface } from "@/components/budgets/meter-bar";
 import { OwnerDot, type PlanningPeople } from "@/components/budgets/owner";
 import { Badge } from "@/components/ui/badge";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Icon } from "@/components/ui/icon";
 import { IconButton } from "@/components/ui/icon-button";
 import { formatDateWithYear } from "@/lib/dates";
+import { progressReachedTarget } from "@/lib/goals";
 import { formatRupiah } from "@/lib/money";
 import type { GoalItem } from "./types";
 
@@ -47,7 +48,16 @@ export function AchievedSection({ goals, people, onReopen, onDelete }: AchievedS
                   <IconButton icon={MoreHorizontal} label={`Aksi untuk ${g.name}`} />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  {g.achievedAt ? (
+                  {progressReachedTarget(g.progress, g.targetAmount) ? (
+                    <>
+                      <DropdownMenuItem icon={RotateCcw} disabled aria-describedby={`${g.id}-penuh`}>
+                        Tandai belum tercapai
+                      </DropdownMenuItem>
+                      <DropdownMenuLabel id={`${g.id}-penuh`} className="max-w-64 pt-0 text-caption">
+                        Progres sudah mencapai nominal target. Naikkan nominal target untuk mengaktifkannya lagi.
+                      </DropdownMenuLabel>
+                    </>
+                  ) : g.achievedAt ? (
                     <DropdownMenuItem icon={RotateCcw} onSelect={() => onReopen(g)}>
                       Tandai belum tercapai
                     </DropdownMenuItem>

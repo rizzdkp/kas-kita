@@ -13,7 +13,7 @@ import type { OnboardingPerson, OnboardingProfile, OnboardingStep } from "./type
 
 const STEP_TITLE: Record<OnboardingStep, { title: string; description: string }> = {
   profil: { title: "Profil kamu", description: "Nama, warna yang menandai data milikmu, dan tanggal gajian." },
-  akun: { title: "Akun pertama", description: "Mulai dari rekening yang paling sering kamu pakai, dengan saldonya hari ini." },
+  akun: { title: "Akun pertama", description: "Mulai dari akun yang paling sering kamu pakai, dengan saldonya hari ini." },
   ai: { title: "Pengaturan AI", description: "Opsional. Semua fitur pencatatan tetap jalan tanpa AI." },
 };
 

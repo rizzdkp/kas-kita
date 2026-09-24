@@ -45,6 +45,9 @@ test("buat target manual, setor sampai tercapai, lalu hapus", async ({ page }) =
 
   await test.step("hapus", async () => {
     await page.getByRole("button", { name: `Aksi untuk ${name}` }).click();
+    // progres sudah penuh: membatalkan tanda tidak berefek, jadi aksinya nonaktif dengan alasan
+    await expect(page.getByRole("menuitem", { name: "Tandai belum tercapai" })).toBeDisabled();
+    await expect(page.getByText("Progres sudah mencapai nominal target. Naikkan nominal target untuk mengaktifkannya lagi.")).toBeVisible();
     await page.getByRole("menuitem", { name: "Hapus target" }).click();
     await page.getByRole("dialog", { name: `Hapus target ${name}?` }).getByRole("button", { name: "Hapus target" }).click();
     await expect(page.getByText(name)).toHaveCount(0);

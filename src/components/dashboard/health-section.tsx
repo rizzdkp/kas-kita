@@ -9,7 +9,7 @@ const oneDecimal = new Intl.NumberFormat("id-ID", { maximumFractionDigits: 1 });
 const STATE: Record<HealthState, { text: string; tone: BadgeTone }> = {
   good: { text: "Aman", tone: "positive" },
   watch: { text: "Pantau", tone: "neutral" },
-  attention: { text: "Perlu perhatian", tone: "attention" },
+  attention: { text: "Perlu dicek", tone: "attention" },
 };
 
 export function healthValueText(c: HealthCheck): string {

@@ -50,7 +50,7 @@ export function BackupSetup({ onDone }: { onDone: () => void }) {
   if (totp) {
     return (
       <AuthCard
-        title="Pasang TOTP"
+        title="Pasang kode autentikator"
         description="Tambahkan Kas Kita ke aplikasi autentikator (misalnya Google Authenticator, 1Password, atau Aegis), lalu masukkan kode 6 angka yang muncul."
       >
         <a

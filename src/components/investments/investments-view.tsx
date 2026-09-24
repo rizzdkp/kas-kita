@@ -79,7 +79,7 @@ export function InvestmentsView({ items, people, scope, today }: Props) {
     startTransition(async () => {
       const result = await deleteValuationAction({ id: valuation.id, version: valuation.version });
       if (result.ok) {
-        toast.show({ title: "Nilai dihapus" });
+        toast.show({ title: "Terhapus" });
         setToDelete(null);
       } else setDeleteError(result.error);
     });

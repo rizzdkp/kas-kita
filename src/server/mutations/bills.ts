@@ -21,7 +21,7 @@ const billFieldsSchema = z.object({
   payFromAccountId: z.uuid(),
   categoryId: z.uuid().nullish().transform((v) => v ?? null),
   creditCardAccountId: z.uuid().nullish().transform((v) => v ?? null),
-  rrule: z.string().refine(isValidRrule, "Pengulangan tidak dikenali"),
+  rrule: z.string().refine(isValidRrule, "Pengulangan tidak dikenali. Pilih Bulanan, Mingguan, atau Tahunan."),
   nextDueOn: dateKeySchema,
 });
 

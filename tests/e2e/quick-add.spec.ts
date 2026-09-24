@@ -61,7 +61,7 @@ test("kopi 25rb gopay: Enter, kartu, Enter, Tersimpan, muncul di riwayat", async
   await expect(card.getByRole("button", { name: /Nominal/ })).toContainText("Rp 25.000");
   await expect(card.getByRole("combobox", { name: "Akun" })).toContainText("GoPay Rizz");
   await expect(card.getByRole("combobox", { name: "Kategori" })).toHaveText("Kopi dan jajan");
-  await expect(card.getByRole("combobox", { name: "Untuk" })).toHaveText("Untuk: Saya");
+  await expect(card.getByRole("combobox", { name: "Untuk" })).toHaveText("Untuk: Kamu");
   // tidak ada simpan otomatis (AC3)
   expect(psql(`select count(*) from transactions where note ilike '${note}'`)).toBe("0");
 

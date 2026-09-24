@@ -94,7 +94,7 @@ export default async function RingkasanPage({ searchParams }: PageProps) {
             </Link>
           }
         >
-          Mulai dari rekening yang paling sering kamu pakai. Saldonya bisa dicocokkan nanti.
+          Mulai dari akun yang paling sering kamu pakai. Saldonya bisa dicocokkan nanti.
         </EmptyState>
       </Card>
     );

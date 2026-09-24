@@ -49,7 +49,7 @@ export function GoalsView({ scope, people, active, achieved, accounts, today }: 
   function markAchieved(goal: GoalItem, achievedFlag: boolean) {
     mutate.run(
       () => setGoalAchievedAction({ id: goal.id, version: goal.version, achieved: achievedFlag }),
-      () => toast.show({ title: achievedFlag ? `Target ${goal.name} tercapai` : `${goal.name} kembali aktif` }),
+      () => toast.show({ title: achievedFlag ? `Target ${goal.name} tercapai` : `${goal.name} ditandai belum tercapai` }),
     );
   }
 

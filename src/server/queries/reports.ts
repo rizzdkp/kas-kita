@@ -134,7 +134,7 @@ export async function getMonthlyReport(viewer: Viewer, scope: Scope, month: stri
     expense: periodExpense({ total: flows.expense, count: flows.expenseCount, periodLabel: label }),
     net: {
       value: net,
-      formula: "Selisih = pemasukan - pengeluaran periode ini. Transfer tidak dihitung.",
+      formula: "Selisih = pemasukan − pengeluaran periode ini. Transfer tidak dihitung.",
       inputs: { Pemasukan: flows.income, Pengeluaran: flows.expense },
     },
     savingsRate: savingsRate(flows.income, flows.expense),

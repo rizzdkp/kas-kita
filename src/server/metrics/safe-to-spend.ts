@@ -58,7 +58,7 @@ export function safeToSpend(input: SafeToSpendInput): SafeToSpend {
   return {
     value: input.liquid - billsDue - goalSetAsides - mandatoryRemaining,
     formula:
-      "Aman dibelanjakan = saldo likuid - tagihan jatuh tempo sebelum gajian - setoran target yang direncanakan sampai gajian - sisa anggaran wajib bulan ini",
+      "Aman dibelanjakan = saldo likuid − tagihan jatuh tempo sebelum gajian − setoran target yang direncanakan sampai gajian − sisa anggaran wajib bulan ini",
     inputs,
     components: { liquid: input.liquid, billsDue, goalSetAsides, mandatoryRemaining },
     billsDue: input.billsDue,

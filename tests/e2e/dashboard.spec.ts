@@ -36,7 +36,7 @@ test("panel Cara menghitung menampilkan rumus dengan angka asli", async ({ page 
 
   await page.keyboard.press("Escape");
   await page.getByRole("button", { name: "Cara menghitung rasio tabungan" }).click();
-  await expect(page.getByRole("dialog", { name: "Rasio tabungan" })).toContainText("Rasio tabungan = (pemasukan - pengeluaran) / pemasukan");
+  await expect(page.getByRole("dialog", { name: "Rasio tabungan" })).toContainText("Rasio tabungan = (pemasukan − pengeluaran) / pemasukan");
 });
 
 test("periode lalu mengubah arus lewat URL, hero tetap posisi hari ini", async ({ page }) => {

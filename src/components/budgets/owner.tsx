@@ -28,7 +28,7 @@ export type OwnerChoice = "me" | "partner" | "shared";
 
 export function ownerChoiceOptions(people: PlanningPeople): Array<{ value: OwnerChoice; label: string }> {
   return [
-    { value: "me", label: "Saya" },
+    { value: "me", label: "Kamu" },
     ...(people.partner ? [{ value: "partner" as const, label: people.partner.name }] : []),
     { value: "shared", label: "Bersama" },
   ];

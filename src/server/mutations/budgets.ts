@@ -28,7 +28,7 @@ export async function upsertBudget(viewer: Viewer, input: z.input<typeof upsertB
   const { version, ...data } = parseInput(upsertBudgetSchema, input);
   const ownerId = budgetOwnerIdFromKey(data.scopeOwner);
   if (ownerId && ownerId !== viewer.user.id && ownerId !== viewer.partner?.id) {
-    throw new ValidationError("Pemilik anggaran tidak dikenal");
+    throw new ValidationError("Pemilik anggaran tidak dikenal. Pilih pemilik lagi.");
   }
   return inTransaction(db, async (tx) => {
     const [existing] = await tx

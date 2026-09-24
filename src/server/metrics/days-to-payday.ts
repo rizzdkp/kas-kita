@@ -27,8 +27,8 @@ export function daysToPayday(people: PaydayPerson[], now: Date): DaysToPayday {
     value: days,
     formula:
       people.length > 1
-        ? "Hari menuju gajian = gajian terdekat dari kalian berdua - hari ini (WIB)"
-        : "Hari menuju gajian = tanggal gajian berikutnya - hari ini (WIB)",
+        ? "Hari menuju gajian = gajian terdekat dari kalian berdua − hari ini (WIB)"
+        : "Hari menuju gajian = tanggal gajian berikutnya − hari ini (WIB)",
     inputs,
     nextPayday: next,
     userIds: nearest.map((c) => c.p.userId),

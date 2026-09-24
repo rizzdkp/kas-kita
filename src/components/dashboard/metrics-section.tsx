@@ -21,7 +21,7 @@ type MetricsSectionProps = {
 };
 
 function ChangeLine({ percent, comparedTo }: { percent: number | null; comparedTo: string }) {
-  if (percent === null) return <span className="text-small text-secondary">Tidak ada di {comparedTo}</span>;
+  if (percent === null) return <span className="text-small text-secondary">Tidak ada pembanding di {comparedTo}</span>;
   return <Delta percent={percent} comparedTo={comparedTo} />;
 }
 

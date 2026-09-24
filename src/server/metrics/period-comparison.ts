@@ -40,7 +40,7 @@ export function comparableRanges(mode: PeriodMode, paydayDay: number, now: Date)
 export function periodComparison(current: bigint, previous: bigint, ranges: ComparableRanges): Metric<number | null> {
   return {
     value: percentOf(current - previous, previous),
-    formula: `Perubahan = (${ranges.current.label} - ${ranges.previous.label}) / ${ranges.previous.label}`,
+    formula: `Perubahan = (${ranges.current.label} − ${ranges.previous.label}) / ${ranges.previous.label}`,
     inputs: { [ranges.current.label]: current, [ranges.previous.label]: previous },
   };
 }

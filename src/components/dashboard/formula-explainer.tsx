@@ -59,7 +59,7 @@ export function FormulaExplainer({ title, items, trigger = "button", className }
   return (
     <Sheet>
       {trigger === "icon" ? <Tooltip content="Cara menghitung">{triggerNode}</Tooltip> : triggerNode}
-      <SheetContent title={title} description="Dihitung app dari data kalian, bukan AI.">
+      <SheetContent title={title} description="Dihitung Kas Kita dari data kalian, bukan AI.">
         <div className="flex flex-col gap-4">
           {items.map((item) => (
             <section key={item.label} className="flex flex-col gap-2">

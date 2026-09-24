@@ -64,7 +64,7 @@ export function TransactionFormSheet({ open, onOpenChange, mode, initial, scope,
           </div>
         ) : (
           <div role="status" aria-busy className="flex flex-col gap-6">
-            <span className="sr-only">Memuat form</span>
+            <span className="sr-only">Memuat formulir</span>
             <SkeletonText lines={3} />
             <SkeletonText lines={3} />
           </div>

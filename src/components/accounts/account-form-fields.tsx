@@ -35,7 +35,7 @@ function openingCopy(type: AccountType): { label: string; description: string } 
 
 export function AccountFormFields({ state, errors, people, institutions, onChange }: Props) {
   const ownerOptions: Array<{ value: OwnerChoice; label: string }> = [
-    { value: "me", label: "Saya" },
+    { value: "me", label: "Kamu" },
     ...(people.partner ? [{ value: "partner" as const, label: people.partner.name }] : []),
     { value: "shared", label: "Bersama" },
   ];

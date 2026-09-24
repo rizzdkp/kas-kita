@@ -86,7 +86,7 @@ Semua format lewat `src/lib/money.ts` dan `src/lib/dates.ts` memakai `Intl` deng
 
 | Elemen | Copy |
 |---|---|
-| Keterangan halaman | Foto struk dan teks transaksi dikirim ke penyedia yang kamu pasang di sini. Angka di dashboard selalu dihitung app, bukan AI. |
+| Keterangan halaman | Foto struk dan teks transaksi dikirim ke penyedia yang kamu pasang di sini. Angka di Ringkasan selalu dihitung Kas Kita, bukan AI. |
 | Tombol | Ambil daftar model |
 | Tombol | Tes koneksi |
 | Hasil tes berhasil | Model teks dan model vision merespons |
@@ -129,18 +129,18 @@ Tabel di bawah mencatat teks yang sudah dipakai di kode. Bagian dinamis ditulis 
 | Label | Password / Ulangi password |
 | Petunjuk password | Minimal [n] karakter. |
 | Tombol | Lanjut / Menyimpan / Lewati |
-| TOTP, judul | Pasang TOTP |
+| TOTP, judul | Pasang kode autentikator |
 | TOTP, keterangan | Tambahkan Kas Kita ke aplikasi autentikator (misalnya Google Authenticator, 1Password, atau Aegis), lalu masukkan kode 6 angka yang muncul. |
 | TOTP, tautan | Buka di aplikasi autentikator |
 | TOTP, kunci manual | Atau ketik kunci ini secara manual: |
 | TOTP, tombol | Aktifkan / Memeriksa |
-| Error password pendek | Password minimal [n] karakter. |
+| Error password pendek | Password minimal [n] karakter. (juga cadangan kalau pesan validasi tidak ada) |
 | Error password beda | Kedua password belum sama. |
 | Error password panjang | Password maksimal 128 karakter. |
-| Error kode bukan 6 angka | Kode terdiri dari 6 angka. |
+| Error kode bukan 6 angka | Kode terdiri dari 6 angka. / Kode terdiri dari 6 angka. Masukkan kode terbaru dari aplikasi autentikator. (cadangan kalau pesan validasi tidak ada) |
 | Error kode salah saat pasang | Kode tidak cocok. Pastikan jam ponselmu tepat lalu masukkan kode terbaru. |
 | Error kode salah saat masuk | Kode dari aplikasi autentikator salah. Cek jam di ponselmu lalu coba lagi. |
-| Error email atau password | Email atau password salah. |
+| Error email atau password | Email atau password salah. Cek lagi, atau masuk dengan passkey. |
 | Error passkey dibatalkan (masuk) | Masuk dengan passkey dibatalkan. Coba lagi atau pakai password. |
 | Error passkey dibatalkan (daftar) | Pendaftaran passkey dibatalkan. Coba lagi. |
 | Error passkey sudah ada | Passkey ini sudah terdaftar di akunmu. |
@@ -168,7 +168,7 @@ Tabel di bawah mencatat teks yang sudah dipakai di kode. Bagian dinamis ditulis 
 | Halaman di luar menu | Pengenalan, Notifikasi |
 | Tautan lewati | Lewati ke konten |
 | Navigasi (aria) | Navigasi utama |
-| Tombol lipat navigasi | Lipat sidebar / Buka sidebar |
+| Tombol lipat navigasi | Lipat navigasi / Buka navigasi |
 | Tombol tengah tab bar | Catat transaksi |
 | Tab lainnya | Lainnya |
 | Toggle cakupan (aria) | Cakupan |
@@ -194,6 +194,7 @@ Tabel di bawah mencatat teks yang sudah dipakai di kode. Bagian dinamis ditulis 
 | Chip kosong | Isi [field] |
 | Pilihan kosong | Pilih jenis / Pilih akun / Pilih akun tujuan / Pilih kategori |
 | Label pemilik akun di chip | Bersama / milik [nama] |
+| Chip Untuk, pilihan | Kamu / [nama] / Bersama |
 | Tambah catatan | Tambah catatan |
 | Keterangan pencatat | Dicatat atas nama [nama], diisi oleh kamu |
 | Buang baris (aria) | Buang baris [n] |
@@ -223,7 +224,7 @@ Tabel di bawah mencatat teks yang sudah dipakai di kode. Bagian dinamis ditulis 
 | Baris, total grup | Total |
 | Tombol konfirmasi | Konfirmasi |
 | Toast konfirmasi | Dikonfirmasi |
-| Memuat | Memuat transaksi berikutnya / Memuat transaksi / Memuat form |
+| Memuat | Memuat transaksi berikutnya / Memuat transaksi / Memuat formulir |
 | Tombol ulang | Coba lagi |
 | Pencarian | Cari transaksi |
 | Filter | Filter / Filter ([n]) / Filter transaksi / Filter aktif / Tampilkan hasil / Lainnya ([n]) |
@@ -240,29 +241,30 @@ Tabel di bawah mencatat teks yang sudah dipakai di kode. Bagian dinamis ditulis 
 | Form, label | Jenis transaksi, Nominal, Akun, Dari akun, Ke akun, Kategori, Tanggal dan waktu, Untuk siapa, Catatan, Tag |
 | Form, placeholder | Misalnya 25rb / Misalnya belanja mingguan / Pilih akun / Pilih akun tujuan / Pilih kategori |
 | Form, petunjuk tag | Pisahkan dengan koma, misalnya kantor, liburan |
-| Form, pilihan untuk | Saya / [nama] / Bersama |
+| Form, pilihan untuk | Kamu / [nama] / Bersama |
 | Form, error | Isi nominal, misalnya 25rb / Isi tanggal dan waktu / Pilih akun / Pilih akun tujuan transfer / Akun tujuan harus berbeda dari akun asal / Pilih kategori |
 | Jenis | Pengeluaran / Pemasukan / Transfer |
 | Pemilik | Milik kamu / Milik [nama] / Milik Bersama |
 | Opsi akun diarsipkan | [nama] (diarsipkan) |
 | Status | Terkonfirmasi / Perlu dikonfirmasi / Dihapus |
-| Sumber | Form / Quick-add / Foto struk / Impor CSV / Impor PDF / Transaksi berulang / Penyesuaian saldo |
+| Sumber | Formulir / Bar catat / Foto struk / Impor CSV / Impor PDF / Transaksi berulang / Penyesuaian saldo |
 | Detail, judul | Detail transaksi |
 | Detail, label | Jenis, Tanggal, Akun, Dari akun, Ke akun, Kategori, Untuk, Catatan, Tag, Sumber, Diisi oleh, Terakhir diubah |
 | Detail, nilai pencatat | [nama], [tanggal], [waktu] |
 | Detail, tombol | Ubah / Hapus / Konfirmasi / Pulihkan |
-| Toast hapus dan pulihkan | Transaksi dihapus / Transaksi dipulihkan |
+| Toast hapus dan pulihkan | Terhapus / Transaksi dipulihkan |
 | Riwayat, judul | Riwayat |
 | Riwayat, kosong | Belum ada perubahan tercatat. |
 | Riwayat, aksi | [nama] mencatat transaksi ini / menghapus transaksi ini / memulihkan transaksi ini |
 | Riwayat, tag kosong | tanpa tag |
 | Konflik, pesan | Transaksi ini baru diubah [nama] pukul [waktu]. Pilih versi yang dipakai. |
 | Konflik, tombol | Pakai versi terbaru / Pakai versi saya |
-| Konflik, kolom | Field / Versi terbaru / Versi kamu |
+| Konflik, kolom | Bagian / Versi terbaru / Versi kamu |
+| Konflik, nilai kosong | — |
 | Konflik, penanda | Berbeda |
 | Konflik, nilai tak dikenal | Akun lain / Kategori lain / orang lain |
 | Kolom CSV | Tanggal, Waktu, Jenis, Nominal, Akun, Akun tujuan, Kategori, Catatan, Diisi oleh, Tag, Status |
-| Status di CSV | Terkonfirmasi / Draf |
+| Status di CSV | Terkonfirmasi / Perlu dikonfirmasi |
 | Nama file CSV | kas-kita-transaksi-[tanggal]-sampai-[tanggal].csv / kas-kita-transaksi-sejak-[tanggal].csv |
 
 ### Akun
@@ -271,7 +273,7 @@ Tabel di bawah mencatat teks yang sudah dipakai di kode. Bagian dinamis ditulis 
 |---|---|
 | Keterangan halaman | Akun Bersama selalu tampil di halaman ini, apa pun cakupannya. |
 | Tombol tambah | Tambah akun |
-| Kosong | Tambahkan akun pertama. Mulai dari rekening yang paling sering kamu pakai. Saldonya bisa dicocokkan nanti. |
+| Kosong | Tambahkan akun pertama. Mulai dari akun yang paling sering kamu pakai. Saldonya bisa dicocokkan nanti. |
 | Grup | Likuid / Kewajiban / Aset tidak likuid / Subtotal / Diarsipkan ([n]) |
 | Jenis akun | Bank, E-wallet, Tunai, Kartu kredit, PayLater, Pinjaman, Investasi, Aset lain |
 | Baris, kartu kredit | Terpakai [persen] dari limit [Rp] / Lebih bayar [Rp] / Sisa utang |
@@ -283,7 +285,7 @@ Tabel di bawah mencatat teks yang sudah dipakai di kode. Bagian dinamis ditulis 
 | Form, judul | Tambah akun / Ubah akun |
 | Form, label | Nama akun, Jenis, Pemilik, Institusi, Tanggal saldo awal, Limit, Tanggal cetak tagihan, Tanggal jatuh tempo |
 | Form, placeholder | BCA harian / misalnya 10jt / 1 sampai 31 / Tanpa institusi |
-| Form, pemilik | Saya / [nama] / Bersama |
+| Form, pemilik | Kamu / [nama] / Bersama |
 | Form, saldo awal | Saldo awal: Saldo di aplikasi bank pada tanggal saldo awal. |
 | Form, modal awal | Modal awal: Uang yang sudah ditanam sebelum dicatat di sini. |
 | Form, utang awal | Utang awal: Isi sisa utang sebagai angka positif, misalnya 2,5jt. Kas Kita menyimpannya sebagai saldo negatif. |
@@ -298,7 +300,7 @@ Tabel di bawah mencatat teks yang sudah dipakai di kode. Bagian dinamis ditulis 
 | Hapus, judul | Hapus [nama]? / [nama] tidak bisa dihapus |
 | Hapus, isi | Akun tanpa transaksi dihapus permanen dari daftar. Akun yang sudah punya transaksi hanya bisa diarsipkan. |
 | Hapus, tombol | Hapus akun / Arsipkan / Batal |
-| Hapus, toast | Akun dihapus / Diarsipkan |
+| Hapus, toast | Terhapus / Diarsipkan |
 | Cocokkan, judul | Cocokkan saldo [nama] |
 | Cocokkan, keterangan | Terakhir dicocokkan [tanggal]. / Belum pernah dicocokkan. |
 | Cocokkan, label | Saldo di aplikasi bank / Sisa tagihan di aplikasi bank |
@@ -338,7 +340,7 @@ Tabel di bawah mencatat teks yang sudah dipakai di kode. Bagian dinamis ditulis 
 | Hapus, judul | Hapus nilai [tanggal]? |
 | Hapus, isi | Titik ini hilang dari grafik [nama]. Kalau ini nilai terbaru, imbal hasil dihitung dari nilai sebelumnya. |
 | Hapus, tombol | Hapus nilai / Batal |
-| Hapus, toast | Nilai dihapus |
+| Hapus, toast | Terhapus |
 
 ### Anggaran
 
@@ -424,7 +426,8 @@ Tabel di bawah mencatat teks yang sudah dipakai di kode. Bagian dinamis ditulis 
 | Menu aksi | Aksi untuk [nama] / Ubah target / Riwayat setoran / Tandai tercapai / Tandai belum tercapai / Hapus target |
 | Baris tercapai | Tercapai [tanggal] |
 | Toast tercapai | Target [nama] tercapai. Target ini pindah ke bagian Tercapai. |
-| Toast batal tercapai | [nama] kembali aktif |
+| Toast batal tercapai | [nama] ditandai belum tercapai |
+| Batal tercapai, progres penuh | Tandai belum tercapai (nonaktif) / Progres sudah mencapai nominal target. Naikkan nominal target untuk mengaktifkannya lagi. |
 | Sheet, judul | Tambah target / Ubah [nama] |
 | Sheet, label | Nama target / Nominal target / Tenggat / Akun penampung / Pemilik target |
 | Sheet, placeholder | Dana darurat / Tanpa akun, catat setoran manual |
@@ -447,33 +450,41 @@ Tabel di bawah mencatat teks yang sudah dipakai di kode. Bagian dinamis ditulis 
 
 | Elemen | Copy |
 |---|---|
-| Hero, komponen | Saldo likuid / Tagihan sebelum gajian / Setoran target / Sisa anggaran wajib |
+| Hero, komponen | Saldo likuid / Tagihan sebelum gajian / Setoran target sampai gajian / Sisa anggaran wajib |
+| Hero, periode lalu | Dihitung dari posisi hari ini. |
 | Hero negatif | Kurang [Rp] sampai gajian |
 | Hero (aria) | Aman dibelanjakan / Hari menuju gajian: [n] hari |
-| Kosong, belum ada akun | Tambahkan akun pertama. Mulai dari rekening yang paling sering kamu pakai. Saldonya bisa dicocokkan nanti. / Tambah akun |
+| Kosong, belum ada akun | Tambahkan akun pertama. Mulai dari akun yang paling sering kamu pakai. Saldonya bisa dicocokkan nanti. / Tambah akun |
 | Kosong, partner | [nama] belum mencatat transaksi. Kamu bisa mencatat atas namanya dari sini. / Catat untuk [nama] |
 | Perlu perhatian, judul | Perlu perhatian |
-| Perlu perhatian, tagihan telat | [Telat n hari] · Tagihan [nama] [Rp] belum dibayar |
-| Perlu perhatian, anggaran lewat | Lewat · Anggaran wajib [nama]: terpakai [Rp] dari [Rp] |
-| Perlu perhatian, tagihan segera | [3 hari lagi] · Tagihan [nama] [Rp] jatuh tempo |
-| Perlu perhatian, draf | Draf · [n] transaksi draf menunggu konfirmasi |
+| Perlu perhatian, tagihan telat | [Telat n hari] · Tagihan [nama] belum dibayar · [Rp] |
+| Perlu perhatian, anggaran lewat | Lewat · Anggaran wajib [nama] lewat · [Rp] (nominal yang lewat) |
+| Perlu perhatian, tagihan segera | [3 hari lagi] · Tagihan [nama] jatuh tempo · [Rp] |
+| Perlu perhatian, perlu dikonfirmasi | Perlu dikonfirmasi · [n] transaksi perlu dikonfirmasi |
 | Perlu perhatian, tombol | Lihat semua ([n]) / Tampilkan lebih sedikit |
-| Arus, judul | Arus bulan ini / Arus periode ini |
+| Arus, judul | Arus bulan ini / Arus periode ini / Arus bulan lalu / Arus periode lalu |
+| Arus, pilihan periode | Bulan lalu / Bulan ini (bulan kalender) / Periode lalu / Periode ini (siklus gajian) |
+| Arus, pilihan periode (aria) | Periode arus |
 | Arus, label | Pemasukan / Pengeluaran / Rasio tabungan |
 | Arus, tanpa pemasukan | Belum ada pemasukan periode ini / Belum ada pemasukan |
-| Arus, perubahan | ↑ [persen] dari [periode] / ↑ [n] poin dari [periode] / Tidak ada di [periode] |
+| Arus, perubahan | ↑ [persen] dari [periode] / ↑ [n] poin dari [periode] / Tidak ada pembanding di [periode] |
+| Arus, nilai bersih | Posisi hari ini |
+| Arus, tombol rumus (aria) | Cara menghitung pemasukan / Cara menghitung pengeluaran / Cara menghitung rasio tabungan / Cara menghitung nilai bersih |
 | Arus, perubahan (aria) | naik / turun / tetap [persen] dari [periode] |
 | Grafik saldo, judul | Saldo likuid [Rp] di akhir [periode] / Saldo likuid diperkirakan [Rp] di akhir [periode] / Belum ada saldo untuk digambar |
 | Grafik saldo, keterangan | Garis putus-putus: proyeksi dari rata-rata pengeluaran harian dan tagihan terjadwal sampai [tanggal]. |
 | Grafik saldo, legenda | Saldo likuid / Proyeksi saldo |
 | Grafik saldo, tabel | Saldo likuid harian [periode]: Tanggal / Saldo likuid / Keterangan (Aktual, Proyeksi) |
+| Grafik saldo, tombol rumus (aria) | Cara menghitung saldo likuid harian |
 | Kategori, judul | Pengeluaran per kategori |
 | Kategori, kosong | Belum ada pengeluaran |
 | Kategori, tautan | Lihat semua kategori di Laporan |
 | Kategori, pemisah pemilik | Warna pemilik |
-| Anggaran, judul | Anggaran |
-| Anggaran, kosong | Belum ada anggaran bulan ini. / Atur anggaran |
+| Tren, judul dan tautan | Tren 12 bulan / Buka Laporan |
+| Anggaran, judul | Anggaran / Semua anggaran |
+| Anggaran, kosong | Belum ada anggaran bulan ini. / Belum ada anggaran [periode]. / Atur anggaran |
 | Anggaran, baris | Sesuai / Mendekati / Lewat, lebih cepat dari biasa · [persen] / [Rp] dari [Rp] · sisa [Rp] / · lewat [Rp] |
+| Anggaran, tanpa nominal | belum ada nominal |
 | Anggaran, penanda | Garis tegak: hari ini, [persen] bulan sudah berjalan |
 | Akun, judul | Akun / Semua akun |
 | Akun, label | Saldo likuid / Kewajiban / Aset / Nilai bersih / Milik [nama] |
@@ -484,7 +495,7 @@ Tabel di bawah mencatat teks yang sudah dipakai di kode. Bagian dinamis ditulis 
 | Target, kosong | Belum ada target tabungan. |
 | Target, baris | · setoran [Rp] per bulan |
 | Kesehatan, judul | Cek kesehatan |
-| Kesehatan, status | Aman / Pantau / Perlu perhatian |
+| Kesehatan, status | Aman / Pantau / Perlu dicek |
 | Kesehatan, cek | Dana darurat / Rasio tabungan / Rasio cicilan / Tagihan lewat jatuh tempo |
 | Wawasan, judul | Wawasan minggu ini |
 | Wawasan, kosong | Belum ada transaksi 7 hari terakhir untuk dirangkum. |
@@ -496,7 +507,7 @@ Tabel di bawah mencatat teks yang sudah dipakai di kode. Bagian dinamis ditulis 
 | Wawasan, tagihan | Tagihan [nama] [Rp] jatuh tempo [3 hari lagi]. |
 | Wawasan, tautan | Lihat transaksi |
 | Cara menghitung, judul | Cara menghitung [metrik] |
-| Cara menghitung, keterangan | Dihitung app dari data kalian, bukan AI. |
+| Cara menghitung, keterangan | Dihitung Kas Kita dari data kalian, bukan AI. |
 | Cara menghitung, baris hasil | Hasil |
 
 ### Laporan
@@ -508,7 +519,8 @@ Tabel di bawah mencatat teks yang sudah dipakai di kode. Bagian dinamis ditulis 
 | Ringkasan, judul | Ringkasan [periode], dibanding [periode] |
 | Ringkasan, label | Pemasukan / Pengeluaran / Selisih / Rasio tabungan [persen] |
 | Ringkasan, tanpa pemasukan | Belum ada pemasukan periode ini |
-| Ringkasan, perubahan kosong | Tidak ada di [periode] |
+| Ringkasan, perubahan kosong | Tidak ada pembanding di [periode] |
+| Kategori, perubahan kosong | Tidak ada pembanding di [periode] |
 | Kategori, judul | Pengeluaran per kategori / Pemasukan per kategori |
 | Kategori, kosong | Belum ada pengeluaran [periode]. / Belum ada pemasukan [periode]. |
 | Kategori, porsi | [persen] dari total |
@@ -517,7 +529,7 @@ Tabel di bawah mencatat teks yang sudah dipakai di kode. Bagian dinamis ditulis 
 | Tren, tabel | Pemasukan dan pengeluaran 12 bulan: Bulan / Pemasukan / Pengeluaran / Selisih |
 | Cetak, judul | Laporan keuangan [periode] |
 | Cetak, keterangan | Cakupan [cakupan] · periode [periode], dibanding [periode] · dicetak [tanggal] |
-| Cetak, kolom | Kategori / Nominal / Porsi / Perubahan |
+| Cetak, kolom | Kategori / Nominal / Porsi / Perubahan (— kalau tidak ada pembanding) |
 | Cetak, catatan kaki | Semua angka dihitung Kas Kita dari transaksi terkonfirmasi, tanpa transfer dan Penyesuaian saldo. |
 | Cetak, tautan | Kembali ke laporan |
 
@@ -547,7 +559,7 @@ Tabel di bawah mencatat teks yang sudah dipakai di kode. Bagian dinamis ditulis 
 | Kategori, daftar | Kategori pengeluaran / Kategori pemasukan / Belum ada kategori / Diarsipkan ([n]) |
 | Kategori, tombol | Tambah kategori / Pulihkan / Ubah [nama] / Arsipkan [nama] |
 | Kategori, toast | [nama] diarsipkan. Transaksi lama tetap memakai kategori ini. / [nama] dipulihkan |
-| Kategori sistem | Kategori sistem: [nama] dan [nama] dipakai app untuk transfer antar akun dan pencocokan saldo, jadi tidak bisa diubah atau diarsipkan. |
+| Kategori sistem | Kategori sistem: [nama] dan [nama] dipakai Kas Kita untuk transfer antar akun dan pencocokan saldo, jadi tidak bisa diubah atau diarsipkan. |
 | Dialog kategori, judul | Tambah kategori pengeluaran / Tambah kategori pemasukan / Ubah kategori |
 | Dialog kategori, label | Nama / Induk / Ikon |
 | Dialog kategori, induk kosong | Tidak ada, jadikan kategori utama |
@@ -561,7 +573,7 @@ Tabel di bawah mencatat teks yang sudah dipakai di kode. Bagian dinamis ditulis 
 | Sesi, kosong | Tidak ada sesi aktif lain. Muat ulang halaman kalau baru masuk dari perangkat lain. |
 | Sesi, tombol | Keluar dari perangkat ini |
 | Sesi, toast | [perangkat] sudah keluar |
-| AI, status sementara | Pemasangan penyedia AI (alamat server, API key, dan pilihan model) hadir di tahap berikutnya. Sampai saat itu belum ada data yang dikirim ke penyedia mana pun, dan quick-add membaca teksmu dengan parser di app. |
+| AI, status sementara | Pengaturan penyedia AI belum tersedia di versi ini. Sampai tersedia, tidak ada data yang dikirim ke penyedia AI mana pun, dan Kas Kita membaca teks di bar bawah sendiri, tanpa AI. |
 | Ekspor | Satu file zip berisi data.json (akun, transaksi, kategori, anggaran, tagihan, target, dan riwayat perubahan) beserta lampiran struk. Data login dan API key tidak ikut. |
 | Ekspor, tombol | Ekspor semua data |
 | Ekspor, lampiran hilang | Lampiran ini tidak ditemukan di penyimpanan saat ekspor. |
@@ -578,19 +590,20 @@ Tabel di bawah mencatat teks yang sudah dipakai di kode. Bagian dinamis ditulis 
 | Langkah 1 | Profil kamu: Nama, warna yang menandai data milikmu, dan tanggal gajian. |
 | Langkah 1, petunjuk nama | Nama yang dilihat [nama] di cakupan dan riwayat. / Nama yang tampil di cakupan dan riwayat. |
 | Langkah 1, error | Isi tanggal gajian 1 sampai 31 |
-| Langkah 2 | Akun pertama: Mulai dari rekening yang paling sering kamu pakai, dengan saldonya hari ini. |
+| Langkah 2 | Akun pertama: Mulai dari akun yang paling sering kamu pakai, dengan saldonya hari ini. |
 | Langkah 2, sudah ada | Sudah ada [n] akun. Tambahkan lagi kalau ada yang belum tercatat. |
 | Langkah 2, label | Nama akun / Jenis / Pemilik / Saldo hari ini |
+| Langkah 2, pemilik | Kamu / [nama] / Bersama |
 | Langkah 2, placeholder | BCA gaji |
-| Langkah 2, petunjuk saldo | Lihat di aplikasi bank atau dompet. Bisa dicocokkan lagi nanti. |
-| Langkah 2, petunjuk utang | Tulis sisa utangnya. App mencatatnya sebagai kewajiban. |
+| Langkah 2, petunjuk saldo | Lihat di aplikasi bank atau e-wallet. Bisa dicocokkan lagi nanti. |
+| Langkah 2, petunjuk utang | Tulis sisa utangnya. Kas Kita mencatatnya sebagai kewajiban. |
 | Langkah 2, error | Isi nama akun / Isi saldo hari ini, misalnya 1,5jt |
 | Langkah 2, tombol | Tambah akun |
 | Langkah 2, toast | [nama] ditambahkan |
 | Langkah 2, daftar (aria) | Akun yang baru ditambahkan |
 | Langkah 3 | Pengaturan AI: Opsional. Semua fitur pencatatan tetap jalan tanpa AI. |
-| Langkah 3, isi | Quick-add tetap jalan tanpa AI. Ketik misalnya "kopi 25rb gopay" di bar bawah dan app membacanya sendiri. |
-| Langkah 3, status sementara | Pemasangan penyedia AI untuk membaca foto struk hadir di tahap berikutnya, di Pengaturan bagian AI. Langkah ini dilewati dulu. |
+| Langkah 3, isi | Pencatatan tetap jalan tanpa AI. Ketik misalnya "kopi 25rb gopay" di bar bawah dan Kas Kita membacanya sendiri. |
+| Langkah 3, status sementara | Membaca foto struk dengan AI belum tersedia di versi ini. Langkah ini dilewati dulu. |
 | Tombol langkah | Lanjut / Lewati / Selesai |
 
 ### Notifikasi
@@ -601,14 +614,14 @@ Tabel di bawah mencatat teks yang sudah dipakai di kode. Bagian dinamis ditulis 
 | Tombol | Tandai semua dibaca |
 | Memuat | Memuat notifikasi |
 | Gagal memuat | Notifikasi belum bisa dimuat. / Coba lagi |
-| Kosong, panel | Belum ada notifikasi. Kabar muncul di sini saat [nama] mengubah data milikmu, tagihan jatuh tempo 3 hari lagi, atau anggaran wajib lewat. |
+| Kosong, panel | Belum ada notifikasi. Kabar muncul di sini saat [nama] mengubah data milikmu, tagihan jatuh tempo 3 hari lagi, atau anggaran wajib lewat. / Tanpa partner: Belum ada notifikasi. Kabar muncul di sini saat tagihan jatuh tempo 3 hari lagi atau anggaran wajib lewat. |
 | Kosong, tombol shell | Belum ada notifikasi. |
 | Daftar (aria) | Daftar notifikasi |
 | Belum dibaca (aria) | Belum dibaca. |
 | Waktu | Baru saja / [n] menit lalu / [tanggal] [waktu] |
 | Perubahan oleh partner | [nama] mengubah [objek]. / [nama] mengubah [objek]: [nilai] menjadi [nilai]. / [nama] menghapus [objek]. / [nama] memulihkan [objek]. |
 | Objek | [jenis] [tanggal] / nilai [nama] [tanggal] |
-| Cadangan, partner | Partner mengubah data milikmu. |
+| Cadangan, partner | [nama] mengubah data milikmu. / Ada perubahan pada data milikmu. (kalau nama tidak ada) |
 | Cadangan, tagihan | Ada tagihan yang jatuh tempo 3 hari lagi. |
 | Cadangan, anggaran | Ada anggaran wajib yang lewat. |
 | Cadangan, berulang | Ada transaksi berulang yang menunggu konfirmasi. |
@@ -618,15 +631,15 @@ Tabel di bawah mencatat teks yang sudah dipakai di kode. Bagian dinamis ditulis 
 | Situasi | Copy |
 |---|---|
 | Error server umum | Terjadi kesalahan di server. Coba lagi sebentar lagi. |
-| Data tidak ditemukan | Data [entitas] [id] tidak ditemukan. Muat ulang halaman lalu coba lagi. |
+| Data tidak ditemukan | [Subjek] tidak ditemukan, mungkin sudah dihapus. Muat ulang halaman lalu coba lagi. |
 | Konflik edit, umum | [Subjek] baru diubah [nama] pukul [waktu]. Pilih versi yang dipakai. |
-| Subjek konflik | Transaksi ini, Akun ini, Kategori ini, Anggaran ini, Tagihan ini, Target ini, Setoran ini, Nilai ini, Data ini |
-| Validasi umum | Data tidak valid |
-| Format tanggal | Format tanggal YYYY-MM-DD |
+| Subjek konflik dan tidak ditemukan | Transaksi ini, Akun ini, Kategori ini, Anggaran ini, Tagihan ini, Target ini, Setoran ini, Nilai ini, Pengguna ini, Data ini |
+| Validasi umum | Ada isian yang belum benar. Cek bagian yang ditandai lalu simpan lagi. |
+| Format tanggal | Tanggal belum terbaca. Pilih tanggal lagi. |
 | Nominal kosong | Isi nominal, misalnya 25rb |
 | Saldo tidak cukup | Saldo [nama] tinggal [Rp]. Kurangi nominal atau catat dari akun lain. |
 | Akun, nama kosong | Isi nama akun |
-| Akun, pemilik | Pemilik akun harus kamu, partner, atau Bersama |
+| Akun, pemilik | Pilih pemilik akun: kamu, [nama], atau Bersama. / Pilih pemilik akun: kamu atau Bersama. (tanpa partner) |
 | Akun, saldo awal tunai | Saldo awal Tunai tidak boleh negatif |
 | Akun, hapus ditolak | Akun ini punya transaksi, jadi tidak bisa dihapus. Arsipkan supaya riwayatnya tetap ada. |
 | Cocokkan, saldo negatif | Saldo [nama] tidak boleh negatif |
@@ -636,11 +649,11 @@ Tabel di bawah mencatat teks yang sudah dipakai di kode. Bagian dinamis ditulis 
 | Transaksi, transfer | Pilih akun tujuan transfer / Akun tujuan harus berbeda dari akun asal |
 | Transaksi, pulihkan kedaluwarsa | Transaksi ini dihapus lebih dari 30 hari lalu dan tidak bisa dipulihkan. |
 | Tagihan, nama kosong | Isi nama tagihan |
-| Tagihan, pengulangan | Pengulangan tidak dikenali |
+| Tagihan, pengulangan | Pengulangan tidak dikenali. Pilih Bulanan, Mingguan, atau Tahunan. |
 | Tagihan, kategori | Pilih kategori tagihan |
 | Tagihan, tidak ada nominal | Tidak ada nominal yang perlu dibayar untuk periode ini. |
 | Tagihan, sudah dibayar | Tagihan periode ini sudah dibayar. |
-| Anggaran, pemilik | Pemilik anggaran tidak dikenal |
+| Anggaran, pemilik | Pemilik anggaran tidak dikenal. Pilih pemilik lagi. |
 | Kategori, nama kosong | Isi nama kategori |
 | Kategori, induk diri sendiri | Kategori tidak bisa jadi induk dirinya sendiri |
 | Kategori, kedalaman | Kategori maksimal dua tingkat |
@@ -657,7 +670,7 @@ Tabel di bawah mencatat teks yang sudah dipakai di kode. Bagian dinamis ditulis 
 | Profil, nama | Isi nama tampilan / Nama tampilan maksimal 40 karakter |
 | Profil, gajian | Isi tanggal gajian 1 sampai 31 |
 | Profil, warna | Warna [warna] sudah dipakai [nama]. Pilih warna lain. |
-| Sesi, tidak ditemukan | Sesi tidak ditemukan. / Sesi tidak ditemukan. Mungkin sudah berakhir. |
+| Sesi, tidak ditemukan | Sesi ini sudah berakhir. Muat ulang halaman untuk melihat daftar terbaru. |
 | Sesi habis | Sesimu berakhir. Masuk lagi untuk melanjutkan. |
 
 Pesan CLI `user:create` (dibaca admin di terminal, bukan di app): "Email tidak valid.", "Nama tidak boleh kosong.", "Nama maksimal 40 karakter.", "Tanggal gajian 1 sampai 31.", "Warna harus salah satu dari: [warna].", "Warna [warna] sudah dipakai pengguna lain. Pilih salah satu: [warna].", "Semua warna identitas sudah dipakai.", "Kas Kita sudah punya dua pengguna. Pengguna ketiga tidak bisa dibuat.", "Email [email] sudah terdaftar. Pakai --link untuk membuat tautan pendaftaran baru.", "Pengguna gagal dibuat.", "Belum ada pengguna dengan email [email]."
@@ -668,34 +681,7 @@ Hasil audit teks di kode terhadap bagian 1 sampai 4, per 24 Sep 2026. Urutan tab
 
 | Lokasi | Teks sekarang | Masalah | Usulan |
 |---|---|---|---|
-| src/server/errors.ts:24 | Data [entitas] [id] tidak ditemukan. Muat ulang halaman lalu coba lagi. | Menampilkan nama tabel dan UUID ke pengguna, misalnya "Data accounts 3f2a… tidak ditemukan" (audit.ts:117 dan :133 mengirim nama tabel). | Pakai subjek dari `ENTITY_SUBJECT`, tanpa id: "[Subjek] tidak ditemukan, mungkin sudah dihapus. Muat ulang halaman lalu coba lagi." Tambahkan "Pengguna ini" untuk entitas pengguna. |
-| src/server/mutations/_shared.ts:37, src/server/actions/transactions.ts:47 | Data tidak valid | Tidak menjelaskan apa yang salah atau apa yang bisa dilakukan. | "Ada isian yang belum benar. Cek bagian yang ditandai lalu simpan lagi." |
-| src/server/mutations/_shared.ts:26 | Format tanggal YYYY-MM-DD | Pesan teknis, sampai ke pengguna lewat `parseInput`. | "Tanggal belum terbaca. Pilih tanggal lagi." |
-| src/server/actions/notifications.ts:43 | Partner mengubah data milikmu. | Suara: pasangan disebut dengan nama tampilannya. | "[nama] mengubah data milikmu." Kalau nama tidak ada: "Ada perubahan pada data milikmu." |
-| src/components/notifications/notifications-panel.tsx:86 | …saat {partnerName ?? "partner"} mengubah data milikmu… | Fallback "partner" huruf kecil; pasangan disebut dengan nama. | Kalau partner belum ada, hapus bagian itu: "Belum ada notifikasi. Kabar muncul di sini saat tagihan jatuh tempo 3 hari lagi atau anggaran wajib lewat." |
-| src/components/onboarding/account-step.tsx:100 | Lihat di aplikasi bank atau dompet. Bisa dicocokkan lagi nanti. | Glosarium: "dompet" dilarang. | "Lihat di aplikasi bank atau e-wallet. Bisa dicocokkan lagi nanti." |
-| src/app/(app)/page.tsx:62, src/components/accounts/accounts-view.tsx:109, src/components/onboarding/onboarding-flow.tsx:16 | Mulai dari rekening yang paling sering kamu pakai… | Glosarium: "rekening" untuk semua jenis akun. Akun pertama bisa e-wallet atau tunai. | "Mulai dari akun yang paling sering kamu pakai. Saldonya bisa dicocokkan nanti." dan "Mulai dari akun yang paling sering kamu pakai, dengan saldonya hari ini." |
-| src/components/accounts/delete-account-dialog.tsx:34, src/components/transactions/transaction-detail-sheet.tsx:94, src/components/investments/investments-view.tsx:82 | Akun dihapus / Transaksi dihapus / Nilai dihapus | Toast untuk tombol yang sama ditulis beda: tagihan, anggaran, dan target memakai "Terhapus" (bills-view.tsx:179, budgets-view.tsx:169, goals-view.tsx:147). | Satu pola seperti "Tersimpan": "Terhapus" di semua toast hapus. Label status di riwayat tagihan (bill-history.tsx:24 "Transaksi dihapus") tetap. |
-| src/components/dashboard/attention-items.ts:46 dan :48, src/app/api/export/_lib/csv.ts:19 | Draf / [n] transaksi draf menunggu konfirmasi | Status yang sama di layar lain bernama "Perlu dikonfirmasi" (tab Transaksi, labels.ts:63). | Status: "Perlu dikonfirmasi". Kalimat: "[n] transaksi perlu dikonfirmasi". CSV: "Perlu dikonfirmasi". |
-| src/components/dashboard/formula-explainer.tsx:62, src/components/onboarding/account-step.tsx:100, src/components/onboarding/ai-step.tsx:9, src/components/settings/categories-section.tsx:119, src/app/(app)/pengaturan/page.tsx:72 | Dihitung app… / App mencatatnya… / app membacanya sendiri / dipakai app… / Angka di dashboard selalu dihitung app | Campur bahasa, dan app menyebut dirinya dengan dua cara ("app" dan "Kas Kita"). "Dashboard" tidak ada di menu; halamannya bernama Ringkasan. | Pakai "Kas Kita": "Dihitung Kas Kita dari data kalian, bukan AI." / "Kas Kita mencatatnya sebagai kewajiban." / "…dan Kas Kita membacanya sendiri." / "…dipakai Kas Kita untuk transfer antar akun…". Keterangan halaman AI (juga di tabel Pengaturan AI): "Angka di Ringkasan selalu dihitung Kas Kita, bukan AI." |
-| src/components/shell/sidebar.tsx:44 | Lipat sidebar / Buka sidebar | Campur bahasa Inggris. | "Lipat navigasi" / "Buka navigasi" |
-| src/components/transactions/conflict-dialog.tsx:90 | Field | Kata Inggris dijadikan judul kolom. | "Bagian". Bagian lain dialog sudah memakai kata Indonesia. |
-| src/components/transactions/transaction-form.tsx:67, src/components/transactions/labels.ts:66 dan :67 | Memuat form / Form / Quick-add | Campur bahasa. Teks lain menyebut bar itu "bar bawah". | "Memuat formulir" / sumber "Formulir" / sumber "Bar catat" |
-| src/components/onboarding/ai-step.tsx:9, src/app/(app)/pengaturan/page.tsx:75 | Quick-add tetap jalan tanpa AI… / …quick-add membaca teksmu dengan parser di app. | Istilah internal dan bahasa Inggris ("quick-add", "parser", "app"). | "Pencatatan tetap jalan tanpa AI. Ketik misalnya "kopi 25rb gopay" di bar bawah dan Kas Kita membacanya sendiri." / "…dan Kas Kita membaca teks di bar bawah sendiri, tanpa AI." |
-| src/app/(app)/pengaturan/page.tsx:75, src/components/onboarding/ai-step.tsx:12 | …hadir di tahap berikutnya… | Bahasa roadmap; pengguna tidak tahu "tahap" apa. | "Pengaturan penyedia AI belum tersedia di versi ini. Sampai tersedia, tidak ada data yang dikirim ke penyedia AI mana pun." / "Membaca foto struk dengan AI belum tersedia di versi ini. Langkah ini dilewati dulu." |
-| src/components/dashboard/flow-section.tsx:23, src/components/reports/summary-card.tsx:10, src/components/reports/category-list.tsx:71 | Tidak ada di [periode] | Kurang jelas: yang tidak ada adalah nilai pembanding, bukan data periode ini. | "Tidak ada pembanding di [periode]" |
-| src/server/metrics/safe-to-spend.ts:61, net-worth.ts:23, savings-rate.ts:8, days-to-payday.ts:30-31, cumulative-daily-balance.ts:52 | saldo likuid - tagihan… | Rumus di "Cara menghitung" memakai tanda hubung sebagai minus. | Ganti " - " dengan " − " di semua rumus yang tampil. |
-| src/components/transactions/conflict-dialog.tsx:24, :35, :44, :45; src/components/reports/print-report.tsx:10; src/components/dashboard/budget-section.tsx:30 dan :58 | - | Tanda hubung sebagai isian kosong mudah dibaca sebagai minus di dekat angka. | "—" untuk sel kosong. Di anggaran tanpa nominal, tulis "belum ada nominal". |
-| src/server/mutations/accounts.ts:34 | Pemilik akun harus kamu, partner, atau Bersama | "partner" bukan nama, dan pesannya tidak mengatakan apa yang harus dilakukan. | "Pilih pemilik akun: kamu, [nama], atau Bersama." |
-| src/server/mutations/budgets.ts:31 | Pemilik anggaran tidak dikenal | Tidak mengatakan apa yang harus dilakukan. | "Pemilik anggaran tidak dikenal. Pilih pemilik lagi." |
-| src/server/mutations/bills.ts:24 | Pengulangan tidak dikenali | Tidak mengatakan apa yang harus dilakukan. | "Pengulangan tidak dikenali. Pilih Bulanan, Mingguan, atau Tahunan." |
-| src/server/auth/actions.ts:19 | Sesi tidak ditemukan. | Tidak mengatakan apa yang harus dilakukan; bedanya dengan baris 21 tidak berguna bagi pengguna. | Satukan: "Sesi ini sudah berakhir. Muat ulang halaman untuk melihat daftar terbaru." |
-| src/server/auth/hooks.ts:14 | Email atau password salah. | Tidak mengatakan apa yang bisa dilakukan. | "Email atau password salah. Cek lagi, atau masuk dengan passkey." |
-| src/server/auth/enrollment-actions.ts:34 dan :60 | Password tidak valid. / Kode tidak valid. | Tidak menjelaskan syaratnya. | "Password minimal [n] karakter." / "Kode terdiri dari 6 angka. Masukkan kode terbaru dari aplikasi autentikator." |
-| src/components/goals/goals-view.tsx:52 | [nama] kembali aktif | Toast tidak memakai kata kerja tombolnya ("Tandai belum tercapai"). | "[nama] ditandai belum tercapai" |
-| src/components/dashboard/health-section.tsx:12 | Perlu perhatian | Label status kesehatan sama dengan judul bagian "Perlu perhatian" (attention-list.tsx:27), padahal artinya lain. | Status kesehatan: "Perlu dicek" |
-| src/app/(auth)/daftar-perangkat/backup-setup.tsx:53 | Pasang TOTP | Istilah teknis untuk judul. | "Pasang kode autentikator". Keterangan boleh tetap menyebut TOTP. |
-| src/components/accounts/account-form-fields.tsx:38, src/components/onboarding/account-step.tsx:49, src/components/budgets/owner.tsx:31, src/components/transactions/transaction-form-fields.tsx:33, src/components/quick-add/preview-card.tsx:77 | Saya | Pilihan pemilik ditulis "Saya" di form, tetapi "Milik kamu" di daftar pilihan akun (option-groups.tsx:20) dan nama sendiri di chip akun quick-add (preview-card.tsx:26). | Pilihan pemilik di form memakai "Kamu". "Saya" hanya untuk nama cakupan. |
-| src/components/dashboard/hero.tsx:21 | Setoran target | Nama komponen di hero beda dengan input rumus "Setoran target sampai gajian" (safe-to-spend.ts:51). | Samakan: "Setoran target sampai gajian", atau pendekkan keduanya jadi "Setoran target". |
+
+Semua 29 temuan audit 24 Sep 2026 sudah diterapkan dan tabel di bagian 4 sudah diperbarui.
 
 Tidak ditemukan: emoji, tanda seru di pesan sistem, sapaan selain "kamu", label kapital semua, istilah "Rekonsiliasi", "mode", "view", "goal", "bill", atau "joint" di teks yang tampil. Istilah "Cocokkan saldo" dan "pencocokan" sudah konsisten.

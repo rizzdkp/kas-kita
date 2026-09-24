@@ -20,7 +20,7 @@ export function netWorth(accounts: AccountBalanceInput[]): Metric<bigint> {
   const debts = liabilities(accounts).value;
   return {
     value: sumBigint([liquid, assets, -debts]),
-    formula: "Nilai bersih = saldo likuid + aset tidak likuid - kewajiban",
+    formula: "Nilai bersih = saldo likuid + aset tidak likuid − kewajiban",
     inputs: { "Saldo likuid": liquid, "Aset tidak likuid": assets, Kewajiban: debts },
   };
 }

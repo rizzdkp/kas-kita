@@ -31,7 +31,7 @@ function DeleteBody({ account, onDone }: { account: AccountWithBalance; onDone: 
     startTransition(async () => {
       const result = await deleteAccountAction({ id: account.id, version: account.version });
       if (result.ok) {
-        toast.show({ title: "Akun dihapus" });
+        toast.show({ title: "Terhapus" });
         onDone();
       } else if (result.code === "account_has_transactions") setBlocked(result.error);
       else setError(result.error);

@@ -116,7 +116,7 @@ export function CategoriesManager({ categories }: CategoriesManagerProps) {
             Kategori sistem
           </p>
           <p className="text-small text-secondary">
-            {system.map((c) => c.name).join(" dan ")} dipakai app untuk transfer antar akun dan pencocokan saldo, jadi tidak bisa diubah atau diarsipkan.
+            {system.map((c) => c.name).join(" dan ")} dipakai Kas Kita untuk transfer antar akun dan pencocokan saldo, jadi tidak bisa diubah atau diarsipkan.
           </p>
         </div>
       ) : null}

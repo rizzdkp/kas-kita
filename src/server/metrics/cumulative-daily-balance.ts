@@ -49,7 +49,7 @@ export function cumulativeDailyBalance(input: CumulativeDailyInput): Metric<Dail
   return {
     value: points,
     formula:
-      "Saldo harian = saldo likuid awal periode + perubahan saldo sampai hari itu. Garis putus-putus = saldo hari ini - rata-rata arus keluar harian - tagihan terjadwal",
+      "Saldo harian = saldo likuid awal periode + perubahan saldo sampai hari itu. Garis putus-putus = saldo hari ini − rata-rata arus keluar harian − tagihan terjadwal",
     inputs: {
       "Saldo awal": input.startBalance,
       "Saldo hari ini": balance,

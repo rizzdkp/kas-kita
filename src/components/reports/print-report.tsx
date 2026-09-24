@@ -7,7 +7,7 @@ import "./print.css";
 
 function change(current: bigint, previous: bigint): string {
   const p = percentOf(current - previous, previous);
-  if (p === null) return "-";
+  if (p === null) return "—";
   if (Math.abs(p) < 0.05) return "0%";
   return `${p > 0 ? "↑" : p < 0 ? "↓" : ""} ${formatPercent(Math.abs(p))}`.trim();
 }

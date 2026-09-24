@@ -121,7 +121,7 @@ describe("rate limit login", () => {
     const headers = new Headers({ "x-forwarded-for": "10.0.2.1" });
     for (let i = 0; i < 4; i++) {
       const err = await errorOf(auth.api.signInEmail({ body: { email: "rizz@example.com", password: "salah-salah-salah" }, headers }));
-      expect(err.message).toBe("Email atau password salah.");
+      expect(err.message).toBe("Email atau password salah. Cek lagi, atau masuk dengan passkey.");
     }
     const fifth = await errorOf(auth.api.signInEmail({ body: { email: "rizz@example.com", password: "salah-salah-salah" }, headers }));
     expect(fifth.code).toBe("LOGIN_LOCKED");

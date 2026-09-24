@@ -31,7 +31,8 @@ export type CreateAccountInput = z.input<typeof accountFieldsSchema>;
 function assertOwner(viewer: Viewer, ownerId: string | null) {
   const household = [viewer.user.id, viewer.partner?.id].filter(Boolean);
   if (ownerId !== null && !household.includes(ownerId)) {
-    throw new ValidationError("Pemilik akun harus kamu, partner, atau Bersama", { ownerId: ["Pemilik tidak dikenal"] });
+    const message = viewer.partner ? `Pilih pemilik akun: kamu, ${viewer.partner.displayName}, atau Bersama.` : "Pilih pemilik akun: kamu atau Bersama.";
+    throw new ValidationError(message, { ownerId: ["Pemilik tidak dikenal"] });
   }
 }
 

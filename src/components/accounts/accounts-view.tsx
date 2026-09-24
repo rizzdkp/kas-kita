@@ -106,7 +106,7 @@ export function AccountsView({ accounts, people, institutions, scope, today, ope
               </Button>
             }
           >
-            Mulai dari rekening yang paling sering kamu pakai. Saldonya bisa dicocokkan nanti.
+            Mulai dari akun yang paling sering kamu pakai. Saldonya bisa dicocokkan nanti.
           </EmptyState>
         </Card>
       ) : (

@@ -68,7 +68,7 @@ export function CategoryList({ id, title, kind, categories, range, previousLabel
                     <span className="flex flex-wrap justify-between gap-x-3 text-caption text-secondary">
                       <span className="tabular">{formatPercent(percentOf(c.total, total) ?? 0)} dari total</span>
                       {change === null ? (
-                        <span>Tidak ada di {previousLabel}</span>
+                        <span>Tidak ada pembanding di {previousLabel}</span>
                       ) : (
                         <Delta percent={change} comparedTo={previousLabel} className="text-caption" />
                       )}

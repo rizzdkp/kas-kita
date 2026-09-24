@@ -45,9 +45,9 @@ export function buildAttentionItems(a: Dashboard["attention"], scope: Scope): At
   if (a.draftCount > 0) {
     items.push({
       key: "drafts",
-      status: "Draf",
+      status: "Perlu dikonfirmasi",
       tone: "neutral",
-      text: `${a.draftCount} transaksi draf menunggu konfirmasi`,
+      text: `${a.draftCount} transaksi perlu dikonfirmasi`,
       href: transactionHref({ scope, status: "draft" }),
     });
   }

@@ -91,7 +91,7 @@ export function TransactionDetailSheet({ id, onClose, people, scope, formOptions
     const snapshot: TransactionListRow = { ...detail, version: result.data.version + 1 };
     onChange?.({ type: "deleted", id: txId });
     onClose();
-    toast.show({ title: "Transaksi dihapus", action: { label: "Urungkan", onAction: () => void restore(txId, snapshot) } });
+    toast.show({ title: "Terhapus", action: { label: "Urungkan", onAction: () => void restore(txId, snapshot) } });
   };
 
   const text = detail ? rowText(detail, people) : null;

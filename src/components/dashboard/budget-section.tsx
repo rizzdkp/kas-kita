@@ -42,7 +42,7 @@ export function BudgetSection({ budgets, scope, pastMonth, className }: BudgetSe
               label: b.categoryName,
               formula: b.status.formula,
               inputs: b.status.inputs,
-              result: b.status.value.usedPercent === null ? "-" : `${formatPercent(b.status.value.usedPercent)} terpakai`,
+              result: b.status.value.usedPercent === null ? "belum ada nominal" : `${formatPercent(b.status.value.usedPercent)} terpakai`,
             }))}
           />
           ) : null}
@@ -72,7 +72,7 @@ export function BudgetSection({ budgets, scope, pastMonth, className }: BudgetSe
                     </span>
                     <span className={`tabular ml-auto text-right text-small ${over ? "text-attention" : "text-secondary"}`}>
                       {STATE_TEXT[s.state]}
-                      {s.fasterThanUsual ? ", lebih cepat dari biasa" : ""} · {s.usedPercent === null ? "-" : formatPercent(s.usedPercent)}
+                      {s.fasterThanUsual ? ", lebih cepat dari biasa" : ""} · {s.usedPercent === null ? "belum ada nominal" : formatPercent(s.usedPercent)}
                     </span>
                   </div>
                   <BarTrack percent={s.usedPercent ?? 0} marker={elapsed === undefined ? undefined : s.elapsedPercent} tone={over ? "attention" : "neutral"} />

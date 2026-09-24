@@ -21,7 +21,7 @@ export interface ConflictState {
 type Comparable = Pick<TransactionRow, "kind" | "amount" | "accountId" | "toAccountId" | "categoryId" | "occurredAt" | "note" | "beneficiary">;
 
 function categoryName(options: TransactionFormOptions, id: string | null): string {
-  if (!id) return "-";
+  if (!id) return "—";
   for (const g of [...options.categories.expense, ...options.categories.income]) {
     if (g.id === id) return g.name;
     const child = g.children.find((c) => c.id === id);
@@ -32,7 +32,7 @@ function categoryName(options: TransactionFormOptions, id: string | null): strin
 
 /** Baris perbandingan yang manusiawi; nilai dibandingkan sebagai teks yang tampil. */
 function describe(t: Comparable, options: TransactionFormOptions): Array<{ label: string; value: string }> {
-  const account = (id: string | null) => (id ? (options.accounts.find((a) => a.id === id)?.name ?? "Akun lain") : "-");
+  const account = (id: string | null) => (id ? (options.accounts.find((a) => a.id === id)?.name ?? "Akun lain") : "—");
   const ownerId = options.accounts.find((a) => a.id === t.accountId)?.ownerId ?? null;
   return [
     { label: "Jenis", value: KIND_LABEL[t.kind] },
@@ -41,8 +41,8 @@ function describe(t: Comparable, options: TransactionFormOptions): Array<{ label
     { label: "Akun tujuan", value: account(t.toAccountId) },
     { label: "Kategori", value: categoryName(options, t.categoryId) },
     { label: "Tanggal", value: `${formatDateWithYear(t.occurredAt)}, ${formatTime(t.occurredAt)}` },
-    { label: "Catatan", value: t.note?.trim() || "-" },
-    { label: "Untuk", value: t.kind === "expense" ? beneficiaryLabel(t.beneficiary, ownerId, options.people) : "-" },
+    { label: "Catatan", value: t.note?.trim() || "—" },
+    { label: "Untuk", value: t.kind === "expense" ? beneficiaryLabel(t.beneficiary, ownerId, options.people) : "—" },
   ];
 }
 
@@ -61,8 +61,8 @@ export function ConflictDialog({ conflict, options, busy, onUseMine, onUseLatest
   const latestRows = conflict ? describe(conflict.latest, options) : [];
   const mineRows = conflict ? describe(conflict.mine, options) : [];
   const rows = latestRows
-    .map((l, i) => ({ label: l.label, latest: l.value, mine: mineRows[i]?.value ?? "-" }))
-    .filter((r) => r.latest !== "-" || r.mine !== "-");
+    .map((l, i) => ({ label: l.label, latest: l.value, mine: mineRows[i]?.value ?? "—" }))
+    .filter((r) => r.latest !== "—" || r.mine !== "—");
   const who = conflict?.updatedByName ?? "orang lain";
   const at = conflict ? formatTime(conflict.updatedAt) : "";
 
@@ -87,7 +87,7 @@ export function ConflictDialog({ conflict, options, busy, onUseMine, onUseLatest
           <thead>
             <tr className="text-left text-caption text-secondary">
               <th scope="col" className="w-[28%] pb-2 pr-2 font-normal">
-                <span className="sr-only">Field</span>
+                <span className="sr-only">Bagian</span>
               </th>
               <th scope="col" className="pb-2 pr-2 font-medium">
                 Versi terbaru

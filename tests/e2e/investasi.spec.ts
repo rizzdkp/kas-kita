@@ -23,7 +23,7 @@ test("perbarui nilai investasi lalu hapus lagi dari riwayat", async ({ page }) =
   const row = card.getByRole("row").filter({ hasText: note });
   await row.getByRole("button", { name: /Hapus nilai/ }).click();
   await page.getByRole("dialog").getByRole("button", { name: "Hapus nilai" }).click();
-  await expect(page.getByText("Nilai dihapus")).toBeVisible();
+  await expect(page.getByText("Terhapus", { exact: true })).toBeVisible();
   await expect(card.getByRole("row").filter({ hasText: note })).toHaveCount(0);
 });
 

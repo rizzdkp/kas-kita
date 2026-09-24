@@ -46,7 +46,7 @@ export function AccountStep({ partner, existingCount, onNext, onSkip, isLast, fi
   const [error, setError] = useState<ActionError | null>(null);
   const { pending, save } = useSave();
   const ownerOptions = [
-    { value: "me", label: "Saya" },
+    { value: "me", label: "Kamu" },
     ...(partner ? [{ value: "partner", label: partner.name }] : []),
     { value: "shared", label: "Bersama" },
   ] as ReadonlyArray<{ value: Owner; label: string }>;
@@ -97,7 +97,7 @@ export function AccountStep({ partner, existingCount, onNext, onSkip, isLast, fi
         <Field
           label="Saldo hari ini"
           error={firstFieldError(error, "balance")}
-          description={LIABILITY.has(type) ? "Tulis sisa utangnya. App mencatatnya sebagai kewajiban." : "Lihat di aplikasi bank atau dompet. Bisa dicocokkan lagi nanti."}
+          description={LIABILITY.has(type) ? "Tulis sisa utangnya. Kas Kita mencatatnya sebagai kewajiban." : "Lihat di aplikasi bank atau e-wallet. Bisa dicocokkan lagi nanti."}
         >
           <AmountInput
             value={balanceText}

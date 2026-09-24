@@ -31,7 +31,7 @@ export async function startBackupSetup(password: string): Promise<BackupSetupRes
   if (!viewer) return { ok: false, error: NO_SESSION };
   if (viewer.user.twoFactorEnabled) return { ok: false, error: "Password dan TOTP cadangan sudah aktif untuk akun ini." };
   const parsed = passwordSchema.safeParse(password);
-  if (!parsed.success) return { ok: false, error: parsed.error.issues[0]?.message ?? "Password tidak valid." };
+  if (!parsed.success) return { ok: false, error: parsed.error.issues[0]?.message ?? `Password minimal ${MIN_PASSWORD_LENGTH} karakter.` };
 
   // sisa penyetelan yang tidak selesai dibuang supaya bisa diulang dari awal
   await db.delete(twoFactors).where(eq(twoFactors.userId, viewer.user.id));
@@ -57,7 +57,7 @@ export async function confirmBackupTotp(code: string): Promise<BackupConfirmResu
   const viewer = await getViewer();
   if (!viewer) return { ok: false, error: NO_SESSION };
   const parsed = codeSchema.safeParse(code);
-  if (!parsed.success) return { ok: false, error: parsed.error.issues[0]?.message ?? "Kode tidak valid." };
+  if (!parsed.success) return { ok: false, error: parsed.error.issues[0]?.message ?? "Kode terdiri dari 6 angka. Masukkan kode terbaru dari aplikasi autentikator." };
   try {
     await auth.api.verifyTOTP({ body: { code: parsed.data }, headers: await headers() });
     return { ok: true };

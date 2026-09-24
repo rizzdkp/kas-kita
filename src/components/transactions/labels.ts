@@ -63,8 +63,8 @@ export function beneficiaryLabel(b: Beneficiary, accountOwnerId: string | null, 
 export const STATUS_LABEL = { confirmed: "Terkonfirmasi", draft: "Perlu dikonfirmasi" } as const;
 
 export const SOURCE_LABEL: Record<string, string> = {
-  manual: "Form",
-  quick_add: "Quick-add",
+  manual: "Formulir",
+  quick_add: "Bar catat",
   receipt: "Foto struk",
   import_csv: "Impor CSV",
   import_pdf: "Impor PDF",
