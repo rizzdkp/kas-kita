@@ -39,7 +39,8 @@ export function rowText(row: TransactionListRow, people: People): RowText {
         : row.note || "Transfer";
   return {
     title,
-    subtitle: row.flow === "transfer_internal" && !row.note ? `${row.accountName} · ke ${row.toAccountName ?? "akun lain"}` : route,
+    subtitle:
+      row.flow === "transfer_internal" ? `${row.accountName} · ke ${row.toAccountName ?? "akun lain"}` : [row.note, route].filter(Boolean).join(" · "),
     filledBy,
     signed: row.amount,
     transfer: true,
