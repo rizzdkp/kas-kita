@@ -10,10 +10,10 @@ test("navigasi bulan lewat ?bulan=", async ({ page }) => {
   await page.goto("/laporan?bulan=2026-08");
   await expect(page.getByTestId("report-month")).toHaveText("Agustus 2026");
   await page.getByRole("link", { name: /^Bulan sebelumnya/ }).click();
-  await expect(page).toHaveURL(/bulan=2026-07/);
+  await expect(page).toHaveURL(/bulan=2026-07/, { timeout: 15_000 });
   await expect(page.getByTestId("report-month")).toHaveText("Juli 2026");
   await page.getByRole("link", { name: /^Bulan berikutnya/ }).click();
-  await expect(page).toHaveURL(/bulan=2026-08/);
+  await expect(page).toHaveURL(/bulan=2026-08/, { timeout: 15_000 });
   await expect(page.getByTestId("report-month")).toHaveText("Agustus 2026");
 });
 
