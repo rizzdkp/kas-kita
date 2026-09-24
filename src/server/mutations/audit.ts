@@ -99,10 +99,7 @@ export interface UpdateResult<Row> {
   diff: AuditDiff;
 }
 
-/**
- * Update optimistik: WHERE id AND version, nol baris berarti ConflictError berisi baris terbaru.
- * `extraDiff` untuk perubahan di tabel relasi (misalnya tag) yang ikut tercatat di entitas ini.
- */
+/** `extraDiff` untuk tabel relasi (misalnya tag) yang ikut tercatat di riwayat entitas ini. */
 export async function updateWithAudit<T extends AuditedTable>(
   tx: Tx,
   table: T,

@@ -1,11 +1,7 @@
 import { sql, type SQL } from "drizzle-orm";
 import { db as defaultDb, type DbOrTx } from "@/server/db/client";
 
-/**
- * Saldo dihitung dari opening_balance + arus sejak opening_date (docs/decisions/0004).
- * Saldo awal diperlakukan sebagai delta pada opening_date supaya saldo per tanggal dan grafik harian
- * memakai satu sumber yang sama.
- */
+// saldo awal jadi delta di opening_date supaya saldo per tanggal dan grafik harian satu sumber (docs/decisions/0004)
 export interface DeltaOptions {
   /** Abaikan transaksi ini (dipakai saat memvalidasi edit terhadap saldo tanpa transaksi lama). */
   excludeTransactionIds?: string[];

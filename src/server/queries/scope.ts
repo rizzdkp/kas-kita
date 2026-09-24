@@ -4,10 +4,7 @@ import type { Scope } from "@/lib/scope";
 import type { Viewer } from "@/server/auth/viewer";
 import { accounts, transactions } from "@/server/db/schema";
 
-/**
- * Satu-satunya tempat filter pemilik (AGENTS.md aturan 2, DATA-MODEL bagian 3).
- * me = akun milik user login, partner = akun milik partner, all = semua termasuk Bersama (owner_id NULL).
- */
+// satu-satunya tempat filter pemilik (AGENTS.md aturan 2); Bersama (owner_id NULL) hanya di "all"
 
 export interface ScopeOwners {
   all: boolean;
@@ -82,10 +79,7 @@ export function countableTransaction(): SQL {
 export const CASH_FLOWS = ["income", "expense", "transfer_in", "transfer_out", "transfer_internal"] as const;
 export type CashFlow = (typeof CASH_FLOWS)[number];
 
-/**
- * Arah arus kas dari sudut cakupan. Transfer yang kedua ujungnya di cakupan jadi transfer_internal
- * dan tidak tampil di arus kas; di Gabungan semua transfer internal.
- */
+/** Transfer yang kedua ujungnya di cakupan jadi transfer_internal dan tidak tampil di arus kas. */
 export function transactionFlow(viewer: Viewer, scope: Scope): SQL<CashFlow> {
   const fromIn = accountInScope(viewer, scope, accounts);
   const toIn = accountInScope(viewer, scope, toAccounts);

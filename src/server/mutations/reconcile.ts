@@ -25,10 +25,7 @@ export interface ReconcileResult {
   adjustment: TransactionRow | null;
 }
 
-/**
- * F-ACC-2: selisih saldo dicatat sebagai transaksi kategori sistem "Penyesuaian saldo",
- * yang tidak dihitung di pemasukan, pengeluaran, dan rasio tabungan.
- */
+// kategori sistem supaya selisih tidak masuk pemasukan, pengeluaran, dan rasio tabungan (F-ACC-2 AC1)
 export async function reconcileAccount(viewer: Viewer, input: z.input<typeof reconcileSchema>, db: DbOrTx = defaultDb): Promise<ReconcileResult> {
   const data = parseInput(reconcileSchema, input);
   return inTransaction(db, async (tx) => {

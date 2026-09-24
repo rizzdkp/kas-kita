@@ -43,10 +43,7 @@ export function inTransaction<T>(db: DbOrTx, fn: (tx: Tx) => Promise<T>): Promis
   return db.transaction(fn);
 }
 
-/**
- * Zod 4 tetap mengisi default di dalam .partial(), jadi patch hanya boleh memuat kunci yang benar-benar dikirim;
- * tanpa ini edit satu field akan mereset field lain ke default.
- */
+/** Zod 4 tetap mengisi default di dalam .partial(); tanpa ini edit satu field mereset field lain. */
 export function pickProvided<T extends object>(parsed: T, raw: unknown): Partial<T> {
   if (!raw || typeof raw !== "object") return {};
   const keys = new Set(Object.keys(raw as object));

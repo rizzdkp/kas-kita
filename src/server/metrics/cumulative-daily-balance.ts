@@ -20,10 +20,7 @@ export interface CumulativeDailyInput {
   scheduled: Array<{ day: string; amount: bigint }>;
 }
 
-/**
- * Grafik F-DASH-1 AC2: saldo kumulatif per hari, bukan batang harian.
- * Proyeksi = saldo hari ini - rata-rata arus keluar harian periode ini per hari - tagihan pada tanggalnya.
- */
+// kumulatif, bukan batang harian, supaya lonjakan gaji tidak membuat hari lain tak terbaca (F-DASH-1 AC2)
 export function cumulativeDailyBalance(input: CumulativeDailyInput): Metric<DailyPoint[]> {
   const byDay = new Map<string, bigint>();
   for (const d of input.deltas) byDay.set(d.day, (byDay.get(d.day) ?? 0n) + d.amount);

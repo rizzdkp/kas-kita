@@ -37,10 +37,7 @@ export function insufficientBalanceMessage(accountName: string, available: bigin
   return `Saldo ${accountName} tinggal ${formatRupiah(available)}. Kurangi nominal atau catat dari akun lain.`;
 }
 
-/**
- * Tolak perubahan yang membuat saldo akun terbatas jadi negatif.
- * Baris akun dikunci supaya dua simpan bersamaan tidak lolos berdua.
- */
+// baris akun dikunci supaya dua simpan bersamaan tidak lolos berdua
 export async function assertBalancesAllowed(
   tx: Tx,
   effects: Map<string, bigint>,
