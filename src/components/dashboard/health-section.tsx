@@ -27,12 +27,17 @@ export function healthValueText(c: HealthCheck): string {
 }
 
 /** Empat pemeriksaan dengan rumusnya; tidak ada skor tunggal (F-DASH-1 AC4). */
-export function HealthSection({ checks, className }: { checks: HealthCheck[]; className?: string }) {
+export function HealthSection({ checks, periodLabel, className }: { checks: HealthCheck[]; periodLabel?: string; className?: string }) {
   return (
     <SectionCard
       id="cek-kesehatan"
       className={className}
-      title="Cek kesehatan"
+      title={
+        <>
+          Cek kesehatan
+          {periodLabel ? <span className="ml-2 text-small font-normal text-secondary">{periodLabel}</span> : null}
+        </>
+      }
       action={
         <FormulaExplainer
           trigger="icon"
@@ -43,9 +48,9 @@ export function HealthSection({ checks, className }: { checks: HealthCheck[]; cl
     >
       <ul className="flex flex-col">
         {checks.map((c) => (
-          <li key={c.key} className="flex flex-col gap-1 border-b border-border py-3 first:pt-0 last:border-b-0 last:pb-0">
+          <li key={c.key} className="flex flex-col gap-0.5 border-b border-border py-2.5 first:pt-0 last:border-b-0 last:pb-0">
             <div className="flex items-center justify-between gap-3">
-              <span className="text-body text-primary">{c.label}</span>
+              <span className="text-small text-secondary">{c.label}</span>
               <Badge tone={STATE[c.state].tone}>{STATE[c.state].text}</Badge>
             </div>
             <span className="tabular text-body text-primary">{healthValueText(c)}</span>

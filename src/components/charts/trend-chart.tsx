@@ -4,6 +4,7 @@ import { useEffect, useId, useState } from "react";
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import type { XAxisTickContentProps } from "recharts";
 import { formatCompact, formatRupiah, toSafeNumber } from "@/lib/money";
+import { cn } from "@/components/ui/cn";
 import { ChartTooltipCard, ChartTooltipRow } from "./chart-tooltip";
 
 export interface TrendPoint {
@@ -44,7 +45,18 @@ export function SeriesSwatch({ series }: { series: "income" | "expense" }) {
 }
 
 /** Tren 12 bulan: pemasukan text-primary, pengeluaran text-secondary berarsir dan bergaris putus-putus (DESIGN 8). */
-export function TrendChart({ points, summary, selected }: { points: TrendPoint[]; summary: string; selected: string }) {
+export function TrendChart({
+  points,
+  summary,
+  selected,
+  className,
+}: {
+  points: TrendPoint[];
+  summary: string;
+  selected: string;
+  /** Tinggi area grafik; bawaan untuk Laporan. */
+  className?: string;
+}) {
   const hatchId = `hatch-${useId().replace(/:/g, "")}`;
   const narrow = useNarrow();
   const selectedIndex = points.findIndex((p) => p.month === selected);
@@ -67,7 +79,7 @@ export function TrendChart({ points, summary, selected }: { points: TrendPoint[]
           Pengeluaran
         </span>
       </div>
-      <div role="img" aria-label={summary} className="h-60 w-full sm:h-72">
+      <div role="img" aria-label={summary} className={cn("h-60 w-full sm:h-72", className)}>
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={rows} margin={{ top: 8, right: 8, bottom: 0, left: 0 }} barGap={2} barCategoryGap="24%">
             <defs>

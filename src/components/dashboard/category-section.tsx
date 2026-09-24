@@ -35,7 +35,12 @@ export function CategorySection({ categories, scope, people, range, className }:
     <SectionCard
       id="pengeluaran-kategori"
       className={className}
-      title="Pengeluaran per kategori"
+      title={
+        <>
+          Pengeluaran per kategori
+          <span className="ml-2 text-small font-normal text-secondary">{range.label}</span>
+        </>
+      }
       action={
         <FormulaExplainer
           trigger="icon"
@@ -49,7 +54,7 @@ export function CategorySection({ categories, scope, people, range, className }:
       ) : (
         <>
           {segmented ? <OwnerLegend people={people} ownerIds={rows.flatMap((r) => r.byOwner.map((o) => o.ownerId))} /> : null}
-          <ul className="-mx-2 flex flex-col">
+          <ul className="-mx-2 -mt-2 flex flex-col">
             {rows.map((c) => {
               const owners = [...c.byOwner].sort((a, b) => ownerOrder(a.ownerId, people) - ownerOrder(b.ownerId, people));
               const breakdown = segmented
@@ -59,11 +64,11 @@ export function CategorySection({ categories, scope, people, range, className }:
                 <li key={c.categoryId}>
                   <Link
                     href={transactionHref({ scope, categoryIds: [c.categoryId], from: range.from, to: range.to })}
-                    className="flex flex-col gap-2 rounded-md px-2 py-2 hover:bg-surface-sunken"
+                    className="flex flex-col gap-1.5 rounded-md px-2 py-1.5 hover:bg-surface-sunken"
                   >
                     <span className="flex items-baseline justify-between gap-3">
-                      <span className="min-w-0 text-body text-primary">{c.name}</span>
-                      <Amount value={c.total} className="shrink-0 text-body text-primary" />
+                      <span className="min-w-0 text-small text-primary">{c.name}</span>
+                      <Amount value={c.total} className="shrink-0 text-small text-primary" />
                     </span>
                     <BarTrack
                       percent={share(c.total, max)}

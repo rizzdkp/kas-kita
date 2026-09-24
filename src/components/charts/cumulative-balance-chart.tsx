@@ -3,6 +3,7 @@
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { formatShortDate, parseDateKey } from "@/lib/dates";
 import { formatCompact, formatRupiah, toSafeNumber } from "@/lib/money";
+import { cn } from "@/components/ui/cn";
 import { ChartTooltipCard, ChartTooltipRow } from "./chart-tooltip";
 
 export interface BalancePoint {
@@ -37,11 +38,11 @@ function axisMoney(v: number): string {
 }
 
 /** Saldo likuid kumulatif harian; proyeksi putus-putus sampai akhir periode (F-DASH-1 AC2). */
-export function CumulativeBalanceChart({ points, summary }: { points: BalancePoint[]; summary: string }) {
+export function CumulativeBalanceChart({ points, summary, className }: { points: BalancePoint[]; summary: string; className?: string }) {
   const rows = toRows(points);
   const ticks = rows.filter((_, i) => i === 0 || i === rows.length - 1 || i % 7 === 0).map((r) => r.day);
   return (
-    <div role="img" aria-label={summary} className="h-56 w-full sm:h-64">
+    <div role="img" aria-label={summary} className={cn("h-56 w-full sm:h-64", className)}>
       <ResponsiveContainer width="100%" height="100%">
         <LineChart data={rows} margin={{ top: 8, right: 8, bottom: 0, left: 0 }}>
           <CartesianGrid vertical={false} stroke="var(--border)" />
@@ -61,7 +62,7 @@ export function CumulativeBalanceChart({ points, summary }: { points: BalancePoi
             axisLine={false}
             tick={{ fill: "var(--text-secondary)", fontSize: 12 }}
             tickCount={4}
-            width={56}
+            width={64}
             domain={["auto", "auto"]}
           />
           <Tooltip

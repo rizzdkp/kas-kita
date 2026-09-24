@@ -1,7 +1,7 @@
 import type { Scope } from "@/lib/scope";
 import type { Viewer } from "@/server/auth/viewer";
 import { db as defaultDb, type DbOrTx } from "@/server/db/client";
-import { addDaysKey, addMonthsKey, keyOf, monthStartKey, startOfKey } from "@/server/metrics/_time";
+import { addDaysKey, addMonthsKey, keyOf, monthEndKey, monthStartKey, startOfKey } from "@/server/metrics/_time";
 import { categoryBreakdown, type CategoryTotal } from "@/server/metrics/category-breakdown";
 import { cumulativeDailyBalance, type DailyPoint } from "@/server/metrics/cumulative-daily-balance";
 import { daysToPayday, type DaysToPayday } from "@/server/metrics/days-to-payday";
@@ -29,6 +29,7 @@ import {
   scheduledBillOutflows,
 } from "./dashboard-inputs";
 import { listGoals, type GoalWithProgress } from "./goals";
+import { formatMonthLong, monthlyFlows, TREND_MONTHS, type MonthFlow } from "./reports";
 import { countDrafts } from "./transactions";
 
 // bagian "Perlu perhatian": tagihan yang jatuh tempo dalam 3 hari (F-NOT-1, UX-FLOWS bagian 3)
@@ -36,10 +37,17 @@ const DUE_SOON_DAYS = 3;
 const EMERGENCY_SAMPLE_MONTHS = 3;
 const TOP_BUDGETS = 5;
 
+/** "current": periode berjalan sampai hari ini; "previous": periode sebelumnya utuh (?periode=lalu). */
+export type DashboardPeriod = "current" | "previous";
+
 export interface Dashboard {
   scope: Scope;
+  period: DashboardPeriod;
   today: string;
+  /** Rentang periode terpilih; hero, akun, tagihan, target, dan Perlu perhatian selalu posisi hari ini. */
   ranges: ComparableRanges;
+  /** Bulan kalender anggaran yang ditampilkan, "YYYY-MM-01". */
+  budgetMonth: string;
   daysToPayday: DaysToPayday;
   safeToSpend: SafeToSpend;
   accounts: AccountGroups;
@@ -58,6 +66,8 @@ export interface Dashboard {
   upcomingBills: BillWithStatus[];
   activeGoals: GoalWithProgress[];
   health: HealthCheck[];
+  /** Pemasukan dan pengeluaran 12 bulan kalender sampai bulan ini. */
+  trend: Metric<MonthFlow[]>;
   attention: {
     overdueBills: BillWithStatus[];
     dueSoonBills: BillWithStatus[];
@@ -66,33 +76,52 @@ export interface Dashboard {
   };
 }
 
+/** Rentang periode terpilih: periode lalu dihitung utuh, dibanding periode sebelumnya yang juga utuh. */
+function selectedRanges(viewer: Viewer, now: Date, period: DashboardPeriod): ComparableRanges {
+  const live = comparableRanges(viewer.user.periodMode, viewer.user.paydayDay, now);
+  if (period === "current") return live;
+  return comparableRanges(viewer.user.periodMode, viewer.user.paydayDay, new Date(live.period.start.getTime() - 1));
+}
+
 /** Semua angka halaman Ringkasan untuk satu cakupan; query independen berjalan paralel. */
-export async function getDashboard(viewer: Viewer, scope: Scope, now: Date = new Date(), db: DbOrTx = defaultDb): Promise<Dashboard> {
+export async function getDashboard(
+  viewer: Viewer,
+  scope: Scope,
+  now: Date = new Date(),
+  db: DbOrTx = defaultDb,
+  period: DashboardPeriod = "current",
+): Promise<Dashboard> {
   const today = keyOf(now);
   const people = paydayPeople(viewer, scope);
   const payday = daysToPayday(people, now);
-  const ranges = comparableRanges(viewer.user.periodMode, viewer.user.paydayDay, now);
+  const ranges = selectedRanges(viewer, now, period);
   const month = monthStartKey(today);
+  const budgetMonth = period === "current" ? month : addMonthsKey(month, -1, 1);
   const sampleStart = addMonthsKey(month, -EMERGENCY_SAMPLE_MONTHS, 1);
   const currentRange = { start: ranges.current.start, end: ranges.current.end };
+  // grafik periode lalu berhenti di hari terakhirnya, tanpa proyeksi
+  const chartLast = period === "current" ? today : ranges.period.to;
 
-  const [accounts, flows, previousFlows, categoryRows, budgets, bills, goals, debtPayments, monthly, draftCount] = await Promise.all([
-    listAccounts(viewer, { scope }, db),
-    sumFlows(viewer, scope, currentRange, db),
-    sumFlows(viewer, scope, { start: ranges.previous.start, end: ranges.previous.end }, db),
-    expenseByCategory(viewer, scope, currentRange, db),
-    listBudgets(viewer, scope, { month, today }, db),
-    listBills(viewer, scope, { today }, db),
-    listGoals(viewer, scope, { today, contributedSince: cycleStartKey(people, payday.userIds, now) }, db),
-    sumDebtPayments(viewer, scope, currentRange, db),
-    monthlyExpenseTotals(viewer, scope, { start: startOfKey(sampleStart), end: startOfKey(month) }, db),
-    countDrafts(viewer, scope, db),
-  ]);
+  const [accounts, flows, previousFlows, categoryRows, budgets, bills, goals, debtPayments, monthly, draftCount, trend, pastBudgets] =
+    await Promise.all([
+      listAccounts(viewer, { scope }, db),
+      sumFlows(viewer, scope, currentRange, db),
+      sumFlows(viewer, scope, { start: ranges.previous.start, end: ranges.previous.end }, db),
+      expenseByCategory(viewer, scope, currentRange, db),
+      listBudgets(viewer, scope, { month, today }, db),
+      listBills(viewer, scope, { today }, db),
+      listGoals(viewer, scope, { today, contributedSince: cycleStartKey(people, payday.userIds, now) }, db),
+      sumDebtPayments(viewer, scope, currentRange, db),
+      monthlyExpenseTotals(viewer, scope, { start: startOfKey(sampleStart), end: startOfKey(month) }, db),
+      countDrafts(viewer, scope, db),
+      monthlyFlows(viewer, scope, today.slice(0, 7), TREND_MONTHS, db),
+      period === "current" ? Promise.resolve(null) : listBudgets(viewer, scope, { month: budgetMonth, today: monthEndKey(budgetMonth) }, db),
+    ]);
 
   const liquidIds = accounts.liquid.map((a) => a.id);
   const [startBalances, deltas] = await Promise.all([
     getAccountBalances({ accountIds: liquidIds, asOf: addDaysKey(ranges.period.from, -1) }, db),
-    getDailyDeltas({ accountIds: liquidIds, from: ranges.period.from, to: today }, db),
+    getDailyDeltas({ accountIds: liquidIds, from: ranges.period.from, to: chartLast }, db),
   ]);
 
   const liquid = liquidBalance(accounts.all);
@@ -110,14 +139,16 @@ export async function getDashboard(viewer: Viewer, scope: Scope, now: Date = new
   const sampled = monthly.filter((m) => m.total > 0n);
   const avgMonthlyExpense = sampled.length > 0 ? sampled.reduce((s, m) => s + m.total, 0n) / BigInt(sampled.length) : 0n;
 
-  const topBudgets = [...budgets]
+  const topBudgets = [...(pastBudgets ?? budgets)]
     .sort((a, b) => (b.status.value.usedPercent ?? 0) - (a.status.value.usedPercent ?? 0))
     .slice(0, TOP_BUDGETS);
 
   return {
     scope,
+    period,
     today,
     ranges,
+    budgetMonth,
     daysToPayday: payday,
     safeToSpend: safe,
     accounts,
@@ -132,10 +163,10 @@ export async function getDashboard(viewer: Viewer, scope: Scope, now: Date = new
     dailyBalance: cumulativeDailyBalance({
       startBalance,
       from: ranges.period.from,
-      today,
+      today: chartLast,
       periodLast: ranges.period.to,
       deltas,
-      scheduled: scheduledBillOutflows(bills, today, ranges.period.to),
+      scheduled: period === "current" ? scheduledBillOutflows(bills, today, ranges.period.to) : [],
     }),
     categories: categoryBreakdown(categoryRows),
     topBudgets,
@@ -150,6 +181,16 @@ export async function getDashboard(viewer: Viewer, scope: Scope, now: Date = new
       debtPayments,
       overdueBills: bills.filter((b) => b.overdue).length,
     }),
+    trend: {
+      value: trend,
+      formula: "Tiap bulan: jumlah Pemasukan dan jumlah Pengeluaran bulan kalender itu (WIB), tanpa transfer dan Penyesuaian saldo",
+      inputs: Object.fromEntries(
+        trend.flatMap((t) => [
+          [`Pemasukan ${formatMonthLong(t.month)}`, t.income],
+          [`Pengeluaran ${formatMonthLong(t.month)}`, t.expense],
+        ]),
+      ),
+    },
     attention: {
       overdueBills: bills.filter((b) => b.overdue),
       dueSoonBills: bills.filter((b) => !b.overdue && b.daysUntilDue <= DUE_SOON_DAYS),

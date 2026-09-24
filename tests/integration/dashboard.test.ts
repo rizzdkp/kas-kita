@@ -19,14 +19,17 @@ import { getDashboard } from "@/server/queries/dashboard";
  * Aman dibelanjakan = 18.300.000 - 350.000 - 2.000.000 - 800.000 = 15.150.000
  */
 let h: Household;
+let c: Awaited<ReturnType<typeof seedBasicCategories>>;
+let bcaId: string;
 const now = new Date("2026-09-24T10:00:00+07:00");
 
 beforeAll(async () => {
   await resetDb();
   h = await createHousehold(testDb);
-  const c = await seedBasicCategories(testDb);
+  c = await seedBasicCategories(testDb);
   const rizz = h.rizz.user.id;
   const bca = await createAccountRow(testDb, { name: "BCA", type: "bank", ownerId: rizz, openingBalance: 10_000_000n, openingDate: "2026-08-31" });
+  bcaId = bca.id;
   await createAccountRow(testDb, { name: "Tunai", type: "cash", ownerId: rizz, openingBalance: 500_000n, openingDate: "2026-08-31" });
   const shared = await createAccountRow(testDb, { name: "Bersama", type: "bank", ownerId: null, openingBalance: 2_000_000n, openingDate: "2026-08-31" });
   await insertTx(testDb, { kind: "income", amount: 8_000_000n, accountId: bca.id, categoryId: c.salary.id, occurredAt: "2026-09-01T08:00:00+07:00", createdBy: rizz });
@@ -84,5 +87,59 @@ describe("getDashboard", () => {
     expect(d.liquid.value).toBe(0n);
     expect(d.daysToPayday.value).toBe(7);
     expect(d.savingsRate.value).toBeNull();
+  });
+});
+
+/**
+ * Periode lalu (?periode=lalu) pada 24 Sep 2026: Agustus utuh 1-31 Agu, dibanding Juli utuh.
+ * Ditambah di 31 Agu: gaji sampingan +1.000.000 dan belanja dapur -300.000 di BCA Rizz; anggaran wajib Agustus 500.000.
+ * Pemasukan Agu 1.000.000, pengeluaran 300.000, rasio tabungan (1.000.000 - 300.000) / 1.000.000 = 70%.
+ * Saldo 1-30 Agu 0 (akun dibuka 31 Agu); 31 Agu = 10.000.000 + 500.000 + 1.000.000 - 300.000 = 11.200.000.
+ * Hero tetap posisi hari ini: likuid 18.300.000 + 700.000 = 19.000.000; 19.000.000 - 350.000 - 2.000.000 - 800.000 = 15.850.000.
+ */
+describe("getDashboard periode lalu", () => {
+  beforeAll(async () => {
+    const rizz = h.rizz.user.id;
+    await insertTx(testDb, { kind: "income", amount: 1_000_000n, accountId: bcaId, categoryId: c.salary.id, occurredAt: "2026-08-31T09:00:00+07:00", createdBy: rizz });
+    await insertTx(testDb, { kind: "expense", amount: 300_000n, accountId: bcaId, categoryId: c.groceries.id, occurredAt: "2026-08-31T12:00:00+07:00", createdBy: rizz });
+    await upsertBudget(h.rizz, { scopeOwner: `user:${rizz}`, categoryId: c.food.id, month: "2026-08-01", amount: 500_000n, isMandatory: true }, testDb);
+  });
+
+  it("metrik, kategori, grafik, dan anggaran memakai Agustus utuh; hero tetap hari ini", async () => {
+    const d = await getDashboard(h.rizz, "me", now, testDb, "previous");
+    expect(d.period).toBe("previous");
+    expect(d.ranges.current.label).toBe("1-31 Agu");
+    expect(d.ranges.previous.label).toBe("1-31 Jul");
+    expect(d.income.value).toBe(1_000_000n);
+    expect(d.expense.value).toBe(300_000n);
+    expect(d.savingsRate.value).toBe(70);
+    // Juli tanpa transaksi: perubahan tidak bisa dihitung
+    expect(d.incomeChange.value).toBeNull();
+    expect(d.categories.value.map((x) => [x.name, x.total])).toEqual([["Makan dan minum", 300_000n]]);
+    const points = d.dailyBalance.value;
+    expect(points).toHaveLength(31);
+    expect(points.some((p) => p.projected)).toBe(false);
+    expect(points[29]).toEqual({ day: "2026-08-30", balance: 0n, projected: false });
+    expect(points[30]).toEqual({ day: "2026-08-31", balance: 11_200_000n, projected: false });
+    expect(d.budgetMonth).toBe("2026-08-01");
+    expect(d.topBudgets.map((b) => [b.categoryName, b.spent, b.status.value.elapsedPercent])).toEqual([["Makan dan minum", 300_000n, 100]]);
+    expect(d.safeToSpend.value).toBe(15_850_000n);
+    expect(d.attention.dueSoonBills.map((b) => b.name)).toEqual(["Internet"]);
+  });
+
+  it("periode berjalan tidak berubah oleh pilihan periode", async () => {
+    const [current, previous] = await Promise.all([
+      getDashboard(h.rizz, "me", now, testDb),
+      getDashboard(h.rizz, "me", now, testDb, "previous"),
+    ]);
+    expect(current.period).toBe("current");
+    expect(current.ranges.current.label).toBe("1-24 Sep");
+    expect(current.budgetMonth).toBe("2026-09-01");
+    expect(current.safeToSpend.value).toBe(previous.safeToSpend.value);
+    // tren 12 bulan: Okt 2025 sampai Sep 2026, sama di kedua periode
+    expect(current.trend.value).toHaveLength(12);
+    expect(current.trend.value.at(-1)).toEqual({ month: "2026-09", income: 8_000_000n, expense: 200_000n });
+    expect(current.trend.value.at(-2)).toEqual({ month: "2026-08", income: 1_000_000n, expense: 300_000n });
+    expect(previous.trend.value).toEqual(current.trend.value);
   });
 });

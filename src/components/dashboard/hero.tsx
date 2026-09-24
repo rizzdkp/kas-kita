@@ -9,10 +9,12 @@ type HeroProps = {
   label: string;
   safe: SafeToSpend;
   payday: DaysToPayday;
+  /** Periode lalu sedang dipilih: tegaskan bahwa hero tetap posisi hari ini. */
+  todayNote?: boolean;
 };
 
 /** Hero tanpa kartu: satu angka, satu baris komponen, satu tombol rumus (UX-FLOWS bagian 3.1). */
-export function Hero({ label, safe, payday }: HeroProps) {
+export function Hero({ label, safe, payday, todayNote = false }: HeroProps) {
   const short = safe.value < 0n;
   const c = safe.components;
   const parts: Array<[string, bigint]> = [
@@ -22,7 +24,7 @@ export function Hero({ label, safe, payday }: HeroProps) {
   ];
   if (c.mandatoryRemaining > 0n) parts.push(["Sisa anggaran wajib", c.mandatoryRemaining]);
   return (
-    <section aria-labelledby="hero-label" className="flex flex-col gap-2 px-1 pb-4 sm:pb-8">
+    <section aria-labelledby="hero-label" className="flex flex-col gap-1 px-1 pb-2 lg:pt-1">
       <h2 id="hero-label" data-testid="hero-label" className="text-body text-secondary">
         {label}
       </h2>
@@ -34,16 +36,17 @@ export function Hero({ label, safe, payday }: HeroProps) {
         </div>
       ) : (
         <div data-testid="hero-value">
-          <HeroNumber value={safe.value} className="text-primary" />
+          <HeroNumber value={safe.value} className="text-primary lg:[&>span]:text-hero-sm min-[1280px]:[&>span]:text-hero" />
         </div>
       )}
-      <ul className="flex flex-wrap gap-x-6 gap-y-1 text-small text-secondary">
+      <ul className="mt-1 flex flex-wrap gap-x-4 gap-y-0.5 text-small text-secondary">
         {parts.map(([name, value]) => (
           <li key={name}>
             {name} <Amount value={value} className="text-primary" />
           </li>
         ))}
       </ul>
+      {todayNote ? <p className="text-small text-secondary">Dihitung dari posisi hari ini.</p> : null}
       <div>
         <FormulaExplainer
           title="Aman dibelanjakan"

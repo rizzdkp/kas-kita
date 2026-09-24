@@ -1,5 +1,4 @@
 import { formatCountdown } from "@/lib/dates";
-import { formatRupiah } from "@/lib/money";
 import type { Scope } from "@/lib/scope";
 import { transactionHref } from "@/components/reports/transaction-link";
 import type { Dashboard } from "@/server/queries/dashboard";
@@ -18,7 +17,8 @@ export function buildAttentionItems(a: Dashboard["attention"], scope: Scope): At
       key: `overdue-${b.id}`,
       status: capitalize(formatCountdown(b.daysUntilDue)),
       tone: "attention",
-      text: `Tagihan ${b.name} ${formatRupiah(b.amount)} belum dibayar`,
+      text: `Tagihan ${b.name} belum dibayar`,
+      amount: b.amount,
       href: scopedHref("/tagihan", scope),
     });
   }
@@ -27,7 +27,8 @@ export function buildAttentionItems(a: Dashboard["attention"], scope: Scope): At
       key: `budget-${budget.id}`,
       status: "Lewat",
       tone: "attention",
-      text: `Anggaran wajib ${budget.categoryName}: terpakai ${formatRupiah(budget.spent)} dari ${formatRupiah(budget.amount)}`,
+      text: `Anggaran wajib ${budget.categoryName} lewat`,
+      amount: budget.spent - budget.amount,
       href: scopedHref("/anggaran", scope),
     });
   }
@@ -36,7 +37,8 @@ export function buildAttentionItems(a: Dashboard["attention"], scope: Scope): At
       key: `due-${b.id}`,
       status: capitalize(formatCountdown(b.daysUntilDue)),
       tone: "due-soon",
-      text: `Tagihan ${b.name} ${formatRupiah(b.amount)} jatuh tempo`,
+      text: `Tagihan ${b.name} jatuh tempo`,
+      amount: b.amount,
       href: scopedHref("/tagihan", scope),
     });
   }
