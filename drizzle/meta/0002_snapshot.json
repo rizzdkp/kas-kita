@@ -1,5 +1,5 @@
 {
-  "id": "eacbb687-767f-4281-a874-f6736c8842ac",
+  "id": "4fb9acb8-6220-4b8e-882d-2de7c38f4b88",
   "prevId": "2f4a8b26-a5f7-4905-803b-16ca56ee4f10",
   "version": "7",
   "dialect": "postgresql",
@@ -293,7 +293,23 @@
           "default": "now()"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "users_identity_color_unique": {
+          "name": "users_identity_color_unique",
+          "columns": [
+            {
+              "expression": "identity_color",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {

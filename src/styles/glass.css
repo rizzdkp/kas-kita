@@ -1,0 +1,171 @@
+/*
+ * Liquid glass (DESIGN.md 5). Satu-satunya file yang boleh menulis backdrop-filter.
+ * Dipakai hanya lewat <GlassSurface>. Diimpor ke layer components supaya utilitas Tailwind tetap bisa menimpa posisi.
+ */
+
+/* G1 frosted, persis DESIGN 5.4 */
+.glass {
+  position: relative;
+  background: var(--glass-fill);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  border-radius: var(--radius-glass-bar);
+  box-shadow:
+    inset 0 0 0 1px var(--glass-rim),
+    inset 0 1px 0 0 var(--glass-highlight),
+    var(--glass-shadow);
+  isolation: isolate;
+  transition: background-color var(--dur-fast) var(--ease-out);
+}
+
+/* sheen tipis dari arah cahaya atas-kiri, memberi volume tanpa gradient dekoratif penuh */
+.glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* di bawah isi supaya soft-light tidak memudarkan teks */
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(160deg, var(--glass-highlight) 0%, transparent 38%);
+  opacity: 0.35;
+  mix-blend-mode: soft-light;
+}
+
+.glass--bar {
+  border-radius: var(--radius-glass-bar);
+}
+
+.glass--regular {
+  border-radius: var(--radius-card);
+}
+
+/* toolbar: isian naik 8% saat konten di bawahnya di-scroll lebih dari 8px */
+.glass[data-scrolled="true"] {
+  background: var(--glass-fill-scrolled);
+}
+
+/* tekan: membesar dengan pegas dan isian naik ke glass-fill-active */
+.glass--pressable {
+  transition:
+    transform var(--dur-spring) var(--ease-spring-glass),
+    background-color var(--dur-fast) var(--ease-out);
+}
+.glass--pressable:active {
+  transform: scale(1.02);
+  background: var(--glass-fill-active);
+}
+
+/* isian terpilih di dalam glass: item nav aktif, indikator toggle cakupan */
+.glass-active {
+  background: var(--glass-fill-active);
+  box-shadow: var(--glass-active-shadow);
+}
+
+/* medan ambien di belakang app (DESIGN 6) */
+.ambient-field {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.ambient-field__layer {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity var(--dur-slow) var(--ease-out);
+}
+.ambient-field__layer[data-active="true"] {
+  opacity: 1;
+}
+
+.ambient-field__light {
+  position: absolute;
+  width: 60vmax;
+  height: 60vmax;
+  border-radius: var(--radius-pill);
+  opacity: var(--ambient-opacity);
+  /* gradient radial yang meluruh ke transparan setara blur 120px tanpa biaya filter di layar penuh */
+  background: radial-gradient(closest-side, var(--ambient-color) 0%, transparent 100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glass--pressable {
+    transition: background-color var(--dur-fast) var(--ease-out);
+  }
+  .glass--pressable:active {
+    transform: none;
+  }
+  .ambient-field__layer {
+    transition-duration: var(--dur-fast);
+  }
+}
+
+/* G0 solid: preferensi sistem */
+@media (prefers-reduced-transparency: reduce) {
+  .glass,
+  .glass[data-scrolled="true"],
+  .glass--pressable:active {
+    background: var(--surface);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    box-shadow:
+      inset 0 0 0 1px var(--border),
+      var(--glass-shadow);
+  }
+  .glass::before {
+    display: none;
+  }
+  .glass-active {
+    background: var(--surface-sunken);
+    box-shadow: inset 0 0 0 1px var(--border);
+  }
+  .ambient-field {
+    display: none;
+  }
+}
+
+/* G0 solid: toggle manual "Kurangi transparansi" di Pengaturan */
+html[data-transparency="reduced"] .glass,
+html[data-transparency="reduced"] .glass[data-scrolled="true"],
+html[data-transparency="reduced"] .glass--pressable:active {
+  background: var(--surface);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  box-shadow:
+    inset 0 0 0 1px var(--border),
+    var(--glass-shadow);
+}
+html[data-transparency="reduced"] .glass::before {
+  display: none;
+}
+html[data-transparency="reduced"] .glass-active {
+  background: var(--surface-sunken);
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+html[data-transparency="reduced"] .ambient-field {
+  display: none;
+}
+
+/* G0 solid: browser tanpa backdrop-filter */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass,
+  .glass[data-scrolled="true"] {
+    background: var(--surface);
+    box-shadow:
+      inset 0 0 0 1px var(--border),
+      var(--glass-shadow);
+  }
+  .glass::before {
+    display: none;
+  }
+  .glass-active {
+    background: var(--surface-sunken);
+    box-shadow: inset 0 0 0 1px var(--border);
+  }
+  .ambient-field {
+    display: none;
+  }
+}

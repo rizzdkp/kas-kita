@@ -28,6 +28,8 @@
   /* +8% isian saat konten di bawah toolbar di-scroll (DESIGN 5.6) */
   --glass-fill-scrolled: rgba(255, 255, 255, 0.66);
   --glass-fill-active: rgba(255, 255, 255, 0.82);
+  /* isian aktif di terang nyaris putih di atas putih, butuh bayangan tipis supaya terbaca */
+  --glass-active-shadow: 0 1px 3px rgba(39, 26, 0, 0.1), inset 0 0 0 1px rgba(39, 26, 0, 0.04);
   --glass-blur: 24px;
   --glass-saturate: 180%;
   --glass-rim: rgba(255, 255, 255, 0.7);
@@ -88,7 +90,7 @@
   );
 
   /* tipografi */
-  --font-sans: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-family-base: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 
   /* permukaan browser */
   --selection: rgba(1, 106, 113, 0.18);
@@ -120,6 +122,7 @@
     --glass-fill: rgba(30, 30, 32, 0.52);
     --glass-fill-scrolled: rgba(30, 30, 32, 0.6);
     --glass-fill-active: rgba(255, 255, 255, 0.14);
+    --glass-active-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
     --glass-blur: 28px;
     --glass-saturate: 160%;
     --glass-rim: rgba(255, 255, 255, 0.14);
@@ -164,6 +167,7 @@
   --glass-fill: rgba(30, 30, 32, 0.52);
   --glass-fill-scrolled: rgba(30, 30, 32, 0.6);
   --glass-fill-active: rgba(255, 255, 255, 0.14);
+  --glass-active-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
   --glass-blur: 28px;
   --glass-saturate: 160%;
   --glass-rim: rgba(255, 255, 255, 0.14);

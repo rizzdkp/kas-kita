@@ -28,7 +28,10 @@ export function ownerInScope(ownerColumn: AnyColumn | SQL, viewer: Viewer, scope
   const owners = scopeOwnerIds(viewer, scope);
   if (owners.all) return sql`true`;
   if (owners.ownerIds.length === 0) return sql`false`;
-  return inArray(ownerColumn, owners.ownerIds);
+  return sql`${ownerColumn} in (${sql.join(
+    owners.ownerIds.map((id) => sql`${id}::uuid`),
+    sql`, `,
+  )})`;
 }
 
 /** Pemilik JS: sama dengan ownerInScope tapi untuk data yang sudah dimuat. */
@@ -38,7 +41,7 @@ export function ownerIdInScope(ownerId: string | null, viewer: Viewer, scope: Sc
   return ownerId !== null && owners.ownerIds.includes(ownerId);
 }
 
-export type AccountsTable = typeof accounts;
+export type AccountsTable = { ownerId: AnyColumn };
 
 export function accountInScope(viewer: Viewer, scope: Scope, table: AccountsTable = accounts): SQL {
   return ownerInScope(table.ownerId, viewer, scope);
@@ -124,15 +127,4 @@ export function budgetInScope(scopeOwnerColumn: AnyColumn, viewer: Viewer, scope
   if (owners.all) return sql`true`;
   if (owners.ownerIds.length === 0) return sql`false`;
   return inArray(scopeOwnerColumn, owners.ownerIds.map((id) => budgetOwnerKey(id)));
-}
-
-/** Daftar owner_id akun yang masuk cakupan, untuk query SQL mentah; null berarti semua. */
-export function scopeOwnerFilterSql(ownerColumn: SQL, viewer: Viewer, scope: Scope): SQL {
-  const owners = scopeOwnerIds(viewer, scope);
-  if (owners.all) return sql`true`;
-  if (owners.ownerIds.length === 0) return sql`false`;
-  return sql`${ownerColumn} in (${sql.join(
-    owners.ownerIds.map((id) => sql`${id}::uuid`),
-    sql`, `,
-  )})`;
 }
