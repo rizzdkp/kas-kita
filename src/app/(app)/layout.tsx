@@ -1,17 +1,17 @@
 import { Suspense } from "react";
-import { AppShell } from "@/components/shell/app-shell";
 import type { ShellViewer } from "@/components/shell/types";
+import { requireViewer } from "@/server/auth/session";
+import { AppFrame } from "./app-frame";
 
-// SEMENTARA (M0): data contoh sampai koordinator menyambung shell ke sesi Better Auth (getViewer).
-const CONTOH_VIEWER_SEMENTARA: ShellViewer = {
-  me: { name: "Contoh Saya", color: "ocean" },
-  partner: { name: "Contoh Partner", color: "rose" },
-};
-
-export default function AppLayout({ children }: { children: React.ReactNode }) {
+export default async function AppLayout({ children }: { children: React.ReactNode }) {
+  const viewer = await requireViewer();
+  const shellViewer: ShellViewer = {
+    me: { name: viewer.user.displayName, color: viewer.user.identityColor },
+    partner: viewer.partner ? { name: viewer.partner.displayName, color: viewer.partner.identityColor } : null,
+  };
   return (
     <Suspense>
-      <AppShell viewer={CONTOH_VIEWER_SEMENTARA}>{children}</AppShell>
+      <AppFrame viewer={shellViewer}>{children}</AppFrame>
     </Suspense>
   );
 }
