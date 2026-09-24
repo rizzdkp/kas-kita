@@ -57,7 +57,10 @@ export function ReceiptPicker({ vision, error, onFile }: ReceiptPickerProps) {
       >
         <Icon icon={ImageUp} size={24} className="text-secondary" />
         <div className="flex max-w-[44ch] flex-col gap-1">
-          <p className="text-card text-primary">Seret foto struk ke sini</p>
+          <p className="text-card text-primary">
+            <span className="pointer-coarse:hidden">Seret foto struk ke sini</span>
+            <span className="hidden pointer-coarse:inline">Ambil atau pilih foto struk</span>
+          </p>
           <p className="text-small text-secondary">
             Foto dikecilkan di perangkat ini sebelum diunggah, lalu dibaca model AI. Semua hasil bisa kamu ubah sebelum disimpan.
           </p>

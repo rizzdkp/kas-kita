@@ -46,4 +46,4 @@ export function titleForPath(pathname: string): string {
 }
 
 // halaman di luar navigasi utama
-const EXTRA_TITLES: Record<string, string> = { "/mulai": "Pengenalan", "/notifikasi": "Notifikasi" };
+const EXTRA_TITLES: Record<string, string> = { "/mulai": "Pengenalan", "/notifikasi": "Notifikasi", "/struk": "Foto struk" };

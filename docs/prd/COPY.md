@@ -238,6 +238,29 @@ Tabel di bawah mencatat teks yang sudah dipakai di kode. Bagian dinamis ditulis 
 | Dialog foto struk, judul | Foto struk butuh model vision |
 | Dialog foto struk, isi | Struk dibaca oleh model AI yang bisa membaca gambar. Pasang model vision di pengaturan AI, lalu tombol ini langsung membuka kamera. Sementara itu, ketik transaksinya di bar, misalnya kopi 25rb gopay. |
 | Dialog foto struk, tombol | Buka pengaturan AI / Batal |
+| Dialog foto struk offline, judul | Foto struk butuh koneksi |
+| Dialog foto struk offline, isi | Foto struk dibaca oleh model AI lewat server, jadi tidak bisa diproses saat offline. Sambungkan internet lalu coba lagi, atau ketik transaksinya di bar, misalnya kopi 25rb gopay. Transaksi yang diketik tetap tersimpan di perangkat. |
+| Dialog foto struk offline, tombol | Tutup |
+| Struk, area unggah | Seret foto struk ke sini (layar sentuh: Ambil atau pilih foto struk) / Foto dikecilkan di perangkat ini sebelum diunggah, lalu dibaca model AI. Semua hasil bisa kamu ubah sebelum disimpan. / Pilih foto |
+| Struk, progres | Mengunggah foto [n]% / Membaca struk… / Model AI membaca toko, tanggal, total, dan item. Biasanya kurang dari satu menit. |
+| Struk, progres (aria) | Progres unggah / Membaca struk |
+| Struk, foto | Perbesar / Perbesar foto struk (aria) / Foto struk (alt) / Foto struk ukuran penuh (alt) |
+| Struk, label | Total struk, Tanggal dan waktu, Catatan, Akun, Untuk siapa, Cara simpan, Kategori |
+| Struk, keterangan catatan | Nama toko dari struk |
+| Struk, placeholder | Misalnya 192rb / Misalnya Indomaret / Nama item / Nominal |
+| Struk, cara simpan | Simpan sebagai satu transaksi: Satu kategori untuk seluruh struk. / Pecah per kategori: Tetap satu transaksi, nominalnya dirinci per kategori item. |
+| Struk, item | Item struk / Jumlah item [Rp] / Tambah item / Belum ada item terbaca. Tambahkan item kalau ingin memecah per kategori. |
+| Struk, item (aria) | Nama item [n] / Nominal item [n] / Kategori item [n] / Buang item [n] |
+| Struk, banner selisih | Jumlah item [Rp], total struk [Rp]. Cek item yang terlewat. |
+| Struk, rincian | Rincian per kategori |
+| Struk, selisih saat dipecah | Jumlah item selisih [Rp] dari total. Transaksi yang dipecah harus pas dengan totalnya. / Tambah item selisih / Pakai jumlah item sebagai total |
+| Struk, nama item selisih | Selisih struk / Potongan |
+| Struk, belum bisa simpan | Lengkapi [field] dan [field] untuk menyimpan. / Isi nominal setiap item, atau buang baris yang kosong. / Tambahkan item untuk memecah per kategori. / Pilih kategori untuk setiap item sebelum memecah per kategori. / Samakan jumlah item dengan total sebelum memecah per kategori. |
+| Struk, error simpan | Jumlah item [Rp] belum sama dengan total [Rp]. Samakan dulu sebelum memecah per kategori. / Nominal per kategori harus lebih dari nol. Gabungkan potongan harga dengan item di kategori yang sama. / Foto struk ini sudah tersimpan di transaksi lain. |
+| Struk, AI belum dipasang | Model vision belum dipasang. Isi field dari foto sendiri, atau pasang model vision di pengaturan AI. |
+| Struk, AI tidak terhubung | Tidak bisa terhubung ke server. Isi field dari foto sendiri. |
+| Struk, sudah tersimpan | Struk ini sudah tersimpan / Foto ini sudah jadi lampiran sebuah transaksi. Buka transaksinya untuk mengubah, atau baca struk lain. / Lihat transaksi / Foto struk lain |
+| Unggah foto, error | Foto lebih dari 10 MB. Ambil ulang fotonya atau pilih foto yang lebih kecil. / File ini bukan foto JPEG, PNG, WebP, atau HEIC. Pilih foto struk. / Foto ini tidak bisa dibuka. Ambil ulang fotonya lalu coba lagi. / File kosong. Pilih foto struk. / Foto ini tidak ditemukan, mungkin sudah dihapus. Unggah ulang fotonya. / Permintaan ditolak. |
 
 ### Transaksi
 
@@ -280,6 +303,8 @@ Tabel di bawah mencatat teks yang sudah dipakai di kode. Bagian dinamis ditulis 
 | Detail, label | Jenis, Tanggal, Akun, Dari akun, Ke akun, Kategori, Untuk, Catatan, Tag, Sumber, Diisi oleh, Terakhir diubah |
 | Detail, nilai pencatat | [nama], [tanggal], [waktu] |
 | Detail, tombol | Ubah / Hapus / Konfirmasi / Pulihkan |
+| Detail, lampiran | Rincian per kategori / Lampiran / Belum ada lampiran. / Tambah lampiran / Mengunggah [n]% / Hapus lampiran |
+| Detail, lampiran (aria dan alt) | Buka lampiran [n] / Lampiran [n] |
 | Toast hapus dan pulihkan | Terhapus / Transaksi dipulihkan |
 | Riwayat, judul | Riwayat |
 | Riwayat, kosong | Belum ada perubahan tercatat. |
