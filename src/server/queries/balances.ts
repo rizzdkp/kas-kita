@@ -7,13 +7,23 @@ import { db as defaultDb, type DbOrTx } from "@/server/db/client";
  * memakai satu sumber yang sama.
  */
 export interface DeltaOptions {
-  excludeTransactionId?: string;
+  /** Abaikan transaksi ini (dipakai saat memvalidasi edit terhadap saldo tanpa transaksi lama). */
+  excludeTransactionIds?: string[];
 }
 
 const WIB_DAY = (col: SQL) => sql`(${col} at time zone 'Asia/Jakarta')::date`;
 
+function uuidList(ids: string[]): SQL {
+  return sql.join(
+    ids.map((id) => sql`${id}::uuid`),
+    sql`, `,
+  );
+}
+
 export function accountDeltasSql(opts: DeltaOptions = {}): SQL {
-  const exclude = opts.excludeTransactionId ? sql`and t.id <> ${opts.excludeTransactionId}::uuid` : sql``;
+  const exclude = opts.excludeTransactionIds?.length
+    ? sql`and t.id not in (${uuidList(opts.excludeTransactionIds)})`
+    : sql``;
   const day = WIB_DAY(sql`t.occurred_at`);
   return sql`
     select a.id as account_id, a.opening_date as day, a.opening_balance as amount
@@ -29,12 +39,6 @@ export function accountDeltasSql(opts: DeltaOptions = {}): SQL {
         and ${day} >= a.opening_date ${exclude}`;
 }
 
-function uuidList(ids: string[]): SQL {
-  return sql.join(
-    ids.map((id) => sql`${id}::uuid`),
-    sql`, `,
-  );
-}
 
 export interface BalanceOptions extends DeltaOptions {
   accountIds?: string[];

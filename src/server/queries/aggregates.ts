@@ -146,3 +146,22 @@ export async function sumTransfersInto(
   for (const r of rows) if (r.accountId) result.set(r.accountId, BigInt(r.total));
   return result;
 }
+
+/** Total pengeluaran per bulan kalender WIB (dasar rata-rata pengeluaran bulanan dana darurat). */
+export async function monthlyExpenseTotals(
+  viewer: Viewer,
+  scope: Scope,
+  range: InstantRange,
+  db: DbOrTx = defaultDb,
+): Promise<Array<{ month: string; total: bigint }>> {
+  const month = sql<string>`to_char(${transactions.occurredAt} at time zone 'Asia/Jakarta', 'YYYY-MM')`;
+  const rows = await db
+    .select({ month, total: sql<bigint>`sum(${transactions.amount})::bigint` })
+    .from(transactions)
+    .innerJoin(accounts, transactionJoins.fromAccount)
+    .innerJoin(categories, eq(categories.id, transactions.categoryId))
+    .where(and(countableTransaction(), eq(transactions.kind, "expense"), accountInScope(viewer, scope), inRange(range), notSystemCategory))
+    .groupBy(month)
+    .orderBy(month);
+  return rows.map((r) => ({ month: r.month, total: BigInt(r.total) }));
+}
