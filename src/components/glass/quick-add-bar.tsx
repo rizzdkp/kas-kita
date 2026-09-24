@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useRef, useState, type ReactNode } from "react";
+import { useEffect, useId, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { Camera, LoaderCircle } from "lucide-react";
 import type { Scope } from "@/lib/scope";
 import { cn } from "@/components/ui/cn";
@@ -22,8 +22,15 @@ type QuickAddBarProps = {
   partnerColor?: IdentityColor | null;
   /** Enter. Parsing ditangani pemanggil (M1). */
   onSubmit?: (text: string) => void;
+  /** Teks terkendali; tanpa ini bar menyimpan teksnya sendiri. */
+  value?: string;
+  onValueChange?: (text: string) => void;
+  /** Esc di dalam bar, misalnya untuk menutup kartu pratinjau. */
+  onEscape?: () => void;
   /** File dari tombol kamera. */
   onPhoto?: (file: File) => void;
+  /** Kalau diisi, tombol kamera memanggil ini alih-alih membuka pemilih file (model vision belum ada). */
+  onCameraClick?: () => void;
   /** Sedang menunggu parser atau AI: input dikunci dan spinner tampil. */
   busy?: boolean;
   /** Slot di atas bar: kartu pratinjau, pesan. */
@@ -41,14 +48,23 @@ export function QuickAddBar({
   partnerName,
   partnerColor,
   onSubmit,
+  value,
+  onValueChange,
+  onEscape,
   onPhoto,
+  onCameraClick,
   busy = false,
   children,
   className,
 }: QuickAddBarProps) {
-  const inputRef = useRef<HTMLInputElement | null>(null);
+  const inputRef = useRef<HTMLTextAreaElement | null>(null);
   const fileRef = useRef<HTMLInputElement | null>(null);
-  const [text, setText] = useState("");
+  const [innerText, setInnerText] = useState("");
+  const text = value ?? innerText;
+  const setText = (next: string) => {
+    if (value === undefined) setInnerText(next);
+    onValueChange?.(next);
+  };
   const inputId = useId();
   const forPartner = scope === "partner" && Boolean(partnerName);
 
@@ -70,6 +86,14 @@ export function QuickAddBar({
     };
   }, []);
 
+  // tinggi mengikuti isi supaya beberapa baris (F-IN-2 AC4) tetap terlihat, maksimal empat baris
+  useLayoutEffect(() => {
+    const node = inputRef.current;
+    if (!node) return;
+    node.style.height = "auto";
+    node.style.height = `${Math.min(node.scrollHeight, 96)}px`;
+  }, [text]);
+
   const placeholder = forPartner ? `Catat untuk ${partnerName}, misalnya makan 40rb` : "kopi 25rb gopay";
 
   return (
@@ -85,7 +109,7 @@ export function QuickAddBar({
           if (!value || busy) return;
           onSubmit?.(value);
         }}
-        className="flex h-13 items-center gap-2 pl-4 pr-1"
+        className="flex min-h-13 items-center gap-2 pl-4 pr-1"
       >
         {forPartner && partnerColor ? (
           <IdentityDot color={partnerColor} label={`Dicatat atas nama ${partnerName}`} />
@@ -93,12 +117,23 @@ export function QuickAddBar({
         <label htmlFor={inputId} className="sr-only">
           Catat transaksi
         </label>
-        <input
+        <textarea
           ref={inputRef}
           id={inputId}
-          type="text"
+          rows={1}
           value={text}
           onChange={(event) => setText(event.target.value)}
+          onKeyDown={(event) => {
+            if (event.key === "Escape" && onEscape) {
+              event.preventDefault();
+              onEscape();
+              return;
+            }
+            // Enter mengirim; Shift+Enter menambah baris untuk beberapa transaksi sekaligus
+            if (event.key !== "Enter" || event.shiftKey || event.nativeEvent.isComposing) return;
+            event.preventDefault();
+            event.currentTarget.form?.requestSubmit();
+          }}
           placeholder={placeholder}
           disabled={busy}
           autoComplete="off"
@@ -106,8 +141,12 @@ export function QuickAddBar({
           spellCheck={false}
           enterKeyHint="done"
           aria-keyshortcuts="/ Control+K Meta+K"
-          className="h-full min-w-0 flex-1 bg-transparent text-body font-medium text-primary outline-none placeholder:text-secondary disabled:opacity-(--disabled-opacity)"
+          aria-describedby={`${inputId}-hint`}
+          className="block max-h-24 min-w-0 flex-1 resize-none bg-transparent py-3.5 text-body font-medium text-primary outline-none placeholder:text-secondary disabled:opacity-(--disabled-opacity)"
         />
+        <span id={`${inputId}-hint`} className="sr-only">
+          Enter untuk pratinjau. Shift+Enter untuk baris baru, satu transaksi per baris.
+        </span>
         {busy ? (
           <span role="status" className="inline-flex size-11 items-center justify-center text-secondary">
             <Icon icon={LoaderCircle} className="kk-spin" />
@@ -132,7 +171,7 @@ export function QuickAddBar({
           type="button"
           aria-label="Foto struk"
           disabled={busy}
-          onClick={() => fileRef.current?.click()}
+          onClick={() => (onCameraClick ? onCameraClick() : fileRef.current?.click())}
           className={cn(
             "inline-flex size-11 shrink-0 items-center justify-center rounded-pill text-secondary",
             "transition-colors duration-(--dur-fast) ease-(--ease-out) hover:bg-glass-active hover:text-primary",

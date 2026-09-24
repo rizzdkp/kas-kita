@@ -24,9 +24,14 @@ export type AppShellProps = {
   onSignOut?: () => void;
   onQuickAddSubmit?: (text: string, scope: Scope) => void;
   onReceiptPhoto?: (file: File) => void;
+  onReceiptClick?: () => void;
   /** Slot di atas bar quick-add (kartu pratinjau). */
   quickAddSlot?: ReactNode;
   quickAddBusy?: boolean;
+  /** Teks bar quick-add terkendali (dikosongkan setelah pratinjau, dipulihkan saat batal). */
+  quickAddValue?: string;
+  onQuickAddValueChange?: (text: string) => void;
+  onQuickAddEscape?: () => void;
 };
 
 /** Cakupan hidup di URL (?scope=) supaya tautan bisa dibagikan (F-SCOPE-1 AC4). */
@@ -62,8 +67,12 @@ export function AppShell({
   onSignOut,
   onQuickAddSubmit,
   onReceiptPhoto,
+  onReceiptClick,
   quickAddSlot,
   quickAddBusy,
+  quickAddValue,
+  onQuickAddValueChange,
+  onQuickAddEscape,
 }: AppShellProps) {
   const pathname = usePathname();
   const [scope, setScope] = useScopeParam();
@@ -116,7 +125,11 @@ export function AppShell({
               partnerColor={viewer.partner?.color}
               onSubmit={(text) => onQuickAddSubmit?.(text, effectiveScope)}
               onPhoto={onReceiptPhoto}
+              onCameraClick={onReceiptClick}
               busy={quickAddBusy}
+              value={quickAddValue}
+              onValueChange={onQuickAddValueChange}
+              onEscape={onQuickAddEscape}
               className="pointer-events-auto max-w-(--quick-add-max)"
             >
               {quickAddSlot}
