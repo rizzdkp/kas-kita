@@ -4,8 +4,8 @@ import { aiSettings, users } from "@/server/db/schema";
 import { deleteAiSettings, saveAiSettings } from "@/server/mutations/ai-settings";
 import { getAiSettingsRow } from "@/server/queries/ai-settings";
 
-// hanya untuk e2e quick-add AI: pasang pengaturan AI ke server palsu lewat mutasi, lalu kembalikan seperti semula
-// set <baseUrl> <textModel> → mencetak snapshot (key tetap terenkripsi); restore <snapshot> <baseUrl>
+// hanya untuk e2e foto struk: pasang model vision ke server palsu lewat mutasi, lalu kembalikan seperti semula
+// set <baseUrl> → mencetak snapshot (key tetap terenkripsi); restore <snapshot>
 if (process.env.NODE_ENV === "production") throw new Error("helper e2e tidak boleh dipakai di produksi");
 
 type Snapshot = {
@@ -17,7 +17,7 @@ type Snapshot = {
   supportsJsonSchema: boolean | null;
 } | null;
 
-const [command, arg1, arg2] = process.argv.slice(2);
+const [command, arg] = process.argv.slice(2);
 const [rizz] = await db.select().from(users).where(eq(users.email, "rizz@kaskita.local"));
 if (!rizz) throw new Error("User seed tidak ada");
 const viewer = { user: rizz, partner: null, sessionId: "e2e" };
@@ -35,23 +35,19 @@ if (command === "set") {
       }
     : null;
   await saveAiSettings(viewer, {
-    baseUrl: arg1!,
-    apiKey: "sk-e2e-quick-add-0000",
-    textModel: arg2 ?? "fake-text",
-    visionModel: current?.visionModel ?? null,
+    baseUrl: arg!,
+    apiKey: "sk-e2e-struk-0000",
+    textModel: "fake-text",
+    visionModel: "fake-vision",
     version: current?.version ?? null,
   });
   console.log(JSON.stringify(snapshot));
 } else if (command === "restore") {
-  const snapshot = JSON.parse(arg1 ?? "null") as Snapshot;
+  const snapshot = JSON.parse(arg ?? "null") as Snapshot;
   const current = await getAiSettingsRow();
-  // pengaturan AI satu baris untuk semua; kalau tes lain sudah menggantinya, jangan ditimpa
-  if (current && arg2 && current.baseUrl !== arg2) {
-    console.log("dilewati");
-  } else if (!snapshot) {
+  if (!snapshot) {
     if (current) await deleteAiSettings(viewer, { version: current.version });
   } else if (current) {
-    // ciphertext lama dikembalikan apa adanya; key tidak pernah didekripsi di helper ini
     await db
       .update(aiSettings)
       .set({
@@ -68,6 +64,6 @@ if (command === "set") {
   }
   console.log("ok");
 } else {
-  throw new Error("perintah: set <baseUrl> [textModel] | restore <snapshot> <baseUrl>");
+  throw new Error("perintah: set <baseUrl> | restore <snapshot>");
 }
 await sql.end();

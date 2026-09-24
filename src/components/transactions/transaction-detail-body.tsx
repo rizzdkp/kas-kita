@@ -2,6 +2,7 @@ import { formatDateWithYear, formatTime } from "@/lib/dates";
 import { Amount } from "@/components/money/amount";
 import { IdentityDot } from "@/components/identity/identity-dot";
 import { Badge } from "@/components/ui/badge";
+import { TransactionAttachments } from "@/components/receipts/transaction-attachments";
 import type { TransactionDetail } from "@/server/queries/transactions";
 import { beneficiaryLabel, KIND_LABEL, ownerDot, personById, SOURCE_LABEL } from "./labels";
 import { rowText } from "./transaction-row";
@@ -64,6 +65,7 @@ export function TransactionDetailBody({ detail, names, people }: { detail: Trans
             </div>
           ))}
       </dl>
+      <TransactionAttachments transactionId={detail.id} editable={!detail.deletedAt} />
     </div>
   );
 }

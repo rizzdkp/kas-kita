@@ -29,6 +29,7 @@ const ENTITY_SUBJECT: Record<string, string> = {
   goals: "Target ini",
   goal_contributions: "Setoran ini",
   investment_valuations: "Nilai ini",
+  ai_settings: "Pengaturan AI ini",
   users: "Pengguna ini",
 };
 

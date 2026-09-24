@@ -57,7 +57,7 @@ export function AiSettingsForm({ initial }: { initial: Saved }) {
         setError(result);
         return;
       }
-      setModels(result.data.ok ? { models: result.data.models, message: `${result.data.models.length} model ditemukan. Pilih di bawah atau ketik ID-nya.` } : { models: null, message: result.data.message });
+      setModels(result.data.ok ? { models: result.data.models, message: `${result.data.models.length} model ditemukan. Pilih di bawah atau ketik ID model sendiri.` } : { models: null, message: result.data.message });
     });
   }
 

@@ -20,7 +20,7 @@ function psql(query: string): string {
 }
 
 function settings(...args: string[]): string {
-  const out = sh(`npx tsx tests/e2e/helpers/quick-add-ai-settings.ts ${args.map((a) => `'${a}'`).join(" ")}`);
+  const out = sh(`npx tsx tests/e2e/helpers/quick-add-ai-settings.ts ${args.map((a) => JSON.stringify(a)).join(" ")}`);
   return out.split("\n").at(-1) ?? "";
 }
 
@@ -56,7 +56,7 @@ test.beforeAll(async () => {
 
 test.afterAll(async () => {
   await stopFake();
-  settings("restore", snapshot);
+  settings("restore", snapshot, BASE_URL);
   psql(`update transactions set deleted_at = now() where source = 'quick_add' and note like 'E2E %' and deleted_at is null and created_at > now() - interval '1 hour'`);
 });
 
@@ -73,14 +73,15 @@ async function openApp(page: Page) {
   await expect(bar(page)).toBeVisible({ timeout: 60_000 });
 }
 
-/** Tahan server action pertama supaya spinner sempat terlihat; mengembalikan penghitung panggilan action. */
-async function holdFirstAction(page: Page, ms: number): Promise<{ count: () => number }> {
+/** Tahan panggilan AI (server action berisi baris mentah, bukan simpan) dan hitung jumlahnya. */
+async function holdAiAction(page: Page, ms: number): Promise<{ count: () => number }> {
   let calls = 0;
   await page.route("**/*", async (route) => {
     const req = route.request();
-    if (req.method() === "POST" && req.headers()["next-action"]) {
+    const body = req.method() === "POST" && req.headers()["next-action"] ? (req.postData() ?? "") : "";
+    if (body.includes("E2E ") && !body.includes("clientId")) {
       calls += 1;
-      if (calls === 1) await new Promise((r) => setTimeout(r, ms));
+      await new Promise((r) => setTimeout(r, ms));
     }
     await route.continue().catch(() => {});
   });
@@ -100,7 +101,7 @@ const LINES = ["E2E servis motor 350rb", "E2E iuran sampah dan keamanan seratus 
 
 test("baris yang belum lengkap: spinner, kartu terisi AI dengan tanda, lalu simpan sebagai quick_add", async ({ page }) => {
   await openApp(page);
-  const actions = await holdFirstAction(page, 1500);
+  const actions = await holdAiAction(page, 1500);
   await typeLines(page, LINES);
 
   await expect(page.getByTestId("quick-add-ai-status")).toContainText("Model AI membaca 2 baris yang belum lengkap.");
@@ -138,7 +139,7 @@ test("baris yang belum lengkap: spinner, kartu terisi AI dengan tanda, lalu simp
 
 test("baris lengkap tidak memanggil AI (AC1)", async ({ page }) => {
   await openApp(page);
-  const actions = await holdFirstAction(page, 0);
+  const actions = await holdAiAction(page, 0);
   await typeLines(page, ["E2E kopi 25rb gopay"]);
   await expect(page.getByTestId("quick-add-card")).toHaveCount(1);
   await expect(page.getByText("Field bertanda AI")).toHaveCount(0);
@@ -148,7 +149,7 @@ test("baris lengkap tidak memanggil AI (AC1)", async ({ page }) => {
 
 test("Esc saat AI membaca: kartu tampil tanpa hasil AI, field kosong ditandai", async ({ page }) => {
   await openApp(page);
-  await holdFirstAction(page, 10_000);
+  await holdAiAction(page, 10_000);
   await typeLines(page, [LINES[0]!]);
   await expect(page.getByTestId("quick-add-ai-status")).toBeVisible();
   await page.keyboard.press("Escape");

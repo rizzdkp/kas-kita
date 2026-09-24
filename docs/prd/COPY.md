@@ -99,7 +99,7 @@ Semua format lewat `src/lib/money.ts` dan `src/lib/dates.ts` memakai `Intl` deng
 | Model vision, petunjuk | Membaca foto struk. Pilih model yang bisa membaca gambar. |
 | Kolom model, placeholder | Cari atau ketik ID model |
 | Kolom model, tidak ada yang cocok | Tidak ada di daftar. ID yang kamu ketik tetap dipakai. |
-| Daftar model, status | [n] model ditemukan. Pilih di bawah atau ketik ID-nya. / Atau ketik ID model langsung di kolom model. / Isi base URL dan API key untuk mengambil daftar model. |
+| Daftar model, status | [n] model ditemukan. Pilih di bawah atau ketik ID model sendiri. / Atau ketik ID model langsung di kolom model. / Isi base URL dan API key untuk mengambil daftar model. |
 | Daftar model kosong | Server tidak mengirim daftar model. Ketik ID model secara manual. |
 | Daftar model gagal | Server AI tidak merespons. Cek base URL, atau ketik ID model secara manual. / Server membalas HTTP [n]: [pesan server]. Cek base URL dan API key, atau ketik ID model secara manual. |
 | Belum dipasang | AI belum dipasang. Tidak ada data yang dikirim ke penyedia AI mana pun, dan Kas Kita membaca teks di bar bawah sendiri, tanpa AI. |
@@ -596,7 +596,6 @@ Tabel di bawah mencatat teks yang sudah dipakai di kode. Bagian dinamis ditulis 
 | Sesi, kosong | Tidak ada sesi aktif lain. Muat ulang halaman kalau baru masuk dari perangkat lain. |
 | Sesi, tombol | Keluar dari perangkat ini |
 | Sesi, toast | [perangkat] sudah keluar |
-| AI, status sementara | Pengaturan penyedia AI belum tersedia di versi ini. Sampai tersedia, tidak ada data yang dikirim ke penyedia AI mana pun, dan Kas Kita membaca teks di bar bawah sendiri, tanpa AI. |
 | Ekspor | Satu file zip berisi data.json (akun, transaksi, kategori, anggaran, tagihan, target, dan riwayat perubahan) beserta lampiran struk. Data login dan API key tidak ikut. |
 | Ekspor, tombol | Ekspor semua data |
 | Ekspor, lampiran hilang | Lampiran ini tidak ditemukan di penyimpanan saat ekspor. |
