@@ -12,6 +12,8 @@ type FieldChipProps = Omit<ComponentPropsWithRef<"button">, "children"> & {
   missing?: boolean;
   /** Teks saat kosong, misalnya "Pilih kategori". */
   missingText?: string;
+  /** Nilai diisi model AI, bukan parser atau pengguna. */
+  ai?: boolean;
   children?: ReactNode;
 };
 
@@ -26,12 +28,25 @@ export function chipClassName(missing: boolean | undefined): string {
   return `${chipBase} ${missing ? chipMissing : chipFilled}`;
 }
 
+/** Penanda kecil field hasil AI; teks, bukan ikon, supaya terbaca tanpa legenda warna. */
+export function AiMark() {
+  return (
+    <>
+      <span aria-hidden className="text-caption font-medium text-secondary">
+        AI
+      </span>
+      <span className="sr-only">, diisi AI</span>
+    </>
+  );
+}
+
 /** Satu field di kartu pratinjau; klik untuk mengubah. */
-export function FieldChip({ field, missing = false, missingText, children, className, ...rest }: FieldChipProps) {
+export function FieldChip({ field, missing = false, missingText, ai = false, children, className, ...rest }: FieldChipProps) {
   return (
     <button
       type="button"
       data-missing={missing || undefined}
+      data-ai={(ai && !missing) || undefined}
       className={cn(
         chipClassName(missing),
         className,
@@ -45,7 +60,10 @@ export function FieldChip({ field, missing = false, missingText, children, class
           <span>{missingText ?? `Isi ${field.toLowerCase()}`}</span>
         </>
       ) : (
-        children
+        <>
+          {children}
+          {ai ? <AiMark /> : null}
+        </>
       )}
     </button>
   );

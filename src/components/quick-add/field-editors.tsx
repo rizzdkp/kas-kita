@@ -16,6 +16,7 @@ type EditorShellProps = {
   field: string;
   missing?: boolean;
   missingText?: string;
+  ai?: boolean;
   chip: ReactNode;
   /** Dipanggil saat popover ditutup lewat Enter atau tombol Selesai. */
   onCommit: () => void;
@@ -23,7 +24,7 @@ type EditorShellProps = {
   children: ReactNode;
 };
 
-function EditorShell({ field, missing, missingText, chip, onCommit, onOpen, children }: EditorShellProps) {
+function EditorShell({ field, missing, missingText, ai, chip, onCommit, onOpen, children }: EditorShellProps) {
   const [open, setOpen] = useState(false);
   const commit = () => {
     onCommit();
@@ -46,7 +47,7 @@ function EditorShell({ field, missing, missingText, chip, onCommit, onOpen, chil
       }}
     >
       <PopoverTrigger asChild>
-        <FieldChip field={field} missing={missing} missingText={missingText}>
+        <FieldChip field={field} missing={missing} missingText={missingText} ai={ai}>
           {chip}
         </FieldChip>
       </PopoverTrigger>
@@ -60,13 +61,14 @@ function EditorShell({ field, missing, missingText, chip, onCommit, onOpen, chil
   );
 }
 
-export function AmountEditor({ amount, onChange }: { amount: bigint | null; onChange: (v: bigint | null) => void }) {
+export function AmountEditor({ amount, onChange, ai }: { amount: bigint | null; onChange: (v: bigint | null) => void; ai?: boolean }) {
   const [text, setText] = useState("");
   const parsed = parseAmount(text);
   const invalid = text.trim() !== "" && (parsed === null || parsed <= 0n);
   return (
     <EditorShell
       field="Nominal"
+      ai={ai}
       missing={amount === null}
       missingText="Isi nominal"
       chip={<span className="tabular text-card">{amount !== null ? formatRupiah(amount) : null}</span>}
@@ -87,12 +89,13 @@ function timeValue(d: Date): string {
   return formatTime(d).replace(".", ":");
 }
 
-export function DateEditor({ value, now, onChange }: { value: Date; now: Date; onChange: (v: Date) => void }) {
+export function DateEditor({ value, now, onChange, ai }: { value: Date; now: Date; onChange: (v: Date) => void; ai?: boolean }) {
   const [day, setDay] = useState("");
   const [time, setTime] = useState("");
   return (
     <EditorShell
       field="Tanggal"
+      ai={ai}
       chip={
         <span className="tabular">
           {formatRelativeDay(value, now)} {formatTime(value)}
@@ -123,11 +126,12 @@ export function DateEditor({ value, now, onChange }: { value: Date; now: Date; o
   );
 }
 
-export function NoteEditor({ note, onChange }: { note: string | null; onChange: (v: string | null) => void }) {
+export function NoteEditor({ note, onChange, ai }: { note: string | null; onChange: (v: string | null) => void; ai?: boolean }) {
   const [text, setText] = useState("");
   return (
     <EditorShell
       field="Catatan"
+      ai={ai && note !== null}
       chip={
         <>
           <Icon icon={PenLine} size={16} className="shrink-0 text-secondary" />

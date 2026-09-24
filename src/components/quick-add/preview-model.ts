@@ -1,6 +1,7 @@
 import type { Scope } from "@/lib/scope";
 import type { Beneficiary, QuickAddContext, QuickAddDraft, QuickAddKind } from "@/lib/quick-add-parser";
 import { BENEFICIARY_PREFIXES, OWNER_WORDS } from "@/lib/quick-add-keywords";
+import { dropEditedAiFields } from "./ai-merge";
 import type { Party, PreviewField, PreviewItem, QuickAddContextAccount, QuickAddContextData } from "./types";
 
 const OWNER_ORDER: Record<Scope, Party[]> = {
@@ -57,11 +58,11 @@ export function draftToItem(draft: QuickAddDraft, clientId: string): PreviewItem
   };
 }
 
-export type PreviewPatch = Partial<Omit<PreviewItem, "clientId" | "raw" | "error">>;
+export type PreviewPatch = Partial<Omit<PreviewItem, "clientId" | "raw" | "error" | "aiFields">>;
 
 /** Terapkan edit dan buang field yang tidak lagi cocok dengan jenis baru. */
 export function applyEdit(item: PreviewItem, patch: PreviewPatch, ctx: QuickAddContextData): PreviewItem {
-  const next: PreviewItem = { ...item, ...patch, error: null };
+  const next: PreviewItem = { ...item, ...patch, error: null, aiFields: dropEditedAiFields(item.aiFields, Object.keys(patch)) };
   if (next.kind === "transfer") next.categoryId = null;
   else next.toAccountId = null;
   if (next.categoryId && next.kind !== "transfer") {

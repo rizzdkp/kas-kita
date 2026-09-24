@@ -6,7 +6,7 @@ import { Check, CircleAlert } from "lucide-react";
 import { GlassSurface } from "@/components/glass/glass-surface";
 import { cn } from "@/components/ui/cn";
 import { Icon } from "@/components/ui/icon";
-import { chipClassName } from "./field-chip";
+import { AiMark, chipClassName } from "./field-chip";
 
 export type ChipOption = { value: string; label: string; indent?: boolean };
 export type ChipOptionGroup = { label?: string; options: ChipOption[] };
@@ -21,16 +21,19 @@ type ChipSelectProps = {
   /** Isi chip saat terisi; bawaan label opsi terpilih. */
   display?: ReactNode;
   disabled?: boolean;
+  /** Nilai diisi model AI. */
+  ai?: boolean;
 };
 
 /** Pilihan satu nilai yang pemicunya berupa chip di kartu pratinjau. */
-export function ChipSelect({ field, value, onValueChange, groups, missing, missingText, display, disabled }: ChipSelectProps) {
+export function ChipSelect({ field, value, onValueChange, groups, missing, missingText, display, disabled, ai }: ChipSelectProps) {
   const selected = groups.flatMap((g) => g.options).find((o) => o.value === value);
   return (
     <SelectPrimitive.Root value={value ?? ""} onValueChange={onValueChange} disabled={disabled}>
       <SelectPrimitive.Trigger
         aria-label={field}
         data-missing={missing || undefined}
+        data-ai={(ai && !missing) || undefined}
         className={cn(chipClassName(missing), disabled && "pointer-events-none")}
       >
         {missing ? (
@@ -39,7 +42,10 @@ export function ChipSelect({ field, value, onValueChange, groups, missing, missi
             <span>{missingText}</span>
           </>
         ) : (
-          (display ?? <span>{selected?.label}</span>)
+          <>
+            {display ?? <span>{selected?.label}</span>}
+            {ai ? <AiMark /> : null}
+          </>
         )}
       </SelectPrimitive.Trigger>
       <SelectPrimitive.Portal>

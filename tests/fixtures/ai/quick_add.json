@@ -1,0 +1,26 @@
+{
+  "items": [
+    {
+      "line": 1,
+      "kind": "expense",
+      "amount": 350000,
+      "accountName": null,
+      "toAccountName": null,
+      "categoryName": "Transportasi",
+      "date": null,
+      "note": "Servis motor",
+      "beneficiary": null
+    },
+    {
+      "line": 2,
+      "kind": "expense",
+      "amount": "100rb",
+      "accountName": "Rekening Bersama",
+      "toAccountName": null,
+      "categoryName": "Rumah",
+      "date": null,
+      "note": "Iuran sampah dan keamanan",
+      "beneficiary": "shared"
+    }
+  ]
+}

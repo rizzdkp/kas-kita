@@ -72,6 +72,7 @@ type PreviewCardProps = {
 /** Kartu pratinjau satu transaksi; setiap field bisa diklik untuk diubah (F-IN-2 AC3). */
 export function PreviewCard({ item, ctx, colors, now, index, total, onChange, onRemove }: PreviewCardProps) {
   const missing = new Set(missingFields(item, ctx));
+  const ai = new Set(item.aiFields ?? []);
   const account = accountById(ctx, item.accountId);
   const recipient = effectiveRecipient(item, account);
   const recipientName: Record<Party, string> = { me: "Kamu", partner: ctx.partnerName ?? "Partner", shared: "Bersama" };
@@ -102,8 +103,9 @@ export function PreviewCard({ item, ctx, colors, now, index, total, onChange, on
             groups={KIND_GROUPS}
             missing={missing.has("kind")}
             missingText="Pilih jenis"
+            ai={ai.has("kind")}
           />
-          <AmountEditor amount={item.amount} onChange={(amount) => onChange({ amount })} />
+          <AmountEditor amount={item.amount} onChange={(amount) => onChange({ amount })} ai={ai.has("amount")} />
           <ChipSelect
             field={item.kind === "transfer" ? "Dari akun" : "Akun"}
             value={item.accountId}
@@ -111,6 +113,7 @@ export function PreviewCard({ item, ctx, colors, now, index, total, onChange, on
             groups={accountGroups(ctx)}
             missing={missing.has("account")}
             missingText="Pilih akun"
+            ai={ai.has("account")}
             display={account ? <AccountChip account={account} colors={colors} /> : undefined}
           />
           {item.kind === "transfer" ? (
@@ -123,6 +126,7 @@ export function PreviewCard({ item, ctx, colors, now, index, total, onChange, on
                 groups={accountGroups(ctx)}
                 missing={missing.has("toAccount")}
                 missingText="Pilih akun tujuan"
+                ai={ai.has("toAccount")}
                 display={(() => {
                   const to = accountById(ctx, item.toAccountId);
                   return to ? <AccountChip account={to} colors={colors} /> : undefined;
@@ -130,35 +134,33 @@ export function PreviewCard({ item, ctx, colors, now, index, total, onChange, on
               />
             </>
           ) : item.kind !== null ? (
-            <>
-                  <ChipSelect
-                field="Kategori"
-                value={item.categoryId}
-                onValueChange={(categoryId) => onChange({ categoryId })}
-                groups={categoryGroups(ctx, item.kind)}
-                missing={missing.has("category")}
-                missingText="Pilih kategori"
-              />
-            </>
+            <ChipSelect
+              field="Kategori"
+              value={item.categoryId}
+              onValueChange={(categoryId) => onChange({ categoryId })}
+              groups={categoryGroups(ctx, item.kind)}
+              missing={missing.has("category")}
+              missingText="Pilih kategori"
+              ai={ai.has("category")}
+            />
           ) : null}
-          <DateEditor value={item.occurredAt} now={now} onChange={(occurredAt) => onChange({ occurredAt })} />
+          <DateEditor value={item.occurredAt} now={now} onChange={(occurredAt) => onChange({ occurredAt })} ai={ai.has("date")} />
           {item.kind === "expense" ? (
-            <>
-                  <ChipSelect
-                field="Untuk"
-                value={recipient}
-                onValueChange={(v) => onChange({ recipient: v as Party })}
-                groups={recipientGroups}
-                display={<span>Untuk: {recipientName[recipient]}</span>}
-                disabled={account?.owner === "shared"}
-              />
-            </>
+            <ChipSelect
+              field="Untuk"
+              value={recipient}
+              onValueChange={(v) => onChange({ recipient: v as Party })}
+              groups={recipientGroups}
+              display={<span>Untuk: {recipientName[recipient]}</span>}
+              disabled={account?.owner === "shared"}
+              ai={ai.has("recipient") && account?.owner !== "shared"}
+            />
           ) : null}
         </div>
         {total > 1 ? <IconButton icon={X} label={`Buang baris ${index + 1}`} onClick={onRemove} className="-mr-1 shrink-0" /> : null}
       </div>
       <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-        <NoteEditor note={item.note} onChange={(note) => onChange({ note })} />
+        <NoteEditor note={item.note} onChange={(note) => onChange({ note })} ai={ai.has("note")} />
         {account?.owner === "partner" ? (
           <p className="text-small text-secondary">Dicatat atas nama {account.ownerName}, diisi oleh kamu</p>
         ) : null}

@@ -8,6 +8,7 @@ import type {
   QuickAddContextCategory,
   QuickAddContextData,
 } from "@/components/quick-add/types";
+import { getAiConfig } from "@/server/ai/client";
 import type { Viewer } from "@/server/auth/viewer";
 import { db as defaultDb, type DbOrTx } from "@/server/db/client";
 import { accounts, institutions } from "@/server/db/schema";
@@ -87,6 +88,15 @@ async function loadCategories(db: DbOrTx): Promise<QuickAddContextCategory[]> {
   return out;
 }
 
+// hanya flag yang keluar dari server; kegagalan dekripsi key dianggap belum terpasang
+async function textModelAvailable(db: DbOrTx): Promise<boolean> {
+  try {
+    return Boolean((await getAiConfig(db))?.textModel);
+  } catch {
+    return false;
+  }
+}
+
 function fallbackAccount(list: QuickAddContextAccount[], owners: Party[]): string | null {
   for (const owner of owners) {
     const hit = list.find((a) => a.owner === owner && EVERYDAY_TYPES.has(a.type));
@@ -102,11 +112,12 @@ export async function getQuickAddContext(viewer: Viewer, db: DbOrTx = defaultDb)
   const lastUsed = async (who: Viewer, scope: Scope) => valid((await getLastUsedDefaults(who, scope, db)).accountId);
   // belum pernah mengisi untuk partner: pakai akun yang terakhir dipakai partner sendiri
   const asPartner: Viewer | null = viewer.partner ? { user: viewer.partner, partner: viewer.user, sessionId: viewer.sessionId } : null;
-  const [me, partnerByMe, partnerOwn, all] = await Promise.all([
+  const [me, partnerByMe, partnerOwn, all, aiAvailable] = await Promise.all([
     lastUsed(viewer, "me"),
     asPartner ? lastUsed(viewer, "partner") : Promise.resolve(null),
     asPartner ? lastUsed(asPartner, "me") : Promise.resolve(null),
     lastUsed(viewer, "all"),
+    textModelAvailable(db),
   ]);
   const partner = partnerByMe ?? partnerOwn;
   return {
@@ -119,5 +130,6 @@ export async function getQuickAddContext(viewer: Viewer, db: DbOrTx = defaultDb)
     },
     meName: viewer.user.displayName,
     partnerName: viewer.partner?.displayName ?? null,
+    aiAvailable,
   };
 }

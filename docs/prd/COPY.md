@@ -91,6 +91,29 @@ Semua format lewat `src/lib/money.ts` dan `src/lib/dates.ts` memakai `Intl` deng
 | Tombol | Tes koneksi |
 | Hasil tes berhasil | Model teks dan model vision merespons |
 | Key tersimpan | Tersimpan, berakhiran ••••[last4] |
+| Key tersimpan, petunjuk | Tersimpan, berakhiran ••••[last4]. Kosongkan kalau tidak diganti. |
+| Key belum ada, petunjuk | Disimpan terenkripsi dan tidak pernah dikirim ke browser. |
+| Label | Base URL / API key / Model teks / Model vision |
+| Base URL, petunjuk | Alamat server yang kompatibel dengan OpenAI, biasanya diakhiri /v1. |
+| Model teks, petunjuk | Membaca teks transaksi di bar bawah. |
+| Model vision, petunjuk | Membaca foto struk. Pilih model yang bisa membaca gambar. |
+| Kolom model, placeholder | Cari atau ketik ID model |
+| Kolom model, tidak ada yang cocok | Tidak ada di daftar. ID yang kamu ketik tetap dipakai. |
+| Daftar model, status | [n] model ditemukan. Pilih di bawah atau ketik ID-nya. / Atau ketik ID model langsung di kolom model. / Isi base URL dan API key untuk mengambil daftar model. |
+| Daftar model kosong | Server tidak mengirim daftar model. Ketik ID model secara manual. |
+| Daftar model gagal | Server AI tidak merespons. Cek base URL, atau ketik ID model secara manual. / Server membalas HTTP [n]: [pesan server]. Cek base URL dan API key, atau ketik ID model secara manual. |
+| Belum dipasang | AI belum dipasang. Tidak ada data yang dikirim ke penyedia AI mana pun, dan Kas Kita membaca teks di bar bawah sendiri, tanpa AI. |
+| Hasil tes, judul | Hasil tes koneksi |
+| Hasil tes per model | Model teks / Model vision · [id]: Merespons / Model belum dipilih. / Model tidak mendukung gambar. / Tidak merespons. Cek base URL dan pastikan server AI menyala. / Server menolak permintaan. / Merespons, tetapi jawabannya bukan JSON yang sesuai. Coba model lain. / Pesan server: [pesan] |
+| Tombol | Simpan / Hapus pengaturan AI |
+| Dialog hapus | Hapus pengaturan AI?: Base URL, API key, dan pilihan model dihapus untuk kalian berdua. Kas Kita berhenti mengirim data ke penyedia AI, dan pencatatan tetap jalan tanpa AI. |
+| Dialog hapus, tombol | Batal / Hapus pengaturan AI |
+| Toast hapus | Pengaturan AI dihapus |
+| Error base URL | Isi base URL yang diawali http:// atau https://, misalnya https://api.openai.com/v1 |
+| Error API key | Isi API key dari penyedia AI |
+| Error AI belum dipasang | Model AI belum dipasang. Pilih model di pengaturan AI. |
+| Error server AI menolak | Model AI menolak permintaan (HTTP [n]). Cek pengaturan AI atau isi field yang kosong sendiri. |
+| Error jawaban AI tidak terbaca | Jawaban model AI tidak terbaca utuh. Cek hasilnya dan isi field yang kosong sendiri. |
 
 ### Cara membaca tabel per area
 

@@ -1,12 +1,13 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { Scope } from "@/lib/scope";
 import { parseQuickAdd } from "@/lib/quick-add-parser";
 import { focusQuickAdd } from "@/components/glass/quick-add-bar";
 import type { ToastOptions } from "@/components/ui/toast";
 import { createQuickAddAction, undoQuickAddAction } from "@/server/actions/quick-add";
-import { needsAi, resolveWithAi } from "./ai-resolver";
+import { applyAiResults } from "./ai-merge";
+import { incompleteIndexes, requestAi } from "./ai-resolver";
 import { enqueueQuickAdd, offlineQueueAvailable } from "./offline-queue";
 import {
   accountById,
@@ -31,15 +32,32 @@ export function useQuickAdd(ctx: QuickAddContextData, showToast: (options: Toast
   const [text, setText] = useState("");
   const [items, setItems] = useState<PreviewItem[] | null>(null);
   const [now, setNow] = useState(() => new Date());
-  const [busy, setBusy] = useState(false);
+  // jumlah baris yang sedang dibaca AI; lebih dari nol berarti bar dikunci
+  const [aiLines, setAiLines] = useState(0);
+  const busy = aiLines > 0;
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [aiNotice, setAiNotice] = useState<string | null>(null);
+  const cancelAi = useRef<(() => void) | null>(null);
   const lastRaw = useRef("");
   useOfflineFlush(showToast);
+
+  // input bar dikunci saat AI jalan, jadi Esc ditangkap di window
+  useEffect(() => {
+    if (!busy) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key !== "Escape" || !cancelAi.current) return;
+      event.preventDefault();
+      cancelAi.current();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [busy]);
 
   const close = useCallback((restoreText: boolean) => {
     setItems(null);
     setError(null);
+    setAiNotice(null);
     if (restoreText) setText(lastRaw.current);
     focusQuickAdd();
   }, []);
@@ -48,20 +66,30 @@ export function useQuickAdd(ctx: QuickAddContextData, showToast: (options: Toast
     async (raw: string, scope: Scope) => {
       const at = new Date();
       const parserCtx = buildParserContext(ctx, scope, at);
-      let drafts = parseQuickAdd(raw, parserCtx);
+      const drafts = parseQuickAdd(raw, parserCtx);
       if (drafts.length === 0) return;
-      if (needsAi(drafts)) {
-        setBusy(true);
+      let next = drafts.map((d) => draftToItem(d, newClientId()));
+      let notice: string | null = null;
+      const indexes = incompleteIndexes(drafts);
+      // offline: AI dilewati, kartu tampil dengan field kosong ditandai (AC5)
+      if (indexes.length > 0 && ctx.aiAvailable && navigator.onLine) {
+        const run = requestAi(indexes.map((i) => drafts[i]!.raw), scope);
+        cancelAi.current = run.cancel;
+        setAiLines(indexes.length);
         try {
-          drafts = (await resolveWithAi(drafts, parserCtx)) ?? drafts;
+          const outcome = await run.promise;
+          if (outcome.status === "ok") next = applyAiResults(next, drafts, indexes, outcome.data, ctx, parserCtx);
+          else if (outcome.status === "error") notice = outcome.message;
         } finally {
-          setBusy(false);
+          cancelAi.current = null;
+          setAiLines(0);
         }
       }
       lastRaw.current = raw;
       setNow(at);
       setError(null);
-      setItems(drafts.map((d) => draftToItem(d, newClientId())));
+      setAiNotice(notice);
+      setItems(next);
       setText("");
     },
     [ctx],
@@ -149,9 +177,12 @@ export function useQuickAdd(ctx: QuickAddContextData, showToast: (options: Toast
     items,
     now,
     busy,
+    aiLines,
     saving,
     error,
+    aiNotice,
     submit,
+    cancelAi: () => cancelAi.current?.(),
     change,
     remove,
     save,

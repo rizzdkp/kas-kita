@@ -39,6 +39,8 @@ export interface QuickAddContextData {
   defaults: { me: string | null; partner: string | null; all: string | null };
   meName: string;
   partnerName: string | null;
+  /** Model teks AI terpasang (F-IN-2 AC2); key dan base URL tidak pernah dikirim ke klien. */
+  aiAvailable?: boolean;
 }
 
 /** Satu kartu pratinjau: draf parser yang sudah bisa diedit. */
@@ -55,6 +57,10 @@ export interface PreviewItem {
   /** null berarti mengikuti pemilik akun. */
   recipient: Party | null;
   error: string | null;
+  /** Field yang diisi AI, bukan parser; ditandai halus di kartu sampai diubah tangan. */
+  aiFields?: AiField[];
 }
+
+export type AiField = "kind" | "amount" | "account" | "toAccount" | "category" | "date" | "note" | "recipient";
 
 export type PreviewField = "kind" | "amount" | "account" | "toAccount" | "category";

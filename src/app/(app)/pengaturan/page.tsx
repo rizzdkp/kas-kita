@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { listSessions, requireViewer } from "@/server/auth/session";
+import { getAiSettingsView } from "@/server/queries/ai-settings";
 import { listCategories } from "@/server/queries/categories";
+import { AiSettingsForm } from "@/components/settings/ai-section";
 import { AppearanceSettings } from "@/components/settings/appearance-section";
 import { CategoriesManager } from "@/components/settings/categories-section";
 import { ExportAllLink } from "@/components/settings/export-link";
@@ -25,7 +27,11 @@ const SECTIONS: readonly SettingsNavItem[] = [
 
 export default async function PengaturanPage() {
   const viewer = await requireViewer();
-  const [sessions, categories] = await Promise.all([listSessions(viewer), listCategories({ includeArchived: true })]);
+  const [sessions, categories, ai] = await Promise.all([listSessions(viewer), listCategories({ includeArchived: true }), getAiSettingsView()]);
+  // hanya field yang aman untuk browser; key tidak pernah ikut (F-AI-1 AC3)
+  const aiSettings = ai
+    ? { version: ai.version, baseUrl: ai.baseUrl, apiKeyLast4: ai.apiKeyLast4, textModel: ai.textModel, visionModel: ai.visionModel }
+    : null;
   const partner = viewer.partner ? { name: viewer.partner.displayName, color: viewer.partner.identityColor } : null;
 
   return (
@@ -66,16 +72,12 @@ export default async function PengaturanPage() {
           <SessionsList sessions={sessions} />
         </SettingsSection>
 
-        <SettingsSection id="ai" title="AI">
-          <div className="flex max-w-[65ch] flex-col gap-2">
-            <p className="text-body text-primary">
-              Foto struk dan teks transaksi dikirim ke penyedia yang kamu pasang di sini. Angka di Ringkasan selalu dihitung Kas Kita, bukan AI.
-            </p>
-            <p className="text-small text-secondary">
-              Pengaturan penyedia AI belum tersedia di versi ini. Sampai tersedia, tidak ada data yang dikirim ke penyedia AI mana pun, dan Kas Kita
-              membaca teks di bar bawah sendiri, tanpa AI.
-            </p>
-          </div>
+        <SettingsSection
+          id="ai"
+          title="AI"
+          description="Foto struk dan teks transaksi dikirim ke penyedia yang kamu pasang di sini. Angka di Ringkasan selalu dihitung Kas Kita, bukan AI."
+        >
+          <AiSettingsForm initial={aiSettings} />
         </SettingsSection>
 
         <SettingsSection

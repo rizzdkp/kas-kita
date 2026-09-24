@@ -16,6 +16,8 @@ type PreviewStackProps = {
   saving: boolean;
   /** Error yang tidak menunjuk kartu tertentu. */
   error: string | null;
+  /** Model AI gagal atau terlalu lama; kartu tetap tampil dengan field kosong ditandai. */
+  aiNotice?: string | null;
   onChange: (clientId: string, patch: PreviewPatch) => void;
   onRemove: (clientId: string) => void;
   onSave: () => void;
@@ -30,7 +32,7 @@ function isInteractive(target: EventTarget | null): boolean {
  * Kartu pratinjau di atas bar quick-add. Permukaan solid, bukan glass: popover pengedit field
  * memakai glass regular, dan DESIGN 5.1 melarang glass di atas glass.
  */
-export function PreviewStack({ items, ctx, colors, now, saving, error, onChange, onRemove, onSave, onCancel }: PreviewStackProps) {
+export function PreviewStack({ items, ctx, colors, now, saving, error, aiNotice, onChange, onRemove, onSave, onCancel }: PreviewStackProps) {
   const saveRef = useRef<HTMLButtonElement | null>(null);
   const reasonId = useId();
   const count = items.length;
@@ -38,6 +40,7 @@ export function PreviewStack({ items, ctx, colors, now, saving, error, onChange,
   const incomplete = missingPerItem.findIndex((m) => m.length > 0);
   const allMissing = [...new Set(missingPerItem.flat())] as PreviewField[];
   const reason = missingReason(allMissing);
+  const hasAiFields = items.some((i) => (i.aiFields?.length ?? 0) > 0);
   const reasonText =
     reason && count > 1 ? `Baris ${incomplete + 1}: ${missingReason(missingPerItem[incomplete] ?? [])}` : reason;
 
@@ -66,6 +69,19 @@ export function PreviewStack({ items, ctx, colors, now, saving, error, onChange,
       onKeyDown={onKeyDown}
       className="kk-pop flex max-h-[min(60dvh,520px)] flex-col overflow-hidden rounded-card border border-border bg-surface shadow-glass outline-none"
     >
+      {aiNotice || hasAiFields ? (
+        <div className="flex flex-col gap-1 border-b border-border px-3 py-2 sm:px-4">
+          {aiNotice ? (
+            <p role="alert" data-testid="quick-add-ai-notice" className="flex items-start gap-1.5 text-small text-attention">
+              <Icon icon={CircleAlert} size={16} className="mt-0.5 shrink-0" />
+              <span>{aiNotice}</span>
+            </p>
+          ) : null}
+          {hasAiFields ? (
+            <p className="text-small text-secondary">Field bertanda AI diisi model AI. Cek sebelum menyimpan.</p>
+          ) : null}
+        </div>
+      ) : null}
       <div className="min-h-0 overflow-y-auto">
         {items.map((item, index) => (
           <PreviewCard

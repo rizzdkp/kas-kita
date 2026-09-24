@@ -4,8 +4,9 @@ import { useCallback, useEffect, useRef, useState, type RefObject } from "react"
 import type { AppShellProps } from "@/components/shell/app-shell";
 import { useToast, type ToastOptions } from "@/components/ui/toast";
 import type { PartyColors } from "./preview-card";
+import { AiStatus } from "./ai-status";
 import { PreviewStack } from "./preview-stack";
-import { ReceiptDialog } from "./receipt-dialog";
+import { ReceiptDialog, requestReceiptCapture } from "./receipt-dialog";
 import type { QuickAddContextData } from "./types";
 import { useQuickAdd } from "./use-quick-add";
 
@@ -46,11 +47,12 @@ export function useQuickAddShell(ctx: QuickAddContextData, colors: PartyColors):
     onQuickAddSubmit: (text, scope) => void qa.submit(text, scope),
     onQuickAddEscape: qa.items ? qa.dismiss : undefined,
     quickAddBusy: qa.busy,
-    onReceiptClick: () => setReceiptOpen(true),
+    onReceiptClick: requestReceiptCapture,
     quickAddSlot: (
       <>
         <ToastBridge apiRef={toastRef} />
         <ReceiptDialog open={receiptOpen} onOpenChange={setReceiptOpen} />
+        {qa.busy ? <AiStatus lines={qa.aiLines} onSkip={qa.cancelAi} /> : null}
         {qa.items ? (
           <PreviewStack
             items={qa.items}
@@ -59,6 +61,7 @@ export function useQuickAddShell(ctx: QuickAddContextData, colors: PartyColors):
             now={qa.now}
             saving={qa.saving}
             error={qa.error}
+            aiNotice={qa.aiNotice}
             onChange={qa.change}
             onRemove={qa.remove}
             onSave={() => void qa.save()}
