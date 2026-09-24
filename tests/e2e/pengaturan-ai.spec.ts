@@ -1,12 +1,21 @@
 import { expect, test } from "@playwright/test";
+import { startFakeAi } from "./helpers/fake-ai";
 import { loginAs } from "./helpers/session";
 
-// butuh server AI palsu: FAKE_AI_PORT=4011 npx tsx scripts/fake-ai-server.ts
-const FAKE_AI_URL = process.env.E2E_FAKE_AI_URL ?? "http://localhost:4011/v1";
+const FAKE_AI_PORT = 4011;
+const FAKE_AI_URL = process.env.E2E_FAKE_AI_URL ?? `http://localhost:${FAKE_AI_PORT}/v1`;
 const API_KEY = "sk-e2e-rahasia-9f3k";
 
 test.describe("pengaturan AI", () => {
   test.describe.configure({ mode: "serial", timeout: 90_000 });
+
+  let stopFake: (() => Promise<void>) | null = null;
+  test.beforeAll(async () => {
+    if (!process.env.E2E_FAKE_AI_URL) stopFake = await startFakeAi(FAKE_AI_PORT);
+  });
+  test.afterAll(async () => {
+    await stopFake?.();
+  });
 
   test("isi, ambil daftar model, pilih, tes koneksi, simpan, lalu hapus", async ({ page, context }) => {
     await loginAs(context);

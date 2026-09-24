@@ -15,5 +15,7 @@ function cleanup(since: string): void {
 
 export default function globalSetup(): () => void {
   const since = new Date().toISOString();
+  // sisa run sebelumnya (termasuk pengaturan AI palsu) dibersihkan dulu supaya tes non-AI mulai dari keadaan tanpa AI
+  cleanup(since);
   return () => cleanup(since);
 }

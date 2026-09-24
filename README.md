@@ -15,9 +15,9 @@ Next.js 15 (App Router, server actions), TypeScript strict, PostgreSQL 16 + Driz
 | M0 Fondasi | Selesai | Skema, migrasi, auth passkey + password/TOTP, CLI buat user, token desain, shell glass G0/G1 |
 | M1 Catat | Selesai | Akun, form transaksi, quick-add parser lokal (multi-baris, antrean offline), daftar transaksi virtual, audit, riwayat edit, dialog konflik, cakupan |
 | M2 Lihat | Selesai | Rumus metrik dengan panel "Cara menghitung", Ringkasan, Anggaran, Tagihan, Target |
-| M3 AI | Belum | Titik ekstensi sudah ada (`src/components/quick-add/ai-resolver.ts`); pengaturan AI di Pengaturan baru berupa keterangan |
+| M3 AI | Selesai | Pengaturan AI (F-AI-1), quick-add AI (F-IN-2), foto struk + lampiran (F-IN-3). Diuji terhadap server AI palsu `scripts/fake-ai-server.ts`, belum terhadap penyedia sungguhan |
 | M4 Impor | Belum | Skema `import_batches`, `import_rows`, `import_templates` sudah ada |
-| M5 Lengkap | Sebagian | Selesai: rekonsiliasi (F-ACC-2), investasi (F-INV-1), laporan + ekspor CSV/PDF (F-REP-1), notifikasi dalam app (F-NOT-1), wawasan berbasis templat (F-AI-2 AC4), prediksi akhir bulan (F-BUD-2). Belum: transaksi berulang (F-IN-7), web push, service worker PWA, glass G2 refraksi, realtime SSE, lampiran |
+| M5 Lengkap | Sebagian | Selesai: rekonsiliasi (F-ACC-2), investasi (F-INV-1), laporan + ekspor CSV/PDF (F-REP-1), notifikasi dalam app (F-NOT-1), wawasan berbasis templat (F-AI-2 AC4), prediksi akhir bulan (F-BUD-2). Belum: transaksi berulang (F-IN-7), web push, service worker PWA, glass G2 refraksi, realtime SSE |
 | M6 Go-live | Belum | Checklist `SECURITY.md` bagian 6 |
 
 Belum dijalankan: tes e2e di WebKit (Safari). Container pengembangan hanya punya Chromium; proyek `webkit` sudah dikonfigurasi di `playwright.config.ts` dan wajib dijalankan sebelum go-live.
@@ -64,10 +64,10 @@ Masuk ke app:
   set -a; . ./.env.local; set +a
   NEXT_DIST_DIR=.next-e2e pnpm build
   KASKITA_DEV_PAGES=1 NEXT_DIST_DIR=.next-e2e pnpm start -p 3400 &
-  E2E_BASE_URL=http://localhost:3400 pnpm e2e --project=chromium --workers=2
+  E2E_BASE_URL=http://localhost:3400 pnpm e2e --project='chromium*' --workers=2
   ```
 
-  `KASKITA_DEV_PAGES=1` membuka galeri komponen `/dev/komponen` yang dipakai tes visual. Jangan pernah menyetelnya di produksi. `NEXT_DIST_DIR` memisahkan folder build supaya beberapa server tidak saling menimpa. Data berawalan "E2E " dibersihkan otomatis sesudah run.
+  `KASKITA_DEV_PAGES=1` membuka galeri komponen `/dev/komponen` yang dipakai tes visual. Jangan pernah menyetelnya di produksi. `NEXT_DIST_DIR` memisahkan folder build supaya beberapa server tidak saling menimpa. Data berawalan "E2E " dan pengaturan AI yang menunjuk server AI palsu dibersihkan otomatis sebelum dan sesudah run. Tes AI (proyek `chromium-ai`) menjalankan server AI palsu sendiri dan berjalan satu per satu setelah tes lain, karena pengaturan AI satu baris untuk seluruh rumah tangga.
 
 ## Deploy
 

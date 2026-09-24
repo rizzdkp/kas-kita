@@ -50,21 +50,30 @@ export function ReceiptDialog({ open, onOpenChange }: ReceiptDialogProps) {
   }, [pathname]);
 
   useEffect(() => {
-    const onCapture = () => {
+    const onCapture = async () => {
+      // klik sebelum status termuat tidak boleh mengarah ke /struk saat model vision belum dipasang
+      let current = vision;
+      if (current === null && navigator.onLine) {
+        current = await getReceiptStatusAction()
+          .then((r) => r.vision)
+          .catch(() => null);
+        setVision(current);
+      }
       if (!navigator.onLine) {
         setReason("offline");
         onOpenChange(true);
-      } else if (vision === false) {
+      } else if (current === false) {
         setReason("setup");
         onOpenChange(true);
-      } else if (vision && (prefersCamera() || pathname === RECEIPT_PATH)) {
+      } else if (current && (prefersCamera() || pathname === RECEIPT_PATH)) {
         inputRef.current?.click();
       } else {
         router.push(receiptHref(scope));
       }
     };
-    window.addEventListener(RECEIPT_CAPTURE_EVENT, onCapture);
-    return () => window.removeEventListener(RECEIPT_CAPTURE_EVENT, onCapture);
+    const listener = () => void onCapture();
+    window.addEventListener(RECEIPT_CAPTURE_EVENT, listener);
+    return () => window.removeEventListener(RECEIPT_CAPTURE_EVENT, listener);
   }, [vision, scope, pathname, router, onOpenChange]);
 
   const copy = reason === "offline" ? OFFLINE_RECEIPT_COPY : SETUP_RECEIPT_COPY;

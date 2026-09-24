@@ -130,7 +130,7 @@ test("baris yang belum lengkap: spinner, kartu terisi AI dengan tanda, lalu simp
   await page.getByRole("button", { name: "Simpan semua" }).click();
   await expect(page.getByRole("status").filter({ hasText: "Tersimpan" })).toBeVisible({ timeout: 20_000 });
   const rows = psql(
-    `select amount, source, beneficiary from transactions where note like 'E2E %' and deleted_at is null and created_at > now() - interval '5 minutes' order by amount`,
+    `select amount, source, beneficiary from transactions where (note like 'E2E servis motor%' or note like 'E2E iuran sampah%') and source = 'quick_add' and deleted_at is null and created_at > now() - interval '5 minutes' order by amount`,
   );
   expect(rows.split("\n")).toEqual(["100000|quick_add|shared", "350000|quick_add|owner"]);
 });
