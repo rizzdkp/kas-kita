@@ -230,6 +230,11 @@ Tabel di bawah mencatat teks yang sudah dipakai di kode. Bagian dinamis ditulis 
 | Toast urungkan | Diurungkan |
 | Toast urungkan gagal | Belum bisa diurungkan. [pesan error] |
 | Error jaringan | Tidak bisa terhubung ke server. Periksa koneksi lalu coba lagi. |
+| AI membaca (status di atas bar) | Model AI membaca baris yang belum lengkap. / Model AI membaca [n] baris yang belum lengkap. Esc untuk isi sendiri. |
+| AI membaca, tombol | Isi sendiri |
+| Tanda field hasil AI | AI / (aria) , diisi AI |
+| Keterangan field hasil AI | Field bertanda AI diisi model AI. Cek sebelum menyimpan. |
+| AI gagal atau lewat 30 detik | Model AI tidak merespons. Cek pengaturan AI atau isi field yang kosong sendiri. (atau pesan error dari klien AI) |
 | Dialog foto struk, judul | Foto struk butuh model vision |
 | Dialog foto struk, isi | Struk dibaca oleh model AI yang bisa membaca gambar. Pasang model vision di pengaturan AI, lalu tombol ini langsung membuka kamera. Sementara itu, ketik transaksinya di bar, misalnya kopi 25rb gopay. |
 | Dialog foto struk, tombol | Buka pengaturan AI / Batal |
