@@ -1,4 +1,4 @@
-import { and, count, desc, eq, gt, inArray, lt, sql } from "drizzle-orm";
+import { and, count, desc, eq, gt, inArray, lt, lte } from "drizzle-orm";
 import { db, type DbOrTx } from "@/server/db/client";
 import { loginAttempts } from "@/server/db/schema";
 
@@ -52,7 +52,7 @@ export async function recordFailedLogin(identity: LoginIdentity, now: Date = new
     if (exceeded.length === 0) return null;
     await tx.insert(loginAttempts).values(exceeded.map((key) => ({ key: lockKey(key), at: now })));
     // kegagalan lama dibuang supaya hitungan mulai dari nol setelah kunci berakhir
-    await tx.delete(loginAttempts).where(and(inArray(loginAttempts.key, exceeded), sql`${loginAttempts.at} <= ${now}`));
+    await tx.delete(loginAttempts).where(and(inArray(loginAttempts.key, exceeded), lte(loginAttempts.at, now)));
     return { lockedUntil: new Date(now.getTime() + LOGIN_LOCK_MS) };
   });
 }

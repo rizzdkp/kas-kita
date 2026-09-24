@@ -1,5 +1,5 @@
 import { createHash, randomBytes } from "node:crypto";
-import { and, eq, gt, like } from "drizzle-orm";
+import { and, eq, gt, like, sql } from "drizzle-orm";
 import { db, type DbOrTx } from "@/server/db/client";
 import { users, verifications } from "@/server/db/schema";
 import { ENROLL_PATH } from "./constants";
@@ -31,7 +31,7 @@ export async function findEnrollmentUser(token: string, now: Date = new Date(), 
   const [row] = await dbx
     .select({ user: users })
     .from(verifications)
-    .innerJoin(users, eq(users.id, verifications.value))
+    .innerJoin(users, eq(sql`${users.id}::text`, verifications.value))
     .where(and(eq(verifications.identifier, identifierFor(token)), gt(verifications.expiresAt, now)))
     .limit(1);
   return row?.user ?? null;

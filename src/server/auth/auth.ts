@@ -37,6 +37,16 @@ export const auth = betterAuth({
     disableSignUp: true,
     minPasswordLength: MIN_PASSWORD_LENGTH,
   },
+  user: {
+    // kolom tambahan tabel users; hanya diisi CLI dan mutations, tidak lewat endpoint Better Auth
+    additionalFields: {
+      displayName: { type: "string", required: true, input: false },
+      identityColor: { type: "string", required: false, input: false },
+      paydayDay: { type: "number", required: false, input: false },
+      periodMode: { type: "string", required: false, input: false },
+      onboardedAt: { type: "date", required: false, input: false },
+    },
+  },
   session: {
     expiresIn: TRUSTED_SESSION_SECONDS,
     updateAge: 24 * 60 * 60,
