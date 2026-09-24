@@ -30,7 +30,7 @@ export function Toolbar({ title, viewer, scope, onScopeChange, periodSlot, notif
     >
       <h1 className="hidden min-w-0 flex-1 truncate text-title text-primary lg:block">{title}</h1>
       {viewer.partner ? (
-        <ScopeToggle value={scope} onChange={onScopeChange} partnerName={viewer.partner.name} className="w-72 max-w-full" />
+        <ScopeToggle value={scope} onChange={onScopeChange} partnerName={viewer.partner.name} />
       ) : null}
       <div className="flex-1 lg:hidden" />
       {periodSlot ? <div className="flex shrink-0 items-center">{periodSlot}</div> : null}

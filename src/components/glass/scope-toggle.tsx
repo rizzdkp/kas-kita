@@ -6,6 +6,7 @@ import { motion, useAnimate, useReducedMotion } from "motion/react";
 import type { Scope } from "@/lib/scope";
 import { cn } from "@/components/ui/cn";
 import { REDUCED_FADE, SPRING_GLASS } from "@/styles/motion";
+import { selectWithArrows } from "@/components/ui/radio-arrows";
 import { GlassSurface } from "./glass-surface";
 
 const ORDER: readonly Scope[] = ["me", "partner", "all"];
@@ -54,11 +55,13 @@ export function ScopeToggle({ value, onChange, partnerName, standalone = false, 
       onValueChange={(next) => {
         if (isScope(next)) onChange(next);
       }}
+      onKeyDownCapture={(event) => selectWithArrows(event, ORDER, value, onChange)}
       aria-label="Cakupan"
       orientation="horizontal"
       loop
       className={cn(
-        "relative grid h-11 grid-cols-3 rounded-pill p-1",
+        // kolom sama lebar mengikuti label terpanjang; dalam wadah sempit label terpotong
+        "relative grid h-11 w-fit max-w-full grid-cols-[repeat(3,minmax(0,1fr))] rounded-pill p-1",
         standalone ? "" : "bg-surface-sunken",
         className,
       )}
@@ -77,7 +80,7 @@ export function ScopeToggle({ value, onChange, partnerName, standalone = false, 
           key={scope}
           value={scope}
           className={cn(
-            "relative z-10 min-w-0 truncate rounded-pill px-4 text-control",
+            "relative z-10 min-w-0 truncate rounded-pill px-2 text-control sm:px-4",
             "transition-colors duration-(--dur-fast) ease-(--ease-out)",
             "text-secondary hover:text-primary data-[state=checked]:text-primary",
           )}

@@ -3,6 +3,9 @@
 @import "../styles/glass.css" layer(components);
 @import "../styles/motion.css" layer(components);
 
+/* dokumen spesifikasi menyebut nama kelas sebagai contoh; jangan jadikan utilitas */
+@source not "../../docs";
+
 /* utilitas Tailwind hanya menghasilkan nilai token; palet, radius, dan skala bawaan dimatikan */
 @theme inline {
   --color-*: initial;

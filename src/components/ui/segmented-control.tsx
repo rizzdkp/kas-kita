@@ -2,6 +2,7 @@
 
 import * as RadioGroup from "@radix-ui/react-radio-group";
 import { cn } from "./cn";
+import { selectWithArrows } from "./radio-arrows";
 
 export type SegmentOption<V extends string> = { value: V; label: string; disabled?: boolean };
 
@@ -29,6 +30,14 @@ export function SegmentedControl<V extends string>({
         const match = options.find((o) => o.value === next);
         if (match) onValueChange(match.value);
       }}
+      onKeyDownCapture={(event) =>
+        selectWithArrows(
+          event,
+          options.filter((o) => !o.disabled).map((o) => o.value),
+          value,
+          onValueChange,
+        )
+      }
       aria-label={label}
       orientation="horizontal"
       className={cn("inline-flex h-11 rounded-md border border-border bg-surface-sunken p-1 sm:h-10", className)}

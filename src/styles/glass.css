@@ -83,12 +83,13 @@
 
 .ambient-field__light {
   position: absolute;
-  width: 60vmax;
-  height: 60vmax;
+  /* lingkaran 60vmax + blur 120px ditiru gradient: inti penuh, luruh 240px di tiap sisi tepi */
+  width: calc(60vmax + 480px);
+  height: calc(60vmax + 480px);
+  margin: -240px;
   border-radius: var(--radius-pill);
   opacity: var(--ambient-opacity);
-  /* gradient radial yang meluruh ke transparan setara blur 120px tanpa biaya filter di layar penuh */
-  background: radial-gradient(closest-side, var(--ambient-color) 0%, transparent 100%);
+  background: radial-gradient(closest-side, var(--ambient-color) calc(100% - 480px), transparent 100%);
 }
 
 @media (prefers-reduced-motion: reduce) {

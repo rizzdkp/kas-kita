@@ -36,7 +36,7 @@ export function Gallery() {
             <PreferencesBar />
             <div className="flex flex-col gap-2">
               <p className="text-caption text-secondary">Cakupan untuk medan ambien halaman ini</p>
-              <ScopeToggle value={scope} onChange={setScope} partnerName={CONTOH.partner.name} standalone className="w-80 max-w-full" />
+              <ScopeToggle value={scope} onChange={setScope} partnerName={CONTOH.partner.name} standalone className="w-fit" />
             </div>
           </header>
           <FoundationSection />
