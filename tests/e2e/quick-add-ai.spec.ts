@@ -25,7 +25,6 @@ function settings(...args: string[]): string {
 }
 
 let fake: ChildProcess | null = null;
-let snapshot = "null";
 
 async function startFake(): Promise<void> {
   fake = spawn(process.execPath, ["--import", "tsx", "scripts/fake-ai-server.ts"], {
@@ -51,12 +50,11 @@ async function stopFake(): Promise<void> {
 
 test.beforeAll(async () => {
   await startFake();
-  snapshot = settings("set", BASE_URL, "fake-text");
+  settings("set", BASE_URL, "fake-text");
 });
 
 test.afterAll(async () => {
   await stopFake();
-  settings("restore", snapshot, BASE_URL);
   psql(`update transactions set deleted_at = now() where source = 'quick_add' and note like 'E2E %' and deleted_at is null and created_at > now() - interval '1 hour'`);
 });
 
@@ -161,6 +159,8 @@ test("Esc saat AI membaca: kartu tampil tanpa hasil AI, field kosong ditandai", 
 
 test("server AI mati: pesan COPY dan field kosong tetap ditandai", async ({ page }) => {
   await stopFake();
+  // baris ai_settings dipakai bersama; pastikan masih menunjuk ke server palsu yang baru dimatikan
+  settings("set", BASE_URL, "fake-text");
   await openApp(page);
   await typeLines(page, [LINES[0]!]);
   await expect(page.getByTestId("quick-add-ai-notice")).toHaveText(AI_DOWN, { timeout: 40_000 });
