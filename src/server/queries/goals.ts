@@ -1,3 +1,4 @@
+import { goalReached } from "@/lib/goals";
 import { and, asc, eq, gte, inArray, isNull, sql } from "drizzle-orm";
 import type { Scope } from "@/lib/scope";
 import type { Viewer } from "@/server/auth/viewer";
@@ -94,9 +95,10 @@ export async function listGoals(
       remaining,
       progressPercent: g.targetAmount > 0n ? Math.max(0, Math.min(100, Number((progress * 1000n) / g.targetAmount) / 10)) : 0,
       monthsLeft,
-      requiredMonthly: monthsLeft !== null && !g.achievedAt ? ceilDiv(remaining, BigInt(monthsLeft)) : null,
+      requiredMonthly: monthsLeft !== null && !goalReached(g.achievedAt, progress, g.targetAmount) ? ceilDiv(remaining, BigInt(monthsLeft)) : null,
       contributedSince,
     };
   });
-  return { active: list.filter((g) => !g.achievedAt), achieved: list.filter((g) => g.achievedAt) };
+  const done = (g: GoalWithProgress) => goalReached(g.achievedAt, g.progress, g.targetAmount);
+  return { active: list.filter((g) => !done(g)), achieved: list.filter(done) };
 }

@@ -20,8 +20,8 @@ export const TRANSACTION_PARAMS = {
 export type TransactionKind = "income" | "expense" | "transfer";
 
 const KIND_TO_PARAM: Record<TransactionKind, string> = {
-  income: "pemasukan",
-  expense: "pengeluaran",
+  income: "income",
+  expense: "expense",
   transfer: "transfer",
 };
 const PARAM_TO_KIND = Object.fromEntries(Object.entries(KIND_TO_PARAM).map(([k, v]) => [v, k])) as Record<string, TransactionKind>;
@@ -36,7 +36,7 @@ export interface TransactionLinkFilters {
   q?: string;
   createdBy?: string[];
   tagIds?: string[];
-  /** "draf" di URL. */
+  /** "draft" di URL. */
   status?: "draft";
 }
 
@@ -56,7 +56,7 @@ export function transactionSearchParams(f: TransactionLinkFilters): URLSearchPar
   if (f.q) p.set(TRANSACTION_PARAMS.q, f.q);
   list(TRANSACTION_PARAMS.createdBy, f.createdBy);
   list(TRANSACTION_PARAMS.tag, f.tagIds);
-  if (f.status === "draft") p.set(TRANSACTION_PARAMS.status, "draf");
+  if (f.status === "draft") p.set(TRANSACTION_PARAMS.status, "draft");
   if (f.scope && f.scope !== "me") p.set(TRANSACTION_PARAMS.scope, f.scope);
   return p;
 }
@@ -97,7 +97,7 @@ export function parseTransactionSearchParams(source: ParamSource): TransactionLi
     q: q || undefined,
     createdBy: splitValid(read(source, TRANSACTION_PARAMS.createdBy), isUuid),
     tagIds: splitValid(read(source, TRANSACTION_PARAMS.tag), isUuid),
-    status: read(source, TRANSACTION_PARAMS.status) === "draf" ? "draft" : undefined,
+    status: read(source, TRANSACTION_PARAMS.status) === "draft" ? "draft" : undefined,
   };
   return Object.fromEntries(Object.entries(f).filter(([, v]) => v !== undefined)) as TransactionLinkFilters;
 }

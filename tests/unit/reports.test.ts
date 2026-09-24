@@ -13,10 +13,10 @@ const ACC = "0190a1b2-c3d4-7e5f-8a9b-0c1d2e3f4a5c";
 describe("kontrak query string Transaksi", () => {
   it("membangun href dengan nama param Indonesia", () => {
     expect(transactionHref({ scope: "all", categoryIds: [CAT], kinds: ["expense"], from: "2026-08-01", to: "2026-08-31" })).toBe(
-      `/transaksi?kategori=${CAT}&jenis=pengeluaran&dari=2026-08-01&sampai=2026-08-31&scope=all`,
+      `/transaksi?kategori=${CAT}&jenis=expense&dari=2026-08-01&sampai=2026-08-31&scope=all`,
     );
     expect(transactionHref({ scope: "me" })).toBe("/transaksi");
-    expect(transactionHref({ status: "draft" })).toBe("/transaksi?status=draf");
+    expect(transactionHref({ status: "draft" })).toBe("/transaksi?status=draft");
   });
 
   it("parse kebalikan dari build, termasuk nilai jamak dan param berulang", () => {
@@ -128,7 +128,7 @@ describe("wawasan dari templat tetap (F-AI-2 AC4)", () => {
     ]);
     expect(out[0]!.href).toBe(`/transaksi?kategori=${CAT}&dari=2026-09-18&sampai=2026-09-24`);
     expect(out[1]!.href).toBe(`/transaksi?kategori=${CAT}&dari=2026-09-01&sampai=2026-09-24`);
-    expect(out[2]!.href).toBe("/transaksi?jenis=pengeluaran&dari=2026-09-18&sampai=2026-09-24");
+    expect(out[2]!.href).toBe("/transaksi?jenis=expense&dari=2026-09-18&sampai=2026-09-24");
   });
 
   it("maksimal tiga, tagihan hanya mengisi sisa slot", () => {

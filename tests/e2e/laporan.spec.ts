@@ -28,7 +28,7 @@ test("klik kategori membuka Transaksi dengan filter kategori dan periode", async
   const id = await row.getAttribute("data-category-id");
   await row.click();
   // rute Transaksi dikompilasi saat pertama dibuka di dev
-  await expect(page).toHaveURL(new RegExp(`/transaksi\\?kategori=${id}&jenis=pengeluaran&dari=2026-08-01&sampai=2026-08-31$`), { timeout: 30_000 });
+  await expect(page).toHaveURL(new RegExp(`/transaksi\\?kategori=${id}&jenis=expense&dari=2026-08-01&sampai=2026-08-31$`), { timeout: 30_000 });
 });
 
 test("unduh CSV transaksi dengan filter aktif", async ({ page }) => {
