@@ -59,9 +59,9 @@ export default async function LaporanPage({ searchParams }: PageProps) {
         </div>
       </div>
 
-      {process.env.KK_NO_SUMMARY ? null : <ReportSummary r={r} />}
+      <ReportSummary r={r} />
 
-      {process.env.KK_NO_CATS ? null : <div className="grid grid-cols-1 gap-4 sm:gap-6 lg:grid-cols-12">
+      <div className="grid grid-cols-1 gap-4 sm:gap-6 lg:grid-cols-12">
         <CategoryList
           id="pengeluaran-kategori"
           title="Pengeluaran per kategori"
@@ -82,9 +82,9 @@ export default async function LaporanPage({ searchParams }: PageProps) {
           scope={scope}
           className="self-start lg:col-span-5"
         />
-      </div>}
+      </div>
 
-      {process.env.KK_NO_TREND ? null : <TrendSection trend={r.trend} month={month} />}
+      <TrendSection trend={r.trend} month={month} />
     </div>
   );
 }

@@ -1,4 +1,3 @@
-import { Suspense } from "react";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import type { ShellViewer } from "@/components/shell/types";
@@ -19,11 +18,10 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     me: { name: viewer.user.displayName, color: viewer.user.identityColor },
     partner: viewer.partner ? { name: viewer.partner.displayName, color: viewer.partner.identityColor } : null,
   };
+  // tanpa <Suspense>: batas yang sudah tampil membuat navigasi ?bulan= macet (ping transisi hilang di React Next 15.5)
   return (
-    <Suspense>
-      <AppFrame viewer={shellViewer} quickAdd={quickAdd} unread={unread}>
-        {children}
-      </AppFrame>
-    </Suspense>
+    <AppFrame viewer={shellViewer} quickAdd={quickAdd} unread={unread}>
+      {children}
+    </AppFrame>
   );
 }

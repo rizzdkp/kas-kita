@@ -72,9 +72,10 @@ export async function contributeToGoalAction(
     const now = new Date();
     const contributedAt = data.contributedOn === todayJakarta(now) ? now : new Date(startOfKey(data.contributedOn).getTime() + NOON_MS);
     await contributeToGoal(viewer, { goalId: data.goalId, amount: data.amount, contributedAt });
-    const { active } = await listGoals(viewer, "all", { today: todayJakarta(now) });
-    const goal = active.find((g) => g.id === data.goalId);
-    if (goal && goal.progress >= goal.targetAmount) {
+    const { active, achieved } = await listGoals(viewer, "all", { today: todayJakarta(now) });
+    // listGoals sudah memindahkan target yang progresnya penuh ke achieved, jadi cari di keduanya
+    const goal = [...active, ...achieved].find((g) => g.id === data.goalId);
+    if (goal && goal.achievedAt === null && goal.progress >= goal.targetAmount) {
       await setGoalAchieved(viewer, { id: goal.id, version: goal.version, achieved: true });
       return { achieved: true };
     }

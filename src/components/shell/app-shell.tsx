@@ -57,7 +57,7 @@ function useScopeParam(): [Scope, (scope: Scope) => void] {
 /**
  * Shell app: medan ambien, sidebar glass (>=600), toolbar glass, bar quick-add, tab bar glass (<600).
  * Maksimal tiga glass tetap per layar: sidebar + toolbar + quick-add, atau bar atas + quick-add + tab bar.
- * Pemakai useSearchParams: bungkus dengan <Suspense> di layout.
+ * Memakai useSearchParams: di rute statis bungkus dengan <Suspense>; (app)/layout sengaja tanpa (rute dinamis).
  */
 export function AppShell({
   viewer,
