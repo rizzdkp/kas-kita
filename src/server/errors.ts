@@ -34,6 +34,7 @@ const ENTITY_SUBJECT: Record<string, string> = {
   bills: "Tagihan ini",
   goals: "Target ini",
   goal_contributions: "Setoran ini",
+  investment_valuations: "Nilai ini",
 };
 
 export interface ConflictInfo<Row> {

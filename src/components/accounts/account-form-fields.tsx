@@ -94,14 +94,14 @@ export function AccountFormFields({ state, errors, people, institutions, onChang
       {credit ? (
         <div className="grid grid-cols-2 gap-4">
           <Field label="Limit" error={errors.limitText} className="col-span-2">
-            <AmountInput value={state.limitText} onValueChange={(limitText) => onChange({ limitText })} placeholder="10jt" />
+            <AmountInput value={state.limitText} onValueChange={(limitText) => onChange({ limitText })} placeholder="misalnya 10jt" />
           </Field>
           <Field label="Tanggal cetak tagihan" error={errors.statementDay}>
             <Input
               inputMode="numeric"
               value={state.statementDay}
               onChange={(e) => onChange({ statementDay: e.target.value.replace(/\D/g, "").slice(0, 2) })}
-              placeholder="17"
+              placeholder="1 sampai 31"
             />
           </Field>
           <Field label="Tanggal jatuh tempo" error={errors.dueDay}>
@@ -109,7 +109,7 @@ export function AccountFormFields({ state, errors, people, institutions, onChang
               inputMode="numeric"
               value={state.dueDay}
               onChange={(e) => onChange({ dueDay: e.target.value.replace(/\D/g, "").slice(0, 2) })}
-              placeholder="5"
+              placeholder="1 sampai 31"
             />
           </Field>
         </div>

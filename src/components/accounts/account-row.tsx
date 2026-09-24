@@ -7,7 +7,8 @@ import { formatRupiah, percentOf, formatPercent } from "@/lib/money";
 import type { Scope } from "@/lib/scope";
 import { IdentityDot } from "@/components/identity/identity-dot";
 import { Amount } from "@/components/money/amount";
-import { Button } from "@/components/ui/button";
+import { Button, buttonClassName } from "@/components/ui/button";
+import { Icon } from "@/components/ui/icon";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { IconButton } from "@/components/ui/icon-button";
 import { ownerDot, personById } from "@/components/transactions/labels";
@@ -67,9 +68,10 @@ export function AccountRow({ account, people, scope, onAction }: AccountRowProps
   const reconciled = account.lastReconciledAt ? `Dicocokkan ${relativeDayInline(account.lastReconciledAt)}` : "Belum pernah dicocokkan";
   const meta = [account.institutionName, ACCOUNT_TYPE_LABEL[account.type], ownerLabel(people, account.ownerId)].filter(Boolean).join(" · ");
   const canReconcile = !archived && account.type !== "investment";
+  const investHref = `/investasi?scope=${account.ownerId === null ? "all" : scope}`;
 
   return (
-    <li className="relative flex min-h-16 items-center gap-3 px-4 py-3 transition-colors duration-(--dur-fast) hover:bg-surface-sunken sm:gap-4 sm:px-(--space-card)">
+    <li className="group/row relative flex min-h-16 items-center gap-3 px-4 py-3 transition-colors duration-(--dur-fast) hover:bg-surface-sunken sm:gap-4 sm:px-(--space-card)">
       <IdentityDot color={dot.color} shared={dot.shared} label={dot.label} />
       <div className="flex min-w-0 flex-1 flex-col gap-1 sm:flex-row sm:items-center sm:gap-4">
         <div className="flex min-w-0 flex-1 flex-col">
@@ -80,7 +82,7 @@ export function AccountRow({ account, people, scope, onAction }: AccountRowProps
             {account.name}
           </Link>
           <span className="truncate text-small text-secondary">{meta}</span>
-          {!archived ? <span className="text-caption text-secondary">{reconciled}</span> : null}
+          {canReconcile ? <span className="text-caption text-secondary">{reconciled}</span> : null}
         </div>
         <div className="flex flex-col sm:items-end">
           <Amount value={displayValue(account)} className="text-body text-primary" />
@@ -90,11 +92,19 @@ export function AccountRow({ account, people, scope, onAction }: AccountRowProps
         </div>
       </div>
       <div className="relative z-10 flex items-center gap-1">
-        {canReconcile ? (
-          <Button variant="ghost" icon={Scale} className="hidden lg:inline-flex" onClick={() => onAction("reconcile", account)}>
-            Cocokkan saldo
-          </Button>
-        ) : null}
+        {/* aksi utama baris muncul saat hover/fokus di desktop; di layar kecil lewat menu */}
+        <span className="hidden w-44 justify-end opacity-0 transition-opacity duration-(--dur-fast) group-hover/row:opacity-100 group-focus-within/row:opacity-100 lg:flex">
+          {canReconcile ? (
+            <Button variant="ghost" icon={Scale} onClick={() => onAction("reconcile", account)}>
+              Cocokkan saldo
+            </Button>
+          ) : account.type === "investment" && !archived ? (
+            <Link href={investHref} className={buttonClassName("ghost")}>
+              <Icon icon={TrendingUp} />
+              Perbarui nilai
+            </Link>
+          ) : null}
+        </span>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <IconButton icon={MoreHorizontal} label={`Aksi untuk ${account.name}`} />
@@ -107,7 +117,7 @@ export function AccountRow({ account, people, scope, onAction }: AccountRowProps
             ) : null}
             {account.type === "investment" && !archived ? (
               <DropdownMenuItem icon={TrendingUp} asChild>
-                <Link href={`/investasi?scope=${account.ownerId === null ? "all" : scope}`}>Perbarui nilai</Link>
+                <Link href={investHref}>Perbarui nilai</Link>
               </DropdownMenuItem>
             ) : null}
             {!archived ? (

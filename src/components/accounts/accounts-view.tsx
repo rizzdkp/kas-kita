@@ -125,13 +125,13 @@ export function AccountsView({ accounts, people, institutions, scope, today, ope
                   <Amount value={subtotal(group, list)} />
                 </p>
               </div>
-              <Card className="overflow-hidden p-0 sm:p-0">
+              <div className="overflow-hidden rounded-card border border-border bg-surface">
                 <ul className="divide-y divide-border">
                   {list.map((a) => (
                     <AccountRow key={a.id} account={a} people={people} scope={scope} onAction={onAction} />
                   ))}
                 </ul>
-              </Card>
+              </div>
             </section>
           );
         })
@@ -143,13 +143,13 @@ export function AccountsView({ accounts, people, institutions, scope, today, ope
             <Icon icon={ChevronRight} className="transition-transform duration-(--dur-fast) group-open:rotate-90" />
             Diarsipkan ({archived.length})
           </summary>
-          <Card className="mt-3 overflow-hidden p-0 sm:p-0">
+          <div className="mt-3 overflow-hidden rounded-card border border-border bg-surface">
             <ul className="divide-y divide-border">
               {archived.map((a) => (
                 <AccountRow key={a.id} account={a} people={people} scope={scope} onAction={onAction} />
               ))}
             </ul>
-          </Card>
+          </div>
         </details>
       ) : null}
 
@@ -158,6 +158,7 @@ export function AccountsView({ accounts, people, institutions, scope, today, ope
         onOpenChange={(o) => (o ? null : closeForm())}
         account={form?.account ?? null}
         presetType={form?.presetType}
+        presetOwner={scope === "partner" && people.partner ? "partner" : "me"}
         people={people}
         institutions={institutions}
         today={today}

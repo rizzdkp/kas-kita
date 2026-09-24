@@ -109,14 +109,14 @@ function ReconcileForm({ account, onDone }: { account: AccountWithBalance; onDon
         <AmountInput value={text} onValueChange={(t) => setText(t)} placeholder="0" autoFocus />
       </Field>
 
-      <dl className="grid grid-cols-[1fr_auto] gap-x-4 gap-y-2 text-body">
+      <dl className="grid grid-cols-[1fr_auto] gap-y-2 text-body">
         <dt className="text-secondary">Tercatat di Kas Kita</dt>
         <dd className="text-right">
           <Amount value={(shown?.recorded ?? account.balance) * sign} />
         </dd>
         <dt className="text-secondary">Sebenarnya</dt>
         <dd className="text-right">{shown ? <Amount value={shown.actual * sign} /> : <span className="text-secondary">belum diisi</span>}</dd>
-        <dt className="border-t border-border pt-2 font-medium text-primary">Selisih</dt>
+        <dt className="border-t border-border pt-2 pr-4 font-medium text-primary">Selisih</dt>
         <dd className="border-t border-border pt-2 text-right font-medium">
           {shown ? <Amount value={shown.difference * sign} sign="always" tone={large ? "attention" : "default"} /> : <span className="text-secondary">belum diisi</span>}
         </dd>

@@ -21,7 +21,7 @@ export interface PartnerEditPayload {
   message: string;
 }
 
-const MONEY_FIELDS = new Set(["amount", "opening_balance", "target_amount", "credit_limit"]);
+const MONEY_FIELDS = new Set(["amount", "opening_balance", "target_amount", "credit_limit", "market_value"]);
 
 function describeValue(field: string, v: AuditValue): string {
   if (v === null) return "kosong";
