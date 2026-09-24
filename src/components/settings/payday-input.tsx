@@ -29,7 +29,7 @@ export function PaydayInput({ value, onChange, error }: PaydayInputProps) {
         maxLength={2}
         value={value}
         onChange={(event) => onChange(event.target.value.replace(/\D/g, ""))}
-        className="w-24"
+        className="max-w-24"
       />
     </Field>
   );

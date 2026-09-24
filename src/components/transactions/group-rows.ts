@@ -1,8 +1,23 @@
-import { dateKey, formatRelativeDay } from "@/lib/dates";
+import { MONTHS_SHORT } from "@/lib/dates";
 import type { TransactionListRow } from "@/server/queries/transactions";
 
 export const HEADER_HEIGHT = 48;
 export const ROW_HEIGHT = 56;
+
+// WIB tetap UTC+7 tanpa DST; hitung kunci hari tanpa TZDate supaya 20.000 baris tetap cepat
+const WIB_OFFSET_MS = 7 * 3_600_000;
+function wibDayKey(d: Date): string {
+  return new Date(d.getTime() + WIB_OFFSET_MS).toISOString().slice(0, 10);
+}
+
+/** Sama dengan formatRelativeDay, tapi dari kunci hari yang sudah ada. */
+function dayLabel(key: string, todayKey: string, yesterdayKey: string): string {
+  if (key === todayKey) return "Hari ini";
+  if (key === yesterdayKey) return "Kemarin";
+  const [y, m, d] = key.split("-");
+  const base = `${Number(d)} ${MONTHS_SHORT[Number(m) - 1]}`;
+  return y === todayKey.slice(0, 4) ? base : `${base} ${y}`;
+}
 
 export type ListItem =
   | { type: "header"; key: string; label: string; total: bigint | null }
@@ -14,6 +29,8 @@ export type ListItem =
  */
 export function groupByDay(rows: readonly TransactionListRow[], hasMore: boolean, now: Date = new Date()): ListItem[] {
   const items: ListItem[] = [];
+  const todayKey = wibDayKey(now);
+  const yesterdayKey = wibDayKey(new Date(now.getTime() - 86_400_000));
   let currentKey = "";
   let headerIndex = -1;
   let total = 0n;
@@ -23,13 +40,13 @@ export function groupByDay(rows: readonly TransactionListRow[], hasMore: boolean
     if (header?.type === "header") header.total = total;
   };
   for (const row of rows) {
-    const key = dateKey(row.occurredAt);
+    const key = wibDayKey(row.occurredAt);
     if (key !== currentKey) {
       closeGroup();
       currentKey = key;
       total = 0n;
       headerIndex = items.length;
-      items.push({ type: "header", key: `h-${key}`, label: formatRelativeDay(row.occurredAt, now), total: null });
+      items.push({ type: "header", key: `h-${key}`, label: dayLabel(key, todayKey, yesterdayKey), total: null });
     }
     if (row.flow === "income") total += row.amount;
     else if (row.flow === "expense") total -= row.amount;

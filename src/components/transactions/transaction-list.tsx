@@ -26,9 +26,11 @@ type TransactionListProps = {
   empty: ReactNode;
   /** Perubahan lokal (hapus, ubah) tanpa menunggu muat ulang. */
   patches?: { removed: ReadonlySet<string>; replaced: ReadonlyMap<string, TransactionListRow> };
+  /** Total per hari; dimatikan di Baru dihapus karena jumlah transaksi terhapus tidak bermakna. */
+  showDayTotals?: boolean;
 };
 
-export function TransactionList({ initialPage, filters, people, onOpen, renderTrailing, empty, patches }: TransactionListProps) {
+export function TransactionList({ initialPage, filters, people, onOpen, renderTrailing, empty, patches, showDayTotals = true }: TransactionListProps) {
   const [page, setPage] = useState(initialPage);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -109,7 +111,7 @@ export function TransactionList({ initialPage, filters, people, onOpen, renderTr
           return (
             <div key={item.key} className="absolute inset-x-0 top-0 flex items-end justify-between gap-3 px-2 pb-2" style={style}>
               <h2 className="text-small font-medium text-primary">{item.label}</h2>
-              {item.total !== null && item.total !== 0n ? (
+              {showDayTotals && item.total !== null && item.total !== 0n ? (
                 <span className="text-small text-secondary">
                   <span className="sr-only">Total </span>
                   <Amount value={item.total} sign="always" />

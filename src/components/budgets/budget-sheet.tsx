@@ -115,7 +115,7 @@ export function BudgetSheet({ month, people, categories, taken, initialOwner, bu
               setAmountText(text);
               setAmount(parsed);
             }}
-            placeholder="1.500.000"
+            placeholder="0"
           />
         </Field>
         <div className="flex flex-col gap-2">

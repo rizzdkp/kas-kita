@@ -77,11 +77,17 @@ export function BillsView(props: BillsViewProps) {
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div className="flex flex-col gap-1">
               <p className="text-small text-secondary">Jatuh tempo sampai akhir periode ({periodLabel})</p>
-              <p className="tabular text-large text-primary">{formatRupiah(dueTotal)}</p>
-              <p className="text-small text-secondary">
-                {duePeriod.length} tagihan belum dibayar
-                {overdue > 0 ? <span className="text-attention"> · {overdue} telat</span> : null}
-              </p>
+              {duePeriod.length > 0 ? (
+                <>
+                  <p className="tabular text-large text-primary">{formatRupiah(dueTotal)}</p>
+                  <p className="text-small text-secondary">
+                    {duePeriod.length} tagihan belum dibayar
+                    {overdue > 0 ? <span className="text-attention"> · {overdue} telat</span> : null}
+                  </p>
+                </>
+              ) : (
+                <p className="text-section text-primary">Tidak ada tagihan yang belum dibayar di periode ini</p>
+              )}
             </div>
             <Button variant="primary" icon={Plus} onClick={() => setPanel({ kind: "new" })}>
               Tambah tagihan

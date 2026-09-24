@@ -56,7 +56,7 @@ export function TransactionFormFields({ values, onChange, errors, options, mode,
         <AmountInput
           value={values.amountText}
           onValueChange={(amountText) => onChange({ amountText })}
-          placeholder="25.000"
+          placeholder="Misalnya 25rb"
           autoFocus={mode === "create"}
         />
       </Field>

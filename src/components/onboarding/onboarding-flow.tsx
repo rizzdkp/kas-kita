@@ -60,7 +60,7 @@ export function OnboardingFlow({ steps, profile, partner, existingAccountCount }
           <p className="text-small text-secondary">Semua bisa diubah lagi di Pengaturan.</p>
         </div>
         {steps.length > 1 ? (
-          <Button variant="ghost" onClick={finish} disabled={finishing}>
+          <Button variant="ghost" onClick={finish} disabled={finishing} className="-ml-4 sm:ml-0">
             Lewati pengenalan
           </Button>
         ) : null}

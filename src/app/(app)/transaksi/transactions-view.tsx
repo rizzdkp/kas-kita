@@ -158,6 +158,7 @@ export function TransactionsView({ scope, query, filters, initialPage, formOptio
           filters={filters}
           people={people}
           patches={activePatches}
+          showDayTotals={query.view !== "deleted"}
           onOpen={(row) => setOpenId(row.id)}
           renderTrailing={
             query.view === "draft"

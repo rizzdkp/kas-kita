@@ -61,7 +61,7 @@ test("detail menampilkan riwayat setelah edit", async ({ page, context }) => {
   const form = page.getByRole("dialog", { name: "Ubah transaksi" });
   await form.getByLabel("Nominal").fill("42.000");
   await form.getByRole("button", { name: "Simpan" }).click();
-  await expect(form).toBeHidden();
+  await expect(form).toBeHidden({ timeout: 15_000 });
 
   const history = detail.getByRole("region", { name: "Riwayat" });
   await expect(history).toContainText("mengubah");

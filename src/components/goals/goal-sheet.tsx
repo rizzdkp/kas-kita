@@ -81,7 +81,7 @@ export function GoalSheet({ goal, people, initialOwner, accounts, today, onDone 
               setAmountText(text);
               setAmount(parsed);
             }}
-            placeholder="15.000.000"
+            placeholder="0"
           />
         </Field>
         <Field label="Tenggat" description="Opsional. Dengan tenggat, Kas Kita menghitung setoran bulanan yang dibutuhkan.">

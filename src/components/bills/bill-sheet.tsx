@@ -115,7 +115,7 @@ export function BillSheet({ bill, people, initialOwner, payAccounts, cardAccount
                   setAmountText(text);
                   setAmount(parsed);
                 }}
-                placeholder="350.000"
+                placeholder="0"
               />
             </Field>
             <Checkbox

@@ -142,14 +142,11 @@ export function TransactionForm({ mode, initial, scope, options, onCancel, onSav
     }
     setBusy(true);
     setFormError(null);
+    const patch = changedFields(fields, values, start, base);
     const result =
       mode === "create"
         ? await createTransactionAction({ ...fields, clientId })
-        : await updateTransactionAction({
-            id: initial?.id ?? "",
-            version: versionOverride ?? initial?.version ?? 1,
-            patch: changedFields(fields, values, start, base),
-          });
+        : await updateTransactionAction({ id: initial?.id ?? "", version: versionOverride ?? initial?.version ?? 1, patch });
     setBusy(false);
     if (result.ok) {
       setConflict(null);
@@ -161,11 +158,13 @@ export function TransactionForm({ mode, initial, scope, options, onCancel, onSav
       return;
     }
     if (result.code === "conflict" && result.conflict) {
+      const latest = result.conflict.latest as TransactionRow;
+      // "versi kamu" = versi terbaru + field yang kamu ubah, persis yang tersimpan kalau memilih versi saya
       setConflict({
-        latest: result.conflict.latest as TransactionRow,
+        latest,
         updatedByName: result.conflict.updatedByName,
         updatedAt: result.conflict.updatedAt,
-        mine: fields,
+        mine: { ...latest, tagNames: fields.tagNames, ...patch },
       });
       return;
     }

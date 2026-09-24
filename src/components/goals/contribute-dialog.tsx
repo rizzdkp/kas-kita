@@ -54,7 +54,7 @@ export function ContributeDialog({ goal, today, onDone }: { goal: GoalItem; toda
               setAmountText(text);
               setAmount(parsed);
             }}
-            placeholder="500.000"
+            placeholder="0"
           />
         </Field>
         <Field label="Tanggal">

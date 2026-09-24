@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { Insight } from "@/server/queries/reports-dashboard";
+import type { Insight } from "./insight-templates";
 import { SectionCard } from "./section-card";
 
 /** Wawasan dari templat kalimat tetap; setiap angka disisipkan kode (F-AI-2 AC4). */
