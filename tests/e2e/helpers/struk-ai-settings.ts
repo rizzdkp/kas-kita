@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import { db, sql } from "@/server/db/client";
 import { aiSettings, users } from "@/server/db/schema";
-import { deleteAiSettings, saveAiSettings } from "@/server/mutations/ai-settings";
+import { saveAiSettings } from "@/server/mutations/ai-settings";
 import { getAiSettingsRow } from "@/server/queries/ai-settings";
 
 // hanya untuk e2e foto struk: pasang model vision ke server palsu lewat mutasi, lalu kembalikan seperti semula
@@ -45,9 +45,8 @@ if (command === "set") {
 } else if (command === "restore") {
   const snapshot = JSON.parse(arg ?? "null") as Snapshot;
   const current = await getAiSettingsRow();
-  if (!snapshot) {
-    if (current) await deleteAiSettings(viewer, { version: current.version });
-  } else if (current) {
+  // baris dipakai bersama agen dan tes lain: tanpa snapshot, baris dibiarkan, tidak dihapus
+  if (snapshot && current) {
     await db
       .update(aiSettings)
       .set({

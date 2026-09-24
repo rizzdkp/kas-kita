@@ -5,6 +5,7 @@ import { formatRupiah } from "@/lib/money";
 import { AmountInput } from "@/components/money/amount-input";
 import { Amount } from "@/components/money/amount";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/components/ui/cn";
 import { Field } from "@/components/ui/field";
 import { IconButton } from "@/components/ui/icon-button";
 import { Input } from "@/components/ui/input";
@@ -21,6 +22,8 @@ type ReceiptItemsProps = {
 
 /** Daftar item struk; kategori per item hanya relevan saat dipecah per kategori. */
 export function ReceiptItems({ state, onChange, categoryOptions, categoryName }: ReceiptItemsProps) {
+  // kolom kategori per item sempit: tampilkan nama anak saja, bukan "Induk › Anak"
+  const itemCategoryOptions = categoryOptions.map((o) => ({ ...o, selectedLabel: undefined }));
   const split = state.mode === "split";
   const update = (key: string, patch: Partial<ItemState>) =>
     onChange({ items: state.items.map((i) => (i.key === key ? { ...i, ...patch } : i)) });
@@ -54,13 +57,16 @@ export function ReceiptItems({ state, onChange, categoryOptions, categoryName }:
           {state.items.map((item, index) => (
             <li
               key={item.key}
-              className="grid grid-cols-[minmax(0,1fr)_auto] gap-2 p-3 sm:grid-cols-[minmax(0,1fr)_136px_auto] sm:items-start"
+              className={cn(
+                "grid grid-cols-[minmax(0,1fr)_auto] items-start gap-2 p-3",
+                "sm:grid-cols-[minmax(0,1fr)_128px_auto]",
+                split && "lg:grid-cols-[minmax(0,1fr)_128px_minmax(0,224px)_auto]",
+              )}
             >
-              <Field label={`Nama item ${index + 1}`} hideLabel className="col-span-1">
+              <Field label={`Nama item ${index + 1}`} hideLabel className="col-start-1 row-start-1">
                 <Input value={item.name} onChange={(e) => update(item.key, { name: e.target.value })} placeholder="Nama item" />
               </Field>
-              <IconButton icon={X} label={`Buang item ${index + 1}`} onClick={() => remove(item.key)} className="sm:order-last" />
-              <Field label={`Nominal item ${index + 1}`} hideLabel className="col-span-1 sm:col-span-1">
+              <Field label={`Nominal item ${index + 1}`} hideLabel className="col-start-1 row-start-2 sm:col-start-2 sm:row-start-1">
                 <AmountInput
                   value={item.amountText}
                   onValueChange={(amountText) => update(item.key, { amountText })}
@@ -69,15 +75,21 @@ export function ReceiptItems({ state, onChange, categoryOptions, categoryName }:
                 />
               </Field>
               {split ? (
-                <Field label={`Kategori item ${index + 1}`} hideLabel className="col-span-2 sm:col-span-3 sm:col-start-1">
+                <Field label={`Kategori item ${index + 1}`} hideLabel className="col-span-2 row-start-3 sm:col-span-3 sm:row-start-2 lg:col-span-1 lg:col-start-3 lg:row-start-1">
                   <GroupedSelect
                     value={item.categoryId}
                     onValueChange={(categoryId) => update(item.key, { categoryId })}
-                    groups={[{ options: categoryOptions }]}
+                    groups={[{ options: itemCategoryOptions }]}
                     placeholder="Pilih kategori"
                   />
                 </Field>
               ) : null}
+              <IconButton
+                icon={X}
+                label={`Buang item ${index + 1}`}
+                onClick={() => remove(item.key)}
+                className={cn("col-start-2 row-start-1", "sm:col-start-3", split && "lg:col-start-4")}
+              />
             </li>
           ))}
         </ol>
