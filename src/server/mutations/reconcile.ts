@@ -30,7 +30,7 @@ export async function reconcileAccount(viewer: Viewer, input: z.input<typeof rec
   const data = parseInput(reconcileSchema, input);
   return inTransaction(db, async (tx) => {
     const [account] = await tx.select().from(accounts).where(eq(accounts.id, data.accountId)).for("update");
-    if (!account || account.deletedAt) throw new NotFoundError("akun", data.accountId);
+    if (!account || account.deletedAt) throw new NotFoundError("accounts", data.accountId);
     if (data.actualBalance < 0n && mustStayNonNegative(account.type, account.allowNegative)) {
       throw new ValidationError(`Saldo ${account.name} tidak boleh negatif`, { actualBalance: ["Tidak boleh negatif"] });
     }

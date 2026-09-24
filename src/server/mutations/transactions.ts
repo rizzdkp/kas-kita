@@ -83,7 +83,7 @@ export async function createTransactions(
 
 async function loadForWrite(tx: Tx, id: string): Promise<TransactionRow> {
   const row = await selectById(tx, transactions, id);
-  if (!row) throw new NotFoundError("transaksi", id);
+  if (!row) throw new NotFoundError("transactions", id);
   return row;
 }
 

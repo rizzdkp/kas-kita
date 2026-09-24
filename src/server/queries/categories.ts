@@ -32,12 +32,12 @@ export async function listCategories(
 
 export async function getCategory(id: string, db: DbOrTx = defaultDb): Promise<CategoryRow> {
   const [row] = await db.select().from(categories).where(eq(categories.id, id));
-  if (!row) throw new NotFoundError("kategori", id);
+  if (!row) throw new NotFoundError("categories", id);
   return row;
 }
 
 export async function getSystemCategory(key: SystemCategoryKey, db: DbOrTx = defaultDb): Promise<CategoryRow> {
   const [row] = await db.select().from(categories).where(eq(categories.systemKey, key));
-  if (!row) throw new NotFoundError("kategori sistem", key);
+  if (!row) throw new NotFoundError("categories", key);
   return row;
 }

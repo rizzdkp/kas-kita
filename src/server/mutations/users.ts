@@ -33,7 +33,7 @@ function isColorUniqueViolation(e: unknown): boolean {
 
 async function lockUser(tx: Tx, id: string): Promise<UserRow> {
   const [row] = await tx.select().from(users).where(eq(users.id, id)).for("update");
-  if (!row) throw new NotFoundError("pengguna", id);
+  if (!row) throw new NotFoundError("users", id);
   return row;
 }
 
@@ -43,7 +43,7 @@ async function applyUserUpdate(tx: Tx, actor: UserRow, values: Partial<typeof us
     .set({ ...values, updatedAt: new Date() })
     .where(eq(users.id, actor.id))
     .returning();
-  if (!after) throw new NotFoundError("pengguna", actor.id);
+  if (!after) throw new NotFoundError("users", actor.id);
   const diff = computeDiff(users, actor, after);
   if (Object.keys(diff).length > 0) {
     await writeAudit(tx, { actorId: actor.id, entity: "users", entityId: actor.id, action: "update", diff });

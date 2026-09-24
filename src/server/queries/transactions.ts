@@ -231,7 +231,7 @@ export async function getTransaction(viewer: Viewer, id: string, db: DbOrTx = de
   const [row] = await baseQuery(db, viewer, "all")
     .where(eq(transactions.id, id))
     .limit(1);
-  if (!row) throw new NotFoundError("transaksi", id);
+  if (!row) throw new NotFoundError("transactions", id);
   const [meta] = await db
     .select({ createdAt: transactions.createdAt, updatedAt: transactions.updatedAt, updatedByName: users.displayName })
     .from(transactions)

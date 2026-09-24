@@ -44,7 +44,7 @@ async function runQuery<T>(fn: () => Promise<T>): Promise<ActionResult<T>> {
 
 function parseOrThrow<S extends z.ZodType>(schema: S, input: unknown): z.output<S> {
   const r = schema.safeParse(input);
-  if (!r.success) throw new ValidationError(r.error.issues[0]?.message ?? "Data tidak valid");
+  if (!r.success) throw new ValidationError(r.error.issues[0]?.message ?? "Ada isian yang belum benar. Cek bagian yang ditandai lalu simpan lagi.");
   return r.data;
 }
 

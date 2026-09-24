@@ -117,7 +117,7 @@ export async function getAccount(accountId: string, db: DbOrTx = defaultDb): Pro
     .from(accounts)
     .leftJoin(institutions, eq(institutions.id, accounts.institutionId))
     .where(and(eq(accounts.id, accountId), isNull(accounts.deletedAt)));
-  if (!row) throw new NotFoundError("akun", accountId);
+  if (!row) throw new NotFoundError("accounts", accountId);
   return toAccount(row as AccountRow, await getAccountBalance(accountId, {}, db));
 }
 

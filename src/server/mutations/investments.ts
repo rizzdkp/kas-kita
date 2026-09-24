@@ -29,7 +29,7 @@ export type CreateValuationInput = z.input<typeof createValuationSchema>;
 
 async function investmentAccount(tx: Tx, accountId: string) {
   const [account] = await tx.select().from(accounts).where(eq(accounts.id, accountId));
-  if (!account || account.deletedAt) throw new NotFoundError("akun", accountId);
+  if (!account || account.deletedAt) throw new NotFoundError("accounts", accountId);
   if (account.type !== "investment") {
     throw new ValidationError("Nilai pasar hanya untuk akun Investasi", { accountId: ["Pilih akun Investasi"] });
   }

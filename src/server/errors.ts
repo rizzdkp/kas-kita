@@ -19,13 +19,7 @@ export class ValidationError extends DomainError {
   }
 }
 
-export class NotFoundError extends DomainError {
-  constructor(entity: string, id: string) {
-    super("not_found", `Data ${entity} ${id} tidak ditemukan. Muat ulang halaman lalu coba lagi.`);
-    this.name = "NotFoundError";
-  }
-}
-
+// kunci = nama tabel; pengguna tidak pernah melihat nama tabel atau id
 const ENTITY_SUBJECT: Record<string, string> = {
   transactions: "Transaksi ini",
   accounts: "Akun ini",
@@ -35,7 +29,20 @@ const ENTITY_SUBJECT: Record<string, string> = {
   goals: "Target ini",
   goal_contributions: "Setoran ini",
   investment_valuations: "Nilai ini",
+  users: "Pengguna ini",
 };
+
+export class NotFoundError extends DomainError {
+  readonly entity: string;
+  readonly entityId: string;
+  constructor(entity: string, id: string) {
+    const subject = ENTITY_SUBJECT[entity] ?? "Data ini";
+    super("not_found", `${subject} tidak ditemukan, mungkin sudah dihapus. Muat ulang halaman lalu coba lagi.`);
+    this.name = "NotFoundError";
+    this.entity = entity;
+    this.entityId = id;
+  }
+}
 
 export interface ConflictInfo<Row> {
   entity: string;

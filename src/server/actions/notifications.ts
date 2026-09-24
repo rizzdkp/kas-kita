@@ -39,14 +39,19 @@ const ENTITY_ROUTES: Record<string, (id: string) => string> = {
   categories: () => "/pengaturan#kategori",
 };
 
-const FALLBACK_MESSAGE: Record<NotificationRow["kind"], string> = {
-  partner_edit: "Partner mengubah data milikmu.",
+// hanya ada dua pengguna, jadi pengubah data milik viewer pasti partner
+function fallbackMessage(kind: NotificationRow["kind"], partnerName: string | null): string {
+  if (kind === "partner_edit") return partnerName ? `${partnerName} mengubah data milikmu.` : "Ada perubahan pada data milikmu.";
+  return FALLBACK_MESSAGE[kind];
+}
+
+const FALLBACK_MESSAGE: Record<Exclude<NotificationRow["kind"], "partner_edit">, string> = {
   bill_due: "Ada tagihan yang jatuh tempo 3 hari lagi.",
   budget_over: "Ada anggaran wajib yang lewat.",
   recurring_pending: "Ada transaksi berulang yang menunggu konfirmasi.",
 };
 
-function toItem(row: NotificationRow): NotificationItem {
+function toItem(row: NotificationRow, partnerName: string | null): NotificationItem {
   const parsed = payloadSchema.safeParse(row.payload);
   const payload = parsed.success ? parsed.data : {};
   const route = payload.entity ? ENTITY_ROUTES[payload.entity] : undefined;
@@ -54,7 +59,7 @@ function toItem(row: NotificationRow): NotificationItem {
   return {
     id: row.id,
     kind: row.kind,
-    message: payload.message ?? FALLBACK_MESSAGE[row.kind],
+    message: payload.message ?? fallbackMessage(row.kind, partnerName),
     href,
     createdAt: row.createdAt,
     read: row.readAt !== null,
@@ -66,7 +71,7 @@ export async function loadNotificationsAction(): Promise<ActionResult<Notificati
   const viewer = await requireViewer();
   try {
     const [rows, unread] = await Promise.all([listNotifications(viewer, { limit: 30 }), countUnreadNotifications(viewer)]);
-    return { ok: true, data: { items: rows.map(toItem), unread } };
+    return { ok: true, data: { items: rows.map((r) => toItem(r, viewer.partner?.displayName ?? null)), unread } };
   } catch (e) {
     return toActionError(e);
   }

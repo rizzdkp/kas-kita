@@ -48,7 +48,7 @@ export async function updateBill(viewer: Viewer, input: z.input<typeof updateBil
   const patch = pickProvided(parsed.patch, (input as { patch?: unknown }).patch);
   return inTransaction(db, async (tx) => {
     const [current] = await tx.select().from(bills).where(eq(bills.id, id));
-    if (!current) throw new NotFoundError("tagihan", id);
+    if (!current) throw new NotFoundError("bills", id);
     checkBill({ ...current, ...patch, amount: patch.amount ?? current.amount });
     const result = await updateWithAudit(tx, bills, { id, expectedVersion: version, actorId: viewer.user.id, values: patch });
     if (Object.keys(result.diff).length > 0) {
@@ -101,12 +101,12 @@ export async function payBill(
   const data = parseInput(payBillSchema, input);
   return inTransaction(db, async (tx) => {
     const [bill] = await tx.select().from(bills).where(eq(bills.id, data.id));
-    if (!bill || bill.deletedAt) throw new NotFoundError("tagihan", data.id);
+    if (!bill || bill.deletedAt) throw new NotFoundError("bills", data.id);
     const payFrom = data.payFromAccountId ?? bill.payFromAccountId;
     let amount = data.amount ?? bill.amount;
     if (!data.amount && bill.creditCardAccountId) {
       const [card] = await tx.select().from(accounts).where(eq(accounts.id, bill.creditCardAccountId));
-      if (!card) throw new NotFoundError("akun", bill.creditCardAccountId);
+      if (!card) throw new NotFoundError("accounts", bill.creditCardAccountId);
       amount = await creditCardStatementAmount(card, bill.nextDueOn, tx);
     }
     if (amount <= 0n) throw new DomainError("nothing_to_pay", "Tidak ada nominal yang perlu dibayar untuk periode ini.");

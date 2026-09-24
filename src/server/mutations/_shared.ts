@@ -23,7 +23,7 @@ export const signedAmountSchema = z
   .union([z.bigint(), z.string().regex(/^-?\d+$/), z.number().int()])
   .transform((v) => (typeof v === "bigint" ? v : BigInt(v)));
 
-export const dateKeySchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Format tanggal YYYY-MM-DD");
+export const dateKeySchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Tanggal belum terbaca. Pilih tanggal lagi.");
 export const versionSchema = z.number().int().positive();
 
 export function parseInput<S extends z.ZodType>(schema: S, input: unknown): z.output<S> {
@@ -34,7 +34,7 @@ export function parseInput<S extends z.ZodType>(schema: S, input: unknown): z.ou
     const key = issue.path.join(".") || "_";
     (fieldErrors[key] ??= []).push(issue.message);
   }
-  const first = result.error.issues[0]?.message ?? "Data tidak valid";
+  const first = result.error.issues[0]?.message ?? "Ada isian yang belum benar. Cek bagian yang ditandai lalu simpan lagi.";
   throw new ValidationError(first, fieldErrors);
 }
 

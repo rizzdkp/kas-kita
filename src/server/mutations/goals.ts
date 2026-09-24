@@ -92,7 +92,7 @@ export async function contributeToGoal(
   const data = parseInput(contributeSchema, input);
   return inTransaction(db, async (tx) => {
     const [goal] = await tx.select().from(goals).where(eq(goals.id, data.goalId));
-    if (!goal || goal.deletedAt) throw new NotFoundError("target", data.goalId);
+    if (!goal || goal.deletedAt) throw new NotFoundError("goals", data.goalId);
     if (goal.linkedAccountId) {
       throw new DomainError("goal_has_account", "Target ini punya akun penampung. Catat setoran sebagai transfer ke akun itu.");
     }

@@ -22,14 +22,14 @@ async function assertParent(tx: Tx, parentId: string | null, kind: string, selfI
   if (!parentId) return;
   if (parentId === selfId) throw new ValidationError("Kategori tidak bisa jadi induk dirinya sendiri");
   const [parent] = await tx.select().from(categories).where(eq(categories.id, parentId));
-  if (!parent) throw new NotFoundError("kategori", parentId);
+  if (!parent) throw new NotFoundError("categories", parentId);
   if (parent.parentId) throw new ValidationError("Kategori maksimal dua tingkat", { parentId: ["Pilih kategori utama"] });
   if (parent.kind !== kind) throw new ValidationError("Jenis subkategori harus sama dengan induknya", { parentId: ["Jenis berbeda"] });
 }
 
 async function loadEditable(tx: Tx, id: string): Promise<CategoryRow> {
   const [row] = await tx.select().from(categories).where(eq(categories.id, id));
-  if (!row) throw new NotFoundError("kategori", id);
+  if (!row) throw new NotFoundError("categories", id);
   if (row.isSystem) throw new DomainError("system_category", "Kategori sistem tidak bisa diubah atau dihapus.");
   return row;
 }
