@@ -42,5 +42,8 @@ export function isActivePath(pathname: string, href: string): boolean {
 
 export function titleForPath(pathname: string): string {
   const all = [...NAV_ITEMS, SETTINGS_ITEM];
-  return all.find((item) => isActivePath(pathname, item.href))?.label ?? "Kas Kita";
+  return all.find((item) => isActivePath(pathname, item.href))?.label ?? EXTRA_TITLES[pathname] ?? "Kas Kita";
 }
+
+// halaman di luar navigasi utama
+const EXTRA_TITLES: Record<string, string> = { "/mulai": "Pengenalan", "/notifikasi": "Notifikasi" };

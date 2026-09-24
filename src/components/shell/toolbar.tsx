@@ -16,11 +16,12 @@ type ToolbarProps = {
   onScopeChange: (scope: Scope) => void;
   periodSlot?: ReactNode;
   notificationsSlot?: ReactNode;
+  notificationsUnread?: number;
   onSignOut?: () => void;
 };
 
 /** Toolbar glass atas (>=600px). Judul tampil di sini mulai 1024px; di bawahnya judul pindah ke konten. */
-export function Toolbar({ title, viewer, scope, onScopeChange, periodSlot, notificationsSlot, onSignOut }: ToolbarProps) {
+export function Toolbar({ title, viewer, scope, onScopeChange, periodSlot, notificationsSlot, notificationsUnread, onSignOut }: ToolbarProps) {
   const scrolled = useScrolled();
   return (
     <GlassSurface
@@ -34,8 +35,8 @@ export function Toolbar({ title, viewer, scope, onScopeChange, periodSlot, notif
       ) : null}
       <div className="flex-1 lg:hidden" />
       {periodSlot ? <div className="flex shrink-0 items-center">{periodSlot}</div> : null}
-      <NotificationsButton>{notificationsSlot}</NotificationsButton>
-      <UserMenu me={viewer.me} onSignOut={onSignOut} />
+      <NotificationsButton unread={notificationsUnread}>{notificationsSlot}</NotificationsButton>
+      <UserMenu me={viewer.me} onSignOut={onSignOut} notificationsUnread={notificationsUnread} showNotifications />
     </GlassSurface>
   );
 }
@@ -46,7 +47,8 @@ export function MobileTopBar({
   scope,
   onScopeChange,
   onSignOut,
-}: Pick<ToolbarProps, "viewer" | "scope" | "onScopeChange" | "onSignOut">) {
+  notificationsUnread,
+}: Pick<ToolbarProps, "viewer" | "scope" | "onScopeChange" | "onSignOut" | "notificationsUnread">) {
   const scrolled = useScrolled();
   return (
     <GlassSurface
@@ -64,7 +66,7 @@ export function MobileTopBar({
       ) : (
         <span className="flex-1 px-3 text-control font-semibold text-primary">Kas Kita</span>
       )}
-      <UserMenu me={viewer.me} onSignOut={onSignOut} />
+      <UserMenu me={viewer.me} onSignOut={onSignOut} notificationsUnread={notificationsUnread} showNotifications />
     </GlassSurface>
   );
 }

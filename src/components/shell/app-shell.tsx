@@ -21,6 +21,7 @@ export type AppShellProps = {
   /** Kontrol periode. Dirender di toolbar (>=600px) dan di kepala konten (<600px), jadi harus terkendali. */
   periodSlot?: ReactNode;
   notificationsSlot?: ReactNode;
+  notificationsUnread?: number;
   onSignOut?: () => void;
   onQuickAddSubmit?: (text: string, scope: Scope) => void;
   onReceiptPhoto?: (file: File) => void;
@@ -64,6 +65,7 @@ export function AppShell({
   title,
   periodSlot,
   notificationsSlot,
+  notificationsUnread,
   onSignOut,
   onQuickAddSubmit,
   onReceiptPhoto,
@@ -97,7 +99,13 @@ export function AppShell({
 
           <div className="relative z-10 px-3 pb-[calc(168px+env(safe-area-inset-bottom))] sm:pb-24 sm:pl-[calc(var(--sidebar-rail)+24px)] lg:pl-[calc(var(--sidebar-width)+24px)]">
             <div className="pt-[env(safe-area-inset-top)] sm:pt-3">
-              <MobileTopBar viewer={viewer} scope={effectiveScope} onScopeChange={setScope} onSignOut={onSignOut} />
+              <MobileTopBar
+                viewer={viewer}
+                scope={effectiveScope}
+                onScopeChange={setScope}
+                onSignOut={onSignOut}
+                notificationsUnread={notificationsUnread}
+              />
               <Toolbar
                 title={pageTitle}
                 viewer={viewer}
@@ -105,6 +113,7 @@ export function AppShell({
                 onScopeChange={setScope}
                 periodSlot={periodSlot}
                 notificationsSlot={notificationsSlot}
+                notificationsUnread={notificationsUnread}
                 onSignOut={onSignOut}
               />
             </div>

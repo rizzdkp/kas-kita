@@ -69,8 +69,8 @@ export default async function AnggaranPage({ searchParams }: { searchParams: Sea
       nav={<MonthNav month={month} currentMonth={currentMonth} hrefFor={hrefFor(scope)} />}
       summary={
         <div key="summary" className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,24rem)] lg:items-start">
-          <BudgetSummary key="total" totalAmount={totalAmount} totalSpent={totalSpent} day={day} />
-          {forecast ? <ForecastCard key="forecast" forecast={forecast} monthEndLabel={monthEndDate ? formatShortDate(monthEndDate) : monthLast} /> : null}
+          <BudgetSummary totalAmount={totalAmount} totalSpent={totalSpent} day={day} />
+          {forecast ? <ForecastCard forecast={forecast} monthEndLabel={monthEndDate ? formatShortDate(monthEndDate) : monthLast} /> : null}
         </div>
       }
     />

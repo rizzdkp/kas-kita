@@ -17,3 +17,6 @@ export const MIN_PASSWORD_LENGTH = 12;
 export const LOGIN_PATH = "/login";
 export const ENROLL_PATH = "/daftar-perangkat";
 export const SESSION_EXPIRED_PARAM = "sesi";
+
+export const PATHNAME_HEADER = "x-kaskita-pathname";
+export const ONBOARDING_PATH = "/mulai";
