@@ -56,5 +56,5 @@ test("bulan berjalan menampilkan total dan prediksi akhir bulan", async ({ page 
   const forecast = page.getByRole("region", { name: /Prediksi/ });
   await expect(forecast).toBeVisible();
   await forecast.getByRole("button", { name: "Cara menghitung" }).click();
-  await expect(forecast.getByText("Sisa hari")).toBeVisible();
+  await expect(forecast.getByRole("rowheader", { name: "Sisa hari" })).toBeVisible();
 });

@@ -38,7 +38,7 @@ test("buat target manual, setor sampai tercapai, lalu hapus", async ({ page }) =
     await dialog.getByRole("button", { name: "Simpan setoran" }).click();
     await expect(page.getByRole("status").filter({ hasText: `Target ${name} tercapai` })).toBeVisible();
     await expect(page.getByRole("region", { name: /Target aktif/ }).getByText(name)).toHaveCount(0);
-    const achieved = page.locator("details").filter({ hasText: /Tercapai \(\d+\)/ });
+    const achieved = page.locator("details").filter({ has: page.locator("summary", { hasText: "Tercapai" }) });
     await achieved.locator("summary").click();
     await expect(achieved.getByRole("listitem").filter({ hasText: name })).toContainText("Tercapai");
   });

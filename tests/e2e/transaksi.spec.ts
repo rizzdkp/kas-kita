@@ -12,6 +12,10 @@ async function openForm(page: Page) {
   await expect(page.getByRole("dialog", { name: "Tambah transaksi" })).toBeVisible();
 }
 
+function row(page: Page) {
+  return page.getByRole("region", { name: "Daftar transaksi" }).getByRole("button", { name: new RegExp(marker) });
+}
+
 async function choose(page: Page, field: string, option: string) {
   await page.getByRole("combobox", { name: field }).click();
   await page.getByRole("option", { name: option, exact: true }).click();
@@ -29,7 +33,7 @@ test("tambah transaksi lewat form, Enter mengirim", async ({ page, context }) =>
   await form.getByLabel("Catatan").press("Enter");
   await expect(page.getByText("Tersimpan", { exact: true })).toBeVisible();
   await expect(form).toBeHidden();
-  await expect(page.getByRole("button", { name: new RegExp(marker) })).toBeVisible();
+  await expect(row(page)).toBeVisible();
 });
 
 test("filter teks menyaring daftar dan tampil sebagai chip", async ({ page, context }) => {
@@ -37,8 +41,7 @@ test("filter teks menyaring daftar dan tampil sebagai chip", async ({ page, cont
   await page.goto("/transaksi");
   await page.getByRole("searchbox", { name: "Cari transaksi" }).fill(marker);
   await expect(page).toHaveURL(/q=E2E/);
-  const rows = page.getByRole("region", { name: "Daftar transaksi" }).getByRole("button", { name: new RegExp(marker) });
-  await expect(rows).toHaveCount(1);
+  await expect(row(page)).toHaveCount(1);
   await expect(page.getByRole("list", { name: "Filter aktif" })).toContainText(marker);
 
   await page.getByRole("searchbox", { name: "Cari transaksi" }).fill(`${marker} tidak ada`);
@@ -48,7 +51,7 @@ test("filter teks menyaring daftar dan tampil sebagai chip", async ({ page, cont
 test("detail menampilkan riwayat setelah edit", async ({ page, context }) => {
   await loginAs(context);
   await page.goto(`/transaksi?q=${encodeURIComponent(marker)}`);
-  await page.getByRole("button", { name: new RegExp(marker) }).click();
+  await row(page).click();
   await expect(page).toHaveURL(/id=/);
   txId = new URL(page.url()).searchParams.get("id") ?? "";
   const detail = page.getByRole("dialog", { name: marker });
@@ -77,11 +80,11 @@ test("hapus lalu urungkan", async ({ page, context }) => {
   await expect(confirm).toContainText("Transaksi masuk ke Baru dihapus dan bisa dipulihkan selama 30 hari.");
   await confirm.getByRole("button", { name: "Hapus transaksi" }).click();
   await expect(page.getByText("Transaksi dihapus")).toBeVisible();
-  await expect(page.getByRole("button", { name: new RegExp(marker) })).toHaveCount(0);
+  await expect(row(page)).toHaveCount(0);
 
   await page.getByRole("button", { name: "Urungkan" }).click();
   await expect(page.getByText("Transaksi dipulihkan")).toBeVisible();
-  await expect(page.getByRole("button", { name: new RegExp(marker) })).toBeVisible();
+  await expect(row(page)).toBeVisible();
 });
 
 test("konflik edit: Rizz dan Nadia mengubah transaksi yang sama", async ({ browser, baseURL }) => {

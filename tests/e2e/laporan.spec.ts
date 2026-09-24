@@ -36,8 +36,9 @@ test("unduh CSV transaksi dengan filter aktif", async ({ page }) => {
   const [download] = await Promise.all([page.waitForEvent("download"), page.getByRole("link", { name: "Unduh CSV" }).click()]);
   expect(download.suggestedFilename()).toBe("kas-kita-transaksi-2026-08-01-sampai-2026-08-31.csv");
   const text = await readFile((await download.path())!, "utf8");
-  const lines = text.trim().split("\r\n");
-  expect(lines[0]).toBe("﻿Tanggal,Waktu,Jenis,Nominal,Akun,Akun tujuan,Kategori,Catatan,Diisi oleh,Tag,Status");
+  expect(text.startsWith("\uFEFF")).toBe(true);
+  const lines = text.slice(1).trim().split("\r\n");
+  expect(lines[0]).toBe("Tanggal,Waktu,Jenis,Nominal,Akun,Akun tujuan,Kategori,Catatan,Diisi oleh,Tag,Status");
   expect(lines.length).toBeGreaterThan(1);
   for (const line of lines.slice(1)) expect(line).toMatch(/^2026-08-\d{2},\d{2}:\d{2},(Pemasukan|Pengeluaran|Transfer),\d+,/);
 });

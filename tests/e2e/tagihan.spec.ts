@@ -21,7 +21,7 @@ test("tambah tagihan perkiraan, bayar dengan nominal berbeda, lalu hapus", async
     await expect(sheet).toBeHidden();
   });
 
-  const row = page.getByRole("listitem").filter({ hasText: name });
+  const row = page.getByRole("region", { name: "Berikutnya" }).getByRole("listitem").filter({ hasText: name });
   await test.step("baris: perkiraan dan hitung mundur hari ini", async () => {
     await expect(row).toContainText("perkiraan");
     await expect(row).toContainText("Rp 49.000");
