@@ -1,3 +1,4 @@
+import { parseDateKey } from "@/lib/dates";
 import { parseScope, type Scope } from "@/lib/scope";
 
 /**
@@ -41,7 +42,6 @@ export interface TransactionLinkFilters {
 }
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-const DAY = /^\d{4}-\d{2}-\d{2}$/;
 
 export function transactionSearchParams(f: TransactionLinkFilters): URLSearchParams {
   const p = new URLSearchParams();
@@ -92,8 +92,8 @@ export function parseTransactionSearchParams(source: ParamSource): TransactionLi
     accountIds: splitValid(read(source, TRANSACTION_PARAMS.account), isUuid),
     categoryIds: splitValid(read(source, TRANSACTION_PARAMS.category), isUuid),
     kinds,
-    from: from && DAY.test(from) ? from : undefined,
-    to: to && DAY.test(to) ? to : undefined,
+    from: from && parseDateKey(from) ? from : undefined,
+    to: to && parseDateKey(to) ? to : undefined,
     q: q || undefined,
     createdBy: splitValid(read(source, TRANSACTION_PARAMS.createdBy), isUuid),
     tagIds: splitValid(read(source, TRANSACTION_PARAMS.tag), isUuid),

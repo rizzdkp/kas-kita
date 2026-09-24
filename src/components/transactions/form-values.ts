@@ -130,6 +130,22 @@ export function toSubmitFields(
   };
 }
 
+/** Hanya field yang benar-benar diubah dikirim, supaya riwayat dan notifikasi partner tidak berisik. */
+export function changedFields(next: SubmitFields, values: FormValues, start: FormValues, base: SubmitFields | null): Partial<SubmitFields> {
+  if (!base) return next;
+  const patch: Partial<SubmitFields> = {};
+  if (next.kind !== base.kind) patch.kind = next.kind;
+  if (next.amount !== base.amount) patch.amount = next.amount;
+  if (next.accountId !== base.accountId) patch.accountId = next.accountId;
+  if (next.toAccountId !== base.toAccountId) patch.toAccountId = next.toAccountId;
+  if (next.categoryId !== base.categoryId) patch.categoryId = next.categoryId;
+  if (values.occurredLocal !== start.occurredLocal) patch.occurredAt = next.occurredAt;
+  if (next.note !== base.note) patch.note = next.note;
+  if (next.beneficiary !== base.beneficiary) patch.beneficiary = next.beneficiary;
+  if ([...next.tagNames].sort().join("\u0000") !== [...base.tagNames].sort().join("\u0000")) patch.tagNames = next.tagNames;
+  return patch;
+}
+
 /** Kunci fieldErrors server ("tagNames.0") ke nama field form. */
 export function mapFieldErrors(fieldErrors: Record<string, string[]> | undefined): Record<string, string> {
   const out: Record<string, string> = {};

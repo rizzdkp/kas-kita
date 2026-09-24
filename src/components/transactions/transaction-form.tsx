@@ -9,7 +9,7 @@ import { useToast } from "@/components/ui/toast";
 import { createTransactionAction, getTransactionFormOptionsAction, updateTransactionAction } from "@/server/actions/transactions";
 import type { TransactionRow } from "@/server/mutations/transactions";
 import { ConflictDialog, type ConflictState } from "./conflict-dialog";
-import { categoryExists, initialValues, mapFieldErrors, toSubmitFields, type FormValues, type SubmitFields } from "./form-values";
+import { categoryExists, changedFields, initialValues, mapFieldErrors, toSubmitFields, type FormValues, type SubmitFields } from "./form-values";
 import { TransactionFormFields } from "./transaction-form-fields";
 import type { TransactionFormInitial, TransactionFormOptions } from "./types";
 
@@ -82,22 +82,6 @@ type TransactionFormProps = {
   onCancel: () => void;
   onSaved: (row: TransactionRow) => void;
 };
-
-/** Hanya field yang benar-benar diubah dikirim, supaya riwayat dan notifikasi partner tidak berisik. */
-function changedFields(next: SubmitFields, values: FormValues, start: FormValues, base: SubmitFields | null): Partial<SubmitFields> {
-  if (!base) return next;
-  const patch: Partial<SubmitFields> = {};
-  if (next.kind !== base.kind) patch.kind = next.kind;
-  if (next.amount !== base.amount) patch.amount = next.amount;
-  if (next.accountId !== base.accountId) patch.accountId = next.accountId;
-  if (next.toAccountId !== base.toAccountId) patch.toAccountId = next.toAccountId;
-  if (next.categoryId !== base.categoryId) patch.categoryId = next.categoryId;
-  if (values.occurredLocal !== start.occurredLocal) patch.occurredAt = next.occurredAt;
-  if (next.note !== base.note) patch.note = next.note;
-  if (next.beneficiary !== base.beneficiary) patch.beneficiary = next.beneficiary;
-  if ([...next.tagNames].sort().join("\u0000") !== [...base.tagNames].sort().join("\u0000")) patch.tagNames = next.tagNames;
-  return patch;
-}
 
 export function TransactionForm({ mode, initial, scope, options, onCancel, onSaved }: TransactionFormProps) {
   const toast = useToast();

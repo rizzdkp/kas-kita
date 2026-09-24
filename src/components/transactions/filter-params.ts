@@ -1,3 +1,4 @@
+import { parseDateKey } from "@/lib/dates";
 import type { Scope } from "@/lib/scope";
 import type { TransactionFilters } from "@/server/queries/transactions";
 import type { TransactionKind } from "./types";
@@ -32,7 +33,6 @@ export const EMPTY_QUERY: TransactionQuery = {
 };
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-const DATE_KEY = /^\d{4}-\d{2}-\d{2}$/;
 const KINDS: readonly TransactionKind[] = ["income", "expense", "transfer"];
 
 export function isUuid(v: string): boolean {
@@ -62,7 +62,8 @@ export function parseTransactionQuery(input: ParamSource | Record<string, string
   };
   const date = (name: string) => {
     const v = p.get(name);
-    return v && DATE_KEY.test(v) ? v : null;
+    // tanggal kalender mustahil (2026-02-30) juga dibuang; query server melempar RangeError untuknya
+    return v && parseDateKey(v) ? v : null;
   };
   const kind = p.get("jenis");
   const tag = p.get("tag")?.trim();

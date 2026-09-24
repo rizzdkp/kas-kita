@@ -8,6 +8,7 @@ export default defineConfig({
   forbidOnly: Boolean(process.env.CI),
   retries: process.env.CI ? 2 : 0,
   reporter: [["list"]],
+  globalSetup: "./tests/e2e/helpers/global-setup.ts",
   use: {
     baseURL,
     locale: "id-ID",
