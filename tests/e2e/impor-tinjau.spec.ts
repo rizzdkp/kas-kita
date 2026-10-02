@@ -47,7 +47,7 @@ test.describe("layar tinjau impor", () => {
     await expect(exact).toBeVisible();
 
     await expect(page.getByText("Saldo berjalan tidak cocok di 1 baris.", { exact: false })).toBeVisible();
-    await expect(page.getByText("Perlu dicek")).toHaveCount(1);
+    await expect(page.getByRole("list", { name: "Baris baru" }).getByText("Perlu dicek", { exact: true })).toHaveCount(1);
     await expect(page.getByRole("button", { name: "Impor 4 transaksi" })).toBeVisible();
   });
 
