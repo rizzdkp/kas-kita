@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { classifyRows, DEDUPE_WINDOW_DAYS, type DedupeCandidate, type DedupeRow } from "@/server/import/dedupe";
+import { descriptionTokens, suggestCategories } from "@/server/import/category-suggest";
 import { computeRowHash, computeRowHashes, normalizeDescription } from "@/server/import/row-hash";
 import fixture from "../fixtures/imports/dedupe/window.json";
 
@@ -127,5 +128,31 @@ describe("normalisasi deskripsi dan row hash", () => {
     const again = computeRowHashes({ institutionId: null, accountId: "acc" }, rows);
     expect(first[0]).not.toBe(first[1]);
     expect(again).toEqual(first);
+  });
+});
+
+describe("saran kategori", () => {
+  const history = [
+    { kind: "expense" as const, categoryId: "kopi", text: "Kopi Kenangan" },
+    { kind: "expense" as const, categoryId: "kopi", text: "kopi kenangan senopati" },
+    { kind: "expense" as const, categoryId: "belanja", text: "Indomaret" },
+    { kind: "income" as const, categoryId: "gaji", text: "TRSF E-BANKING CR GAJI PT CONTOH" },
+  ];
+
+  it("kategori paling sering dari deskripsi mirip, jenis harus sama", () => {
+    const result = suggestCategories(
+      [
+        { kind: "expense", description: "QRIS KOPI KENANGAN 0012345678" },
+        { kind: "income", description: "TRSF E-BANKING CR GAJI PT CONTOH 092026" },
+        { kind: "expense", description: "GAJI PT CONTOH" },
+        { kind: "expense", description: "ZQXV WPLM" },
+      ],
+      history,
+    );
+    expect(result).toEqual(["kopi", "gaji", null, null]);
+  });
+
+  it("kata generik bank tidak dihitung sebagai kemiripan", () => {
+    expect(descriptionTokens("TRSF E-BANKING QRIS DEBIT ke 12345678")).toEqual([]);
   });
 });

@@ -723,6 +723,30 @@ Tabel di bawah mencatat teks yang sudah dipakai di kode. Bagian dinamis ditulis 
 | Pemetaan, tidak bisa dibuka | Pemetaan tidak bisa dibuka: [pesan]. Tombol: Unggah file mutasi |
 | Pemetaan, templat | Simpan sebagai templat untuk [nama]: Impor CSV berikutnya dari [nama] langsung memakai pemetaan ini. / Akun ini tanpa institusi, jadi pemetaan tidak bisa disimpan sebagai templat. |
 | Pemetaan, tombol | Lanjut ke tinjau |
+| Tinjau, judul | Tinjau mutasi [akun] / [n] baris dari CSV (PDF, PDF, dibaca AI), [tanggal] sampai [tanggal] |
+| Tinjau, kelompok | Baru ([n]) / Kemungkinan duplikat ([n]) / Duplikat pasti ([n]) |
+| Tinjau, keterangan Baru | Belum ada di Kas Kita. Kategori diisi dari transaksi serupa sebelumnya; cek sebelum mengimpor. |
+| Tinjau, keterangan Kemungkinan duplikat | Akun dan nominal sama dengan transaksi yang sudah tercatat, tanggalnya berselisih paling lama 2 hari. Tidak diimpor sampai kamu memilih. |
+| Tinjau, Duplikat pasti terlipat | Duplikat pasti ([n]) / sudah pernah diimpor, tidak diimpor lagi |
+| Tinjau, centang semua | Centang semua baris baru / [n] dari [n] |
+| Tinjau, kolom | Tanggal / Deskripsi / Kategori dan untuk siapa / Nominal |
+| Tinjau, placeholder kategori | Pilih kategori |
+| Tinjau, pembanding | Dari mutasi / Sudah tercatat / Tanggal sama / Selisih [n] hari / diisi oleh [nama] |
+| Tinjau, keputusan duplikat | Sama, tautkan / Beda, impor sebagai baru / Lewati |
+| Tinjau, aria | Impor [deskripsi], [tanggal], keluar (masuk) Rp [x] / Kategori untuk [deskripsi] / Untuk siapa: [deskripsi] / Keputusan untuk [deskripsi] / Baris baru / Kemungkinan duplikat |
+| Tinjau, ringkasan | [n] diimpor · [n] ditautkan · [n] dilewati / Centang baris yang ingin diimpor. |
+| Tinjau, tombol | Impor [n] transaksi / Tautkan [n] transaksi / Batalkan impor |
+| Tinjau, error kategori | Pilih kategori untuk [n] transaksi yang dicentang. / Pilih kategori (per baris) |
+| Tinjau, peringatan AI | Mutasi ini dibaca model AI. Cek tanggal, deskripsi, dan nominal setiap baris sebelum mengimpor. |
+| Tinjau, saldo tidak cocok | Saldo berjalan tidak cocok di [n] baris. Baris itu ditandai Perlu dicek; bandingkan dengan file mutasi sebelum mengimpor. / Perlu dicek (badge baris) |
+| Tinjau, toast | [n] transaksi diimpor / [n] transaksi ditautkan / [n] transaksi diimpor, [n] ditautkan |
+| Tinjau, dialog batal | Batalkan impor ini? / Baris dan pilihan di layar ini dihapus. File mutasinya bisa diunggah lagi kapan saja. / Kembali / Batalkan impor |
+| Tinjau, membaca | Membaca mutasi… / Model AI membaca mutasi per halaman. Biasanya kurang dari dua menit. Halaman ini diperbarui sendiri. / Baris mutasi sedang dibaca dan dicocokkan dengan transaksi yang sudah tercatat. Halaman ini diperbarui sendiri. |
+| Tinjau, gagal | Mutasi ini gagal dibaca / [pesan error batch] atau File tidak bisa dibaca. Cek formatnya lalu unggah lagi. Tombol: Unggah file lain |
+| Tinjau, sudah disimpan | Impor ini sudah disimpan: Transaksinya ada di daftar transaksi dengan filter impor ini. Tombol: Lihat transaksi |
+| Tinjau, tidak ditemukan | Impor ini tidak ditemukan: Impor ini mungkin sudah dibatalkan. Unggah file mutasi lagi untuk memulai. Tombol: Impor mutasi |
+| Tinjau, file tanpa baris | File ini tidak berisi transaksi: Tidak ada baris mutasi yang terbaca. Cek rentang tanggal di file, lalu unggah lagi. Tombol: Unggah file lain |
+| Tinjau, error domain | Impor ini sudah disimpan. Lihat hasilnya di daftar transaksi. / Impor ini belum siap ditinjau. Tunggu sebentar lalu muat ulang halaman. / Transaksi pembanding sudah berubah atau dihapus. Pilih Beda, impor sebagai baru, atau muat ulang halaman. / Impor ini tidak ditemukan, mungkin sudah dibatalkan. Unggah file mutasi lagi. / Baris impor tidak ditemukan. Muat ulang halaman lalu coba lagi. / Baris ini tidak punya transaksi pembanding. / File ini berisi lebih dari 5000 baris. Pecah per bulan lalu impor satu per satu. / Baris [n] di file belum terbaca. Cek format file lalu unggah lagi. |
 
 ### Error domain
 
