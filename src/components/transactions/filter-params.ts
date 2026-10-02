@@ -6,7 +6,7 @@ import type { TransactionKind } from "./types";
 /**
  * Kontrak searchParams /transaksi (dipakai halaman lain untuk menautkan):
  * akun, kategori, jenis (income|expense|transfer), dari, sampai (YYYY-MM-DD), q, pencatat (user id),
- * tag (id atau nama), status=draft, tampil=dihapus, id (buka detail). Cakupan tetap dari `scope`.
+ * tag (id atau nama), status=draft, tampil=dihapus, batch (id batch impor), id (buka detail). Cakupan tetap dari `scope`.
  */
 export interface TransactionQuery {
   accountId: string | null;
@@ -17,6 +17,7 @@ export interface TransactionQuery {
   q: string;
   createdBy: string | null;
   tag: string | null;
+  batchId: string | null;
   view: "all" | "draft" | "deleted";
 }
 
@@ -29,6 +30,7 @@ export const EMPTY_QUERY: TransactionQuery = {
   q: "",
   createdBy: null,
   tag: null,
+  batchId: null,
   view: "all",
 };
 
@@ -76,6 +78,7 @@ export function parseTransactionQuery(input: ParamSource | Record<string, string
     q: (p.get("q") ?? "").slice(0, 200),
     createdBy: uuid("pencatat"),
     tag: tag ? tag.slice(0, 40) : null,
+    batchId: uuid("batch"),
     view: p.get("tampil") === "dihapus" ? "deleted" : p.get("status") === "draft" ? "draft" : "all",
   };
 }
@@ -95,6 +98,7 @@ export function writeTransactionQuery(base: URLSearchParams, q: TransactionQuery
   set("q", q.q.trim() || null);
   set("pencatat", q.createdBy);
   set("tag", q.tag);
+  set("batch", q.batchId);
   set("status", q.view === "draft" ? "draft" : null);
   set("tampil", q.view === "deleted" ? "dihapus" : null);
   return next;
@@ -102,12 +106,12 @@ export function writeTransactionQuery(base: URLSearchParams, q: TransactionQuery
 
 /** Filter selain tampilan (Semua/draf/dihapus) yang sedang aktif. */
 export function hasActiveFilters(q: TransactionQuery): boolean {
-  return Boolean(q.accountId || q.categoryId || q.kind || q.from || q.to || q.q.trim() || q.createdBy || q.tag);
+  return Boolean(q.accountId || q.categoryId || q.kind || q.from || q.to || q.q.trim() || q.createdBy || q.tag || q.batchId);
 }
 
 /** Kunci stabil untuk mereset daftar saat filter atau cakupan berubah. */
 export function queryKey(scope: Scope, q: TransactionQuery): string {
-  return JSON.stringify([scope, q.accountId, q.categoryId, q.kind, q.from, q.to, q.q.trim(), q.createdBy, q.tag, q.view]);
+  return JSON.stringify([scope, q.accountId, q.categoryId, q.kind, q.from, q.to, q.q.trim(), q.createdBy, q.tag, q.batchId, q.view]);
 }
 
 // uuid yang tidak mungkin ada: tag yang tidak dikenal harus menghasilkan daftar kosong, bukan semua transaksi
@@ -125,6 +129,7 @@ export function toServerFilters(scope: Scope, q: TransactionQuery, tags: Readonl
     to: q.to ?? undefined,
     createdBy: q.createdBy ? [q.createdBy] : undefined,
     tagIds: tag ? [tag] : undefined,
+    batchId: q.batchId ?? undefined,
     q: q.q.trim() || undefined,
     status: q.view === "draft" ? "draft" : undefined,
     deleted: q.view === "deleted" || undefined,

@@ -13,6 +13,7 @@ const ACC = "0190a1b2-c3d4-7e5f-8a9b-0c1d2e3f4a5c";
 const CAT = "0190a1b2-c3d4-7e5f-8a9b-0c1d2e3f4a5b";
 const USER = "0190a1b2-c3d4-7e5f-8a9b-0c1d2e3f4a5d";
 const TAG = "0190a1b2-c3d4-7e5f-8a9b-0c1d2e3f4a5e";
+const BATCH = "0190a1b2-c3d4-7e5f-8a9b-0c1d2e3f4a5f";
 
 const FULL: TransactionQuery = {
   accountId: ACC,
@@ -23,6 +24,7 @@ const FULL: TransactionQuery = {
   q: "kopi",
   createdBy: USER,
   tag: "liburan",
+  batchId: BATCH,
   view: "draft",
 };
 
@@ -37,6 +39,7 @@ describe("parseTransactionQuery", () => {
       q: "kopi",
       pencatat: USER,
       tag: "liburan",
+      batch: BATCH,
       status: "draft",
     });
     expect(parseTransactionQuery(p)).toEqual(FULL);
@@ -107,6 +110,7 @@ describe("writeTransactionQuery", () => {
       q: "kopi",
       pencatat: USER,
       tag: "liburan",
+      batch: BATCH,
       status: "draft",
     });
     expect(parseTransactionQuery(written)).toEqual(FULL);
@@ -131,6 +135,7 @@ describe("hasActiveFilters dan queryKey", () => {
     expect(hasActiveFilters({ ...EMPTY_QUERY, view: "draft" })).toBe(false);
     expect(hasActiveFilters({ ...EMPTY_QUERY, q: "  " })).toBe(false);
     expect(hasActiveFilters({ ...EMPTY_QUERY, tag: "liburan" })).toBe(true);
+    expect(hasActiveFilters({ ...EMPTY_QUERY, batchId: BATCH })).toBe(true);
   });
 
   it("kunci berubah bila cakupan atau filter berubah, tidak oleh spasi di q", () => {
@@ -153,6 +158,7 @@ describe("toServerFilters", () => {
       to: "2026-08-31",
       createdBy: [USER],
       tagIds: [TAG],
+      batchId: BATCH,
       q: "kopi",
       status: "draft",
       deleted: undefined,
@@ -171,6 +177,11 @@ describe("toServerFilters", () => {
   it("query kosong tidak mengirim filter apa pun", () => {
     const f = toServerFilters("me", EMPTY_QUERY, tags);
     expect(Object.entries(f).filter(([, v]) => v !== undefined)).toEqual([["scope", "me"]]);
+  });
+
+  it("batch impor: id valid diteruskan, selain uuid diabaikan", () => {
+    expect(toServerFilters("all", parseTransactionQuery({ batch: BATCH }), tags).batchId).toBe(BATCH);
+    expect(parseTransactionQuery({ batch: "bukan-uuid" }).batchId).toBeNull();
   });
 
   it("tampilan dihapus mengirim deleted", () => {

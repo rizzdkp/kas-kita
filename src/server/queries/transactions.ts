@@ -30,6 +30,8 @@ export const transactionFiltersSchema = z.object({
   q: z.string().trim().max(200).optional(),
   status: z.enum(["confirmed", "draft"]).optional(),
   deleted: z.boolean().optional(),
+  /** Transaksi dari satu batch impor: yang dibuat dari barisnya dan yang ditautkan sebagai duplikat. */
+  batchId: z.uuid().optional(),
   /** Sembunyikan transfer yang kedua ujungnya di cakupan (tampilan arus kas). */
   hideInternalTransfers: z.boolean().optional(),
 });
@@ -165,6 +167,12 @@ function filterConditions(viewer: Viewer, f: z.output<typeof transactionFiltersS
         sql`${accounts.name} ilike ${pattern}`,
       )!,
     );
+  }
+  if (f.batchId) {
+    conds.push(sql`(
+      ${transactions.importRowId} in (select id from import_rows where batch_id = ${f.batchId}::uuid)
+      or ${transactions.id} in (select matched_transaction_id from import_rows where batch_id = ${f.batchId}::uuid and decision = 'duplicate_of')
+    )`);
   }
   if (f.hideInternalTransfers) conds.push(sql`${transactionFlow(viewer, f.scope)} <> 'transfer_internal'`);
   return conds;
