@@ -16,7 +16,7 @@ Next.js 15 (App Router, server actions), TypeScript strict, PostgreSQL 16 + Driz
 | M1 Catat | Selesai | Akun, form transaksi, quick-add parser lokal (multi-baris, antrean offline), daftar transaksi virtual, audit, riwayat edit, dialog konflik, cakupan |
 | M2 Lihat | Selesai | Rumus metrik dengan panel "Cara menghitung", Ringkasan, Anggaran, Tagihan, Target |
 | M3 AI | Selesai | Pengaturan AI (F-AI-1), quick-add AI (F-IN-2), foto struk + lampiran (F-IN-3). Diuji terhadap server AI palsu `scripts/fake-ai-server.ts`, belum terhadap penyedia sungguhan |
-| M4 Impor | Belum | Skema `import_batches`, `import_rows`, `import_templates` sudah ada |
+| M4 Impor | Selesai, kecuali parser PDF per bank | Impor CSV dengan pemetaan kolom dan templat per institusi (F-IN-4), impor PDF berpassword dan baca dengan AI lewat worker (F-IN-5), dedupe dan layar tinjau (F-IN-6). Parser PDF bank sungguhan menunggu item terbuka O-1; baru ada parser referensi `contoh-bank` |
 | M5 Lengkap | Sebagian | Selesai: rekonsiliasi (F-ACC-2), investasi (F-INV-1), laporan + ekspor CSV/PDF (F-REP-1), notifikasi dalam app (F-NOT-1), wawasan berbasis templat (F-AI-2 AC4), prediksi akhir bulan (F-BUD-2). Belum: transaksi berulang (F-IN-7), web push, service worker PWA, glass G2 refraksi, realtime SSE |
 | M6 Go-live | Belum | Checklist `SECURITY.md` bagian 6 |
 
@@ -24,7 +24,7 @@ Belum dijalankan: tes e2e di WebKit (Safari). Container pengembangan hanya punya
 
 ## Menjalankan secara lokal
 
-Kebutuhan: Node 22, pnpm, PostgreSQL 16.
+Kebutuhan: Node 22, pnpm, PostgreSQL 16. Di container pengembangan tanpa Docker, `./scripts/dev-db-up.sh` menyalakan PostgreSQL lokal, membuat database, migrasi, dan seed bila kosong.
 
 ```sh
 pnpm install
@@ -34,6 +34,7 @@ set -a; . ./.env.local; set +a
 pnpm db:migrate
 pnpm db:seed                                         # 2 user contoh, 10 akun, 6 bulan transaksi
 pnpm dev
+pnpm worker    # terminal lain, untuk baca PDF dengan AI dan job terjadwal
 ```
 
 Masuk ke app:
@@ -73,6 +74,6 @@ Masuk ke app:
 
 Ikuti [`docs/prd/DEPLOYMENT.md`](docs/prd/DEPLOYMENT.md) dengan `docker/compose.yml`, `docker/Caddyfile`, dan `Dockerfile` di repo ini. Perbedaan dari dokumen:
 
-- Container `worker` belum ada karena belum ada job terjadwal yang diimplementasikan.
+- Container `worker` menjalankan pg-boss: baca PDF dengan AI, hapus file impor sementara > 7 hari (03.15 WIB), hapus lampiran pratinjau yatim > 7 hari (03.30 WIB). Tambahkan `IMPORTS_DIR=/data/imports` di `.env` produksi.
 - Migrasi dan pembuatan user dijalankan dengan tsx dari image app: `docker compose run --rm app node_modules/.bin/tsx scripts/migrate.ts` dan `docker compose run --rm app node_modules/.bin/tsx scripts/create-user.ts --email ... --name ...`.
 - CSP di Caddyfile memakai `script-src 'self' 'unsafe-inline'` karena Next.js menyisipkan skrip inline; CSP berbasis nonce belum dibuat.

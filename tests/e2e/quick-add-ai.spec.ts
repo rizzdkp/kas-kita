@@ -49,6 +49,8 @@ async function stopFake(): Promise<void> {
 }
 
 test.beforeAll(async () => {
+  // akun "E2E …" dari spesifikasi impor sebelumnya bisa jadi akun bawaan quick-add; bersihkan dulu
+  sh("npx tsx scripts/e2e-cleanup.ts 1970-01-01T00:00:00Z");
   await startFake();
   settings("set", BASE_URL, "fake-text");
 });

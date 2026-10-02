@@ -72,6 +72,7 @@ kas.domainkamu.id {
 | `APP_ENCRYPTION_KEY` | 32 byte base64 (`openssl rand -base64 32`) |
 | `AUTH_SECRET` | 32 byte base64 |
 | `ATTACHMENTS_DIR` | `/data/attachments` |
+| `IMPORTS_DIR` | `/data/imports` (file mutasi sementara, dihapus setelah impor atau > 7 hari) |
 | `TZ` | `Asia/Jakarta` |
 | `RESTIC_REPOSITORY`, `RESTIC_PASSWORD`, `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` | Backup |
 

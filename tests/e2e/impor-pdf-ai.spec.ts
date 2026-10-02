@@ -47,6 +47,12 @@ test.afterAll(async () => {
   await stop(worker);
   await stop(fake);
   sh(`npx tsx tests/e2e/helpers/struk-ai-settings.ts restore '${snapshot.replaceAll("'", "'\\''")}'`);
+  // akun uji dengan transaksi baru tidak boleh jadi "akun terakhir dipakai" bagi spesifikasi berikutnya
+  if (account) {
+    sh(
+      `psql "$DATABASE_URL" -qc "update transactions set deleted_at = now(), version = version + 1 where account_id = '${account.accountId}' and deleted_at is null; update accounts set deleted_at = now(), version = version + 1 where id = '${account.accountId}' and deleted_at is null"`,
+    );
+  }
 });
 
 test.beforeEach(async ({ context }) => {
