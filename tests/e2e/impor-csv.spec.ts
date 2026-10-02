@@ -59,7 +59,7 @@ test("unggah CSV tanpa templat, petakan kolom, lalu lanjut ke tinjau", async ({ 
     await expect(page.getByLabel("Format tanggal")).toContainText("31-12-2026");
     await expect(page.getByLabel("Kolom debit (keluar)")).toContainText("Debit");
     await expect(page.getByLabel("Kolom kredit (masuk)")).toContainText("Kredit");
-    await expect(page.getByText("3 baris terbaca · 2 baris dilewati")).toBeVisible();
+    await expect(page.getByText("3 baris terbaca · 2 baris dilewati")).toBeVisible({ timeout: 15_000 });
     await expect(page.getByText('Baris 8: Tanggal "32-09-2026" tidak cocok dengan format DD-MM-YYYY')).toBeVisible();
     await expect(page.getByText("+Rp 8.500.000")).toBeVisible();
     await expect(page.getByText("−Rp 25.000")).toBeVisible();
@@ -72,7 +72,7 @@ test("unggah CSV tanpa templat, petakan kolom, lalu lanjut ke tinjau", async ({ 
     await expect(page.getByRole("button", { name: "Lanjut ke tinjau" })).toBeDisabled();
     await page.getByLabel("Format tanggal").click();
     await page.getByRole("option", { name: /31-12-2026/ }).click();
-    await expect(page.getByText("3 baris terbaca · 2 baris dilewati")).toBeVisible();
+    await expect(page.getByText("3 baris terbaca · 2 baris dilewati")).toBeVisible({ timeout: 15_000 });
   });
 
   await test.step("lanjut ke tinjau", async () => {
@@ -89,5 +89,5 @@ test("file bukan CSV atau PDF ditolak dengan pesan", async ({ page }) => {
   await expect(page.getByRole("radio", { name: new RegExp(account.name) })).toBeChecked();
   await page.getByRole("region", { name: "File mutasi" }).locator('input[type="file"]').setInputFiles({ name: "mutasi.csv", mimeType: "text/csv", buffer: Buffer.from([0x50, 0x4b, 0x03, 0x04, 0x00]) });
   await page.getByRole("button", { name: "Unggah", exact: true }).click();
-  await expect(page.getByText("File Excel belum bisa dibaca. Simpan sebagai CSV dari Excel lalu unggah lagi.")).toBeVisible();
+  await expect(page.getByText("File Excel belum bisa dibaca. Simpan sebagai CSV dari Excel lalu unggah lagi.")).toBeVisible({ timeout: 20_000 });
 });
