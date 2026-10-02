@@ -16,6 +16,7 @@ import {
   transactions,
   users,
 } from "@/server/db/schema";
+import { isProduction, setDevSeedPasswords } from "@/server/auth/dev-passwords";
 import { addDaysKey, addMonthsKey, keyOf, monthStartKey } from "@/server/metrics/_time";
 import { EXPENSE_CATEGORIES, INCOME_CATEGORIES, SYSTEM_CATEGORIES } from "./seed/categories";
 import { generateTransactions, type SeedAccount, type SeedContext } from "./seed/generate";
@@ -48,6 +49,8 @@ async function main() {
       { email: "nadia@kaskita.local", name: "Nadia", displayName: "Nadia", identityColor: "ocean", paydayDay: 1, onboardedAt: now },
     ])
     .returning();
+  // user seed langsung bisa masuk lewat /login di lokal; produksi tidak pernah mendapat password umum ini
+  const seedPassword = isProduction() ? null : await setDevSeedPasswords();
   const rizzId = rizz!.id;
   const nadiaId = nadia!.id;
 
@@ -205,6 +208,7 @@ async function main() {
   await db.insert(investmentValuations).values(valuations);
 
   console.log(`Seed selesai: 2 user, ${Object.keys(acc).length} akun, ${catIds.size} kategori, ${txIds.length + 1} transaksi (${from} sampai ${today}).`);
+  if (seedPassword) console.log("Masuk dengan rizz@kaskita.local atau nadia@kaskita.local, password dari DEV_SEED_PASSWORD (bawaan kaskita-dev-123).");
 }
 
 main()

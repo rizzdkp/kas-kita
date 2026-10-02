@@ -1,18 +1,24 @@
-import { REMEMBER_DEVICE_COOKIE, TRUSTED_SESSION_SECONDS, UNTRUSTED_SESSION_SECONDS } from "./constants";
+import { z } from "zod";
+import { TRUSTED_SESSION_SECONDS, UNTRUSTED_SESSION_SECONDS } from "./constants";
 
-export function readCookie(cookieHeader: string | null | undefined, name: string): string | null {
-  if (!cookieHeader) return null;
-  for (const part of cookieHeader.split(";")) {
-    const eq = part.indexOf("=");
-    if (eq === -1) continue;
-    if (part.slice(0, eq).trim() === name) return decodeURIComponent(part.slice(eq + 1).trim());
-  }
-  return null;
+const SIGN_IN_PATH = "/sign-in/email";
+const rememberBody = z.object({ rememberMe: z.boolean().optional() });
+
+interface SessionCreateContext {
+  path?: string | undefined;
+  body?: unknown;
+  context?: { session?: { session?: { trusted?: unknown } } | null } | undefined;
 }
 
-// tanpa sinyal eksplisit dari klien, perangkat dianggap tidak tepercaya
-export function isRememberRequested(cookieHeader: string | null | undefined): boolean {
-  return readCookie(cookieHeader, REMEMBER_DEVICE_COOKIE) === "1";
+// tanpa centang "Ingat perangkat ini" yang eksplisit, perangkat dianggap tidak tepercaya
+export function isTrustedSessionRequest(ctx: SessionCreateContext | null | undefined): boolean {
+  if (!ctx) return false;
+  if (ctx.path === SIGN_IN_PATH) {
+    const parsed = rememberBody.safeParse(ctx.body);
+    return parsed.success && parsed.data.rememberMe === true;
+  }
+  // sesi pengganti (mis. setelah ganti password) mewarisi status sesi yang sedang dipakai
+  return ctx.context?.session?.session?.trusted === true;
 }
 
 export function sessionExpiresAt(trusted: boolean, now: Date = new Date()): Date {
