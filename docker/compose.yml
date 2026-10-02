@@ -14,7 +14,18 @@ services:
     image: ghcr.io/${GHCR_USER:-rizzdkp}/kas-kita:${APP_VERSION:-latest}
     env_file: .env
     command: ["node", "server.js"]
-    volumes: ["attachments:/data/attachments"]
+    # imports: file mutasi sementara yang diunggah lewat app, dibersihkan worker
+    volumes: ["attachments:/data/attachments", "imports:/data/imports"]
+    depends_on: [db]
+    restart: unless-stopped
+    logging: { driver: json-file, options: { max-size: "10m", max-file: "5" } }
+
+  # pg-boss: antrean impor PDF lewat AI dan job terjadwal (ARCHITECTURE 1 dan 7); image sama dengan app
+  worker:
+    image: ghcr.io/${GHCR_USER:-rizzdkp}/kas-kita:${APP_VERSION:-latest}
+    env_file: .env
+    command: ["node", "--import", "tsx", "src/worker/index.ts"]
+    volumes: ["attachments:/data/attachments", "imports:/data/imports"]
     depends_on: [db]
     restart: unless-stopped
     logging: { driver: json-file, options: { max-size: "10m", max-file: "5" } }
@@ -26,4 +37,4 @@ services:
     restart: unless-stopped
     logging: { driver: json-file, options: { max-size: "10m", max-file: "5" } }
 
-volumes: { caddy_data: {}, attachments: {}, pgdata: {} }
+volumes: { caddy_data: {}, attachments: {}, imports: {}, pgdata: {} }

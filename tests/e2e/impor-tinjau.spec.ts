@@ -7,6 +7,7 @@ interface StagedBatch {
   accountId: string;
   manualId: string;
   token: string;
+  unknown: string;
 }
 
 // batch disiapkan lewat pipeline langsung supaya tes tidak bergantung pada UI unggah
@@ -22,7 +23,7 @@ test.describe("layar tinjau impor", () => {
 
   test("tiga kelompok dengan default F-IN-6 AC3 dan penanda saldo", async ({ page }) => {
     const b = stageBatch();
-    await page.goto(`/impor/${b.batchId}`);
+    await page.goto(`/impor/${b.batchId}`, { waitUntil: "networkidle" });
 
     await expect(page.getByRole("heading", { name: `Tinjau mutasi E2E Impor ${b.token}` })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Baru (4)" })).toBeVisible();
@@ -53,15 +54,18 @@ test.describe("layar tinjau impor", () => {
 
   test("kategori wajib, tautkan duplikat, lalu commit ke daftar transaksi dengan filter batch", async ({ page }) => {
     const b = stageBatch();
-    await page.goto(`/impor/${b.batchId}`);
+    await page.goto(`/impor/${b.batchId}`, { waitUntil: "networkidle" });
 
-    await page.getByText("Centang semua baris baru").click();
-    await expect(page.getByText("0 dari 4")).toBeVisible();
-    await page.getByRole("checkbox", { name: new RegExp(`^Impor ZQXV WPLM ${b.token}`) }).check();
+    // klik sebelum hidrasi selesai bisa hilang di dev server, jadi diulang sampai state React ikut berubah
+    await expect(async () => {
+      await page.getByRole("checkbox", { name: /Centang semua baris baru/ }).setChecked(false);
+      await expect(page.getByText("0 dari 4")).toBeVisible({ timeout: 1000 });
+    }).toPass();
+    await page.getByRole("checkbox", { name: new RegExp(`^Impor ${b.unknown}`) }).check();
 
     await page.getByRole("button", { name: "Impor 1 transaksi" }).click();
     await expect(page.getByRole("alert").filter({ hasText: "Pilih kategori untuk 1 transaksi yang dicentang." })).toBeVisible();
-    const category = page.getByRole("combobox", { name: `Kategori untuk ZQXV WPLM ${b.token}` });
+    const category = page.getByRole("combobox", { name: `Kategori untuk ${b.unknown}` });
     await expect(category).toHaveAttribute("aria-invalid", "true");
     await expect(category).toBeFocused();
 
@@ -77,29 +81,29 @@ test.describe("layar tinjau impor", () => {
     await page.getByRole("button", { name: "Impor 1 transaksi" }).click();
     await page.waitForURL(new RegExp(`/transaksi\\?batch=${b.batchId}`));
     await expect(page.getByText("1 transaksi diimpor, 1 ditautkan")).toBeVisible();
-    await expect(page.getByText(`ZQXV WPLM ${b.token}`)).toBeVisible();
+    await expect(page.getByText(b.unknown)).toBeVisible();
     await expect(page.getByText(`Belanja Indomaret ${b.token}`)).toBeVisible();
     await expect(page.getByText(`KOPI KENANGAN ${b.token}`)).toHaveCount(0);
 
     // layar tinjau batch yang sudah disimpan menawarkan hasilnya
-    await page.goto(`/impor/${b.batchId}`);
+    await page.goto(`/impor/${b.batchId}`, { waitUntil: "networkidle" });
     await expect(page.getByRole("heading", { name: "Impor ini sudah disimpan" })).toBeVisible();
   });
 
   test("batch hasil AI menampilkan peringatan cek baris per baris", async ({ page }) => {
     const b = stageBatch("ai_pdf");
-    await page.goto(`/impor/${b.batchId}`);
+    await page.goto(`/impor/${b.batchId}`, { waitUntil: "networkidle" });
     await expect(page.getByText("Mutasi ini dibaca model AI. Cek tanggal, deskripsi, dan nominal setiap baris sebelum mengimpor.")).toBeVisible();
     await expect(page.getByText("6 baris dari PDF, dibaca AI", { exact: false })).toBeVisible();
   });
 
   test("batal impor menghapus batch", async ({ page }) => {
     const b = stageBatch();
-    await page.goto(`/impor/${b.batchId}`);
+    await page.goto(`/impor/${b.batchId}`, { waitUntil: "networkidle" });
     await page.getByRole("button", { name: "Batalkan impor" }).click();
     await page.getByRole("dialog").getByRole("button", { name: "Batalkan impor" }).click();
     await page.waitForURL(/\/impor(\?|$)/);
-    await page.goto(`/impor/${b.batchId}`);
+    await page.goto(`/impor/${b.batchId}`, { waitUntil: "networkidle" });
     await expect(page.getByRole("heading", { name: "Impor ini tidak ditemukan" })).toBeVisible();
   });
 });

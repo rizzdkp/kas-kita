@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { Archive, ArchiveRestore, MoreHorizontal, Pencil, Scale, Trash2, TrendingUp } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Archive, ArchiveRestore, FileUp, MoreHorizontal, Pencil, Scale, Trash2, TrendingUp } from "lucide-react";
 import { parseDateKey } from "@/lib/dates";
 import { formatRupiah, percentOf, formatPercent } from "@/lib/money";
 import type { Scope } from "@/lib/scope";
@@ -63,12 +64,14 @@ function displayValue(account: AccountWithBalance): bigint {
 }
 
 export function AccountRow({ account, people, scope, onAction }: AccountRowProps) {
+  const router = useRouter();
   const dot = ownerDot(people, account.ownerId);
   const archived = account.archivedAt !== null;
   const reconciled = account.lastReconciledAt ? `Dicocokkan ${relativeDayInline(account.lastReconciledAt)}` : "Belum pernah dicocokkan";
   const meta = [account.institutionName, ACCOUNT_TYPE_LABEL[account.type], ownerLabel(people, account.ownerId)].filter(Boolean).join(" · ");
   const canReconcile = !archived && account.type !== "investment";
   const investHref = `/investasi?scope=${account.ownerId === null ? "all" : scope}`;
+  const canImport = !archived && (account.type === "bank" || account.type === "ewallet" || account.type === "credit_card");
 
   return (
     <li className="group/row relative flex min-h-16 items-center gap-3 px-4 py-3 transition-colors duration-(--dur-fast) hover:bg-surface-sunken sm:gap-4 sm:px-(--space-card)">
@@ -116,8 +119,13 @@ export function AccountRow({ account, people, scope, onAction }: AccountRowProps
               </DropdownMenuItem>
             ) : null}
             {account.type === "investment" && !archived ? (
-              <DropdownMenuItem icon={TrendingUp} asChild>
-                <Link href={investHref}>Perbarui nilai</Link>
+              <DropdownMenuItem icon={TrendingUp} onSelect={() => router.push(investHref)}>
+                Perbarui nilai
+              </DropdownMenuItem>
+            ) : null}
+            {canImport ? (
+              <DropdownMenuItem icon={FileUp} onSelect={() => router.push(`/impor?akun=${account.id}`)}>
+                Impor mutasi
               </DropdownMenuItem>
             ) : null}
             {!archived ? (

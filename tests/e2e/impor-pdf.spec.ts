@@ -34,7 +34,7 @@ test("e-statement contoh-bank terbaca dan masuk layar tinjau", async ({ page }) 
   await expect(page).toHaveURL(/\/impor\/[0-9a-f-]{36}$/, { timeout: 60_000 });
   await expect(page.getByRole("heading", { name: `Tinjau mutasi ${account.name}` })).toBeVisible();
   await expect(page.getByText(/13 baris dari PDF/)).toBeVisible();
-  await expect(page.getByText("GAJI AGUSTUS 2026 PT CONTOH SEJAHTERA")).toBeVisible();
+  await expect(page.getByText("GAJI AGUSTUS 2026 PT CONTOH SEJAHTERA", { exact: true })).toBeVisible();
   await expect(page.getByText(/Saldo berjalan tidak cocok/)).toHaveCount(0);
 });
 

@@ -59,16 +59,18 @@ await saveParsedRows(viewer, earlier.id, [row(day(6), `PARKIR LAMA ${token}`, -5
 const [earlierRow] = await db.select().from(importRows).where(eq(importRows.batchId, earlier.id));
 await commitImportBatch(viewer, { batchId: earlier.id, rows: [{ rowId: earlierRow!.id, action: "import", categoryId: expense.id }] });
 
+// token unik di setiap kata supaya baris ini tidak pernah punya saran kategori dari run lain
+const unknown = `QX${token} WP${token}`;
 const format = process.argv[2] === "ai_pdf" ? "ai_pdf" : "csv";
 const batch = await createImportBatch(viewer, { accountId: account.id, institutionId: null, format, fileSha256: sha() });
 await saveParsedRows(viewer, batch.id, [
   row(day(5), `KOPI KENANGAN ${token}`, -54_000n),
   row(day(4), `GAJI PT CONTOH ${token}`, 8_500_000n),
-  row(day(4), `ZQXV WPLM ${token}`, -33_000n),
+  row(day(4), unknown, -33_000n),
   row(day(3), `INDOMARET ${token}`, -120_000n),
   row(day(6), `PARKIR LAMA ${token}`, -5_000n),
   row(day(1), `BENSIN SHELL ${token}`, -75_000n, { __balanceMismatch: "1" }),
 ]);
 
-console.log(JSON.stringify({ batchId: batch.id, accountId: account.id, manualId: manual.id, token }));
+console.log(JSON.stringify({ batchId: batch.id, accountId: account.id, manualId: manual.id, token, unknown }));
 await sql.end();

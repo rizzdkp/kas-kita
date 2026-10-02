@@ -15,7 +15,7 @@ RUN pnpm build
 FROM node:22-alpine AS run
 WORKDIR /app
 ENV NODE_ENV=production TZ=Asia/Jakarta NEXT_TELEMETRY_DISABLED=1
-RUN addgroup -S app && adduser -S app -G app && mkdir -p /data/attachments && chown app:app /data/attachments
+RUN addgroup -S app && adduser -S app -G app && mkdir -p /data/attachments /data/imports && chown app:app /data/attachments /data/imports
 COPY --from=build --chown=app:app /app/.next/standalone ./
 COPY --from=build --chown=app:app /app/.next/static ./.next/static
 COPY --from=build --chown=app:app /app/public ./public

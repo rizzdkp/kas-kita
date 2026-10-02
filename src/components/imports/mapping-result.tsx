@@ -18,12 +18,6 @@ function dateLabel(key: string, time: string | null): string {
   return time ? `${text}, ${time.replace(":", ".")}` : text;
 }
 
-const SKIP_KIND_NOTE = {
-  invalid: null,
-  summary: "Bukan transaksi",
-  pending: "Bukan transaksi",
-} as const;
-
 /** Hasil baca dengan pemetaan saat ini; baris yang dilewati selalu disebut beserta alasannya. */
 export function MappingResult({ result, problem, pending }: MappingResultProps) {
   return (
@@ -93,7 +87,6 @@ export function MappingResult({ result, problem, pending }: MappingResultProps) 
               <li key={s.line} className="flex flex-col gap-1 px-3 py-2 text-small">
                 <span className="text-primary">
                   Baris {s.line}: {s.reason}
-                  {SKIP_KIND_NOTE[s.kind] ? <span className="text-secondary"> ({SKIP_KIND_NOTE[s.kind]})</span> : null}
                 </span>
                 <span className="truncate text-caption tabular-nums text-secondary">{s.cells.filter((c) => c.trim() !== "").join(" · ")}</span>
               </li>

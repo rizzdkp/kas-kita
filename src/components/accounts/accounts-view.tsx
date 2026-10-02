@@ -2,10 +2,11 @@
 
 import { useState, useTransition } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { ChevronRight, Plus } from "lucide-react";
+import Link from "next/link";
+import { ChevronRight, FileUp, Plus } from "lucide-react";
 import type { Scope } from "@/lib/scope";
 import { Amount } from "@/components/money/amount";
-import { Button } from "@/components/ui/button";
+import { Button, buttonClassName } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Icon } from "@/components/ui/icon";
@@ -91,9 +92,15 @@ export function AccountsView({ accounts, people, institutions, scope, today, ope
     <div className="flex flex-col gap-8 pb-32">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <p className="max-w-[60ch] text-small text-secondary">Akun Bersama selalu tampil di halaman ini, apa pun cakupannya.</p>
-        <Button variant="primary" icon={Plus} onClick={() => setForm({ account: null })}>
-          Tambah akun
-        </Button>
+        <div className="flex flex-wrap gap-2">
+          <Link href="/impor" className={buttonClassName("secondary")}>
+            <Icon icon={FileUp} />
+            Impor mutasi
+          </Link>
+          <Button variant="primary" icon={Plus} onClick={() => setForm({ account: null })}>
+            Tambah akun
+          </Button>
+        </div>
       </div>
 
       {active.length === 0 ? (

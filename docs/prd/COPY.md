@@ -678,6 +678,52 @@ Tabel di bawah mencatat teks yang sudah dipakai di kode. Bagian dinamis ditulis 
 | Cadangan, anggaran | Ada anggaran wajib yang lewat. |
 | Cadangan, berulang | Ada transaksi berulang yang menunggu konfirmasi. |
 
+### Impor mutasi
+
+| Elemen | Copy |
+|---|---|
+| PDF, error kosong | File kosong. Pilih file e-statement PDF. |
+| PDF, error terlalu besar | File lebih dari 20 MB. Unduh e-statement per bulan lalu unggah satu per satu. |
+| PDF, error bukan PDF | File ini bukan PDF. Pilih file e-statement berformat PDF. |
+| PDF, error rusak | PDF ini tidak bisa dibuka. Unduh ulang e-statement dari bank lalu coba lagi. |
+| PDF, error tanpa teks | PDF ini berisi gambar tanpa teks, jadi tidak bisa dibaca. Unduh e-statement versi teks dari bank atau impor CSV. |
+| PDF AI, error terlalu banyak halaman | PDF ini lebih dari 30 halaman. Unduh e-statement per bulan lalu baca dengan AI satu per satu. |
+| PDF AI, gagal tanpa baris | Model AI tidak menemukan baris transaksi di PDF ini. Coba impor CSV atau isi transaksi sendiri. |
+| PDF AI, antrean gagal | Pembacaan dengan AI belum bisa dimulai. Coba lagi sebentar lagi. |
+| Unggah, judul halaman dan tombol di Akun | Impor mutasi |
+| Unggah, keterangan | Unggah mutasi CSV dari internet banking atau e-statement PDF. Semua baris kamu tinjau dulu sebelum masuk ke Transaksi. |
+| Unggah, bagian | Akun tujuan / File mutasi |
+| Unggah, akun bertemplat | Templat [nama] tersimpan |
+| Unggah, area file | Seret file CSV atau PDF ke sini / Pilih file CSV atau PDF (layar sentuh) |
+| Unggah, area file, petunjuk | Mutasi dari internet banking atau e-statement, maksimal 20 MB. PDF berpassword akan dimintai password-nya. |
+| Unggah, tombol | Pilih file / Ganti file / Unggah |
+| Unggah, petunjuk tombol | Pilih akun tujuan dan file mutasi. / Pilih file mutasi. |
+| Unggah, progres | Mengunggah [n]% / Membaca mutasi… |
+| Unggah, kosong | Belum ada akun untuk menerima mutasi: Mutasi diimpor ke akun bank, e-wallet, atau kartu kredit. Tambahkan akunnya dulu, lalu kembali ke sini. Tombol: Tambah akun |
+| Unggah, password PDF | PDF ini berpassword: Password hanya dipakai untuk membuka file ini sekali dan tidak disimpan. Label: Password e-statement. Tombol: Batal / Buka PDF |
+| Unggah, PDF tidak dikenali tanpa AI | Format mutasi ini belum dikenali. Coba impor CSV, atau pasang model AI di Pengaturan supaya PDF ini bisa dibaca dengan AI. Tombol: Buka pengaturan AI |
+| Unggah, PDF tidak dikenali, tombol | Baca dengan AI |
+| Unggah, error | File kosong. Pilih file CSV atau PDF mutasi dari bank. / File lebih dari 20 MB. Unduh mutasi per bulan lalu unggah satu per satu. / Pilih akun tujuan dulu. / File ini bukan CSV atau PDF. Pilih file mutasi dari bank. / File Excel belum bisa dibaca. Simpan sebagai CSV dari Excel lalu unggah lagi. / File ini tidak terbaca sebagai tabel CSV. Pilih file CSV atau PDF mutasi dari bank. / Impor mutasi hanya untuk akun bank, e-wallet, atau kartu kredit. Pilih akun lain. |
+| Sudah diimpor, tautan | Lihat hasil impornya. (kalimat terakhir pesan "File sudah pernah diimpor" jadi tautan) |
+| Pemetaan, keterangan | Petakan kolom mutasi untuk [nama] ([nama]). Pratinjau di bawah berubah mengikuti pilihanmu. / Unggah file lain |
+| Pemetaan, dari templat | Pemetaan diisi dari templat [nama]. Ada baris yang tidak terbaca; cek daftarnya sebelum lanjut. |
+| Pemetaan, petakan ulang | File ini sudah pernah dipetakan. Menerapkan pemetaan baru mengganti baris di layar tinjau. |
+| Pemetaan, bagian | Isi file / Kolom / Hasil baca |
+| Pemetaan, label | Baris header / Kolom tanggal / Format tanggal / Kolom deskripsi / Nominal / Kolom debit (keluar) / Kolom kredit (masuk) / Kolom nominal / Pemisah desimal / Kolom saldo (opsional) / Kolom jam (opsional) / Encoding / Pemisah kolom |
+| Pemetaan, petunjuk | Baris berisi nama kolom. Baris di atasnya dilewati. / Terdeteksi dari isi kolom. Ubah kalau tanggalnya terbaca salah. / Akhiran CR dan DB dibaca otomatis sebagai masuk dan keluar. / Ganti kalau huruf seperti é tampil rusak. |
+| Pemetaan, pilihan | Pilih kolom / Tidak dipakai / Tanpa baris header / Baris [n]: [isi] / Debit dan kredit / Satu kolom / Positif berarti masuk / Positif berarti keluar / Koma: 1.250.000,00 / Titik: 1,250,000.00 / Koma / Titik koma / Tab / UTF-8 / Windows-1252 (Excel lama) / Encoding dan pemisah kolom |
+| Pemetaan, format tanggal | 31/12/2026 (hari/bulan/tahun) / 31-12-2026 (hari-bulan-tahun) / 2026-12-31 (tahun-bulan-hari) / 31 Des 2026 (nama bulan) / 12/31/2026 (bulan/hari/tahun) |
+| Pemetaan, peran kolom | Tanggal / Deskripsi / Nominal / Debit / Kredit / Saldo / Jam |
+| Pemetaan, isi file kosong | Tidak ada baris di bawah baris header. Pilih baris header lain. |
+| Pemetaan, hasil | [n] baris terbaca · [n] baris dilewati / Tanpa deskripsi |
+| Pemetaan, baris dilewati | [n] baris dilewati / Baris [n]: [alasan] / Menampilkan [n] dari [n] baris yang dilewati. |
+| Pemetaan, baris dilewati, penjelasan | Baris ini tidak ikut diimpor. Kalau seharusnya transaksi, cek format tanggal, pemisah desimal, atau kolom nominal. / Baris ringkasan dan transaksi tertunda tidak ikut diimpor. Transaksi tertunda muncul di mutasi berikutnya setelah dibukukan bank. |
+| Pemetaan, alasan dilewati | Tanggal "[isi]" tidak cocok dengan format [format] / Tanggal kosong / Transaksi masih tertunda di bank / Baris ringkasan, bukan transaksi / Nominal kosong / Nominal nol / Nominal "[isi]" tidak terbaca dengan pemisah desimal koma (titik) / Debit "[isi]" … / Kredit "[isi]" … / Debit dan kredit sama-sama terisi / Debit dan kredit kosong |
+| Pemetaan, error | Pilih kolom tanggal / Pilih kolom deskripsi / Pilih kolom debit dan kredit, atau satu kolom nominal / Kolom debit dan kredit harus berbeda / Kolom "[nama]" tidak ada di file ini. Pilih ulang kolomnya. / Tidak ada baris yang terbaca dengan pemetaan ini. Cek kolom tanggal, format tanggal, dan kolom nominal. / File mutasi ini sudah tidak tersimpan. Unggah file-nya lagi. / Impor ini sudah tidak bisa dipetakan ulang. Unggah file mutasi lagi. |
+| Pemetaan, tidak bisa dibuka | Pemetaan tidak bisa dibuka: [pesan]. Tombol: Unggah file mutasi |
+| Pemetaan, templat | Simpan sebagai templat untuk [nama]: Impor CSV berikutnya dari [nama] langsung memakai pemetaan ini. / Akun ini tanpa institusi, jadi pemetaan tidak bisa disimpan sebagai templat. |
+| Pemetaan, tombol | Lanjut ke tinjau |
+
 ### Error domain
 
 | Situasi | Copy |

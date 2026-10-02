@@ -1,6 +1,6 @@
 import { defineConfig, devices } from "@playwright/test";
 
-const AI_SPECS = ["**/pengaturan-ai.spec.ts", "**/quick-add-ai.spec.ts", "**/struk.spec.ts"];
+const AI_SPECS = ["**/pengaturan-ai.spec.ts", "**/quick-add-ai.spec.ts", "**/struk.spec.ts", "**/impor-pdf-ai.spec.ts"];
 
 const baseURL = process.env.E2E_BASE_URL ?? "http://localhost:3000";
 

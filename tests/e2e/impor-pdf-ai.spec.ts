@@ -70,5 +70,5 @@ test("PDF tak dikenal dibaca AI lewat worker, layar tinjau memperingatkan untuk 
   await expect(page.getByRole("heading", { name: `Tinjau mutasi ${account.name}` })).toBeVisible({ timeout: 90_000 });
   await expect(page.getByText("Mutasi ini dibaca model AI. Cek tanggal, deskripsi, dan nominal setiap baris sebelum mengimpor.")).toBeVisible();
   await expect(page.getByText(/3 baris dari PDF, dibaca AI/)).toBeVisible();
-  await expect(page.getByText("Pembayaran merchant KEDAI CONTOH")).toBeVisible();
+  await expect(page.getByText("Pembayaran merchant KEDAI CONTOH", { exact: true })).toBeVisible();
 });
