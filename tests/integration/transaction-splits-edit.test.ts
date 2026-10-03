@@ -3,10 +3,10 @@ import { afterAll, beforeEach, describe, expect, it } from "vitest";
 import { closeDb, resetDb, testDb } from "../helpers/db";
 import { createAccountRow, createHousehold, seedBasicCategories, type Household } from "../helpers/fixtures";
 import { auditLog, transactions, transactionSplits } from "@/server/db/schema";
-import { ValidationError } from "@/server/errors";
+import { DomainError } from "@/server/errors";
 import { createAttachment } from "@/server/mutations/attachments";
 import { saveReceiptTransaction } from "@/server/mutations/receipts";
-import { SPLIT_EDIT_MESSAGES, updateTransaction, type TransactionRow } from "@/server/mutations/transactions";
+import { updateTransaction, type TransactionRow } from "@/server/mutations/transactions";
 import { uuidv7 } from "@/lib/uuid";
 
 let h: Household;
@@ -47,6 +47,10 @@ beforeEach(async () => {
 
 afterAll(closeDb);
 
+// COPY.md bagian error: "Ubah nominal atau jenis transaksi yang dipecah per kategori"
+const SPLIT_LOCKED_MESSAGE =
+  "Transaksi ini dipecah ke beberapa kategori, jadi nominal dan jenisnya tidak bisa diubah dari sini. Hapus transaksi lalu catat ulang dari foto struk, atau ubah kategori dan catatannya saja.";
+
 async function splitsOf(id: string) {
   const rows = await testDb.select().from(transactionSplits).where(eq(transactionSplits.transactionId, id));
   return rows.map((s) => [s.categoryId, s.amount]).sort();
@@ -60,16 +64,15 @@ async function updateAudits(id: string) {
 }
 
 describe("ubah transaksi yang dipecah per kategori", () => {
-  it("menolak ganti nominal dengan pesan COPY.md di field nominal; transaksi, split, dan audit tidak berubah", async () => {
+  it("menolak ganti nominal dengan pesan COPY.md; transaksi, split, dan audit tidak berubah", async () => {
     const before = await splitsOf(saved.id);
     const error = await updateTransaction(h.rizz, { id: saved.id, version: saved.version, patch: { amount: 170_000n } }, testDb).then(
       () => null,
       (e: unknown) => e,
     );
 
-    expect(error).toBeInstanceOf(ValidationError);
-    expect((error as ValidationError).message).toBe(SPLIT_EDIT_MESSAGES.amount);
-    expect((error as ValidationError).fieldErrors).toEqual({ amount: [SPLIT_EDIT_MESSAGES.amount] });
+    expect(error).toBeInstanceOf(DomainError);
+    expect(error).toMatchObject({ code: "split_locked", message: SPLIT_LOCKED_MESSAGE });
 
     const [row] = await testDb.select().from(transactions).where(eq(transactions.id, saved.id));
     expect(row).toMatchObject({ amount: 168_000n, version: saved.version });
@@ -80,7 +83,7 @@ describe("ubah transaksi yang dipecah per kategori", () => {
   it("menolak ganti jenis, karena split memakai kategori pengeluaran", async () => {
     await expect(
       updateTransaction(h.rizz, { id: saved.id, version: saved.version, patch: { kind: "income", categoryId: cats.salary.id } }, testDb),
-    ).rejects.toThrow(SPLIT_EDIT_MESSAGES.kind);
+    ).rejects.toMatchObject({ code: "split_locked" });
   });
 
   it("edit lain tetap bisa, termasuk mengirim nominal yang sama; split tidak tersentuh", async () => {

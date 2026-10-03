@@ -280,7 +280,6 @@ Tabel di bawah mencatat teks yang sudah dipakai di kode. Bagian dinamis ditulis 
 | Konflik, penanda | Berbeda |
 | Konflik, nilai tak dikenal | Akun lain / Kategori lain / orang lain |
 | Baris, transaksi dipecah | dipecah ke [n] kategori |
-| Ubah transaksi dipecah, error | Nominal transaksi yang dipecah per kategori tidak bisa diubah. Hapus transaksi ini lalu catat ulang dengan nominal yang benar. / Jenis transaksi yang dipecah per kategori tidak bisa diubah. Hapus transaksi ini lalu catat ulang dengan jenis yang benar. |
 | Kolom CSV | Tanggal, Waktu, Jenis, Nominal, Akun, Akun tujuan, Kategori, Rincian kategori, Catatan, Diisi oleh, Tag, Status |
 | Rincian kategori di CSV | [kategori] [Rp]; [kategori] [Rp] (hanya transaksi yang dipecah; kosong selain itu) |
 | Status di CSV | Terkonfirmasi / Perlu dikonfirmasi |
@@ -781,6 +780,7 @@ Tabel di bawah mencatat teks yang sudah dipakai di kode. Bagian dinamis ditulis 
 | Situasi | Copy |
 |---|---|
 | Error server umum | Terjadi kesalahan di server. Coba lagi sebentar lagi. |
+| Ubah nominal atau jenis transaksi yang dipecah per kategori | Transaksi ini dipecah ke beberapa kategori, jadi nominal dan jenisnya tidak bisa diubah dari sini. Hapus transaksi lalu catat ulang dari foto struk, atau ubah kategori dan catatannya saja. |
 | Data tidak ditemukan | [Subjek] tidak ditemukan, mungkin sudah dihapus. Muat ulang halaman lalu coba lagi. |
 | Konflik edit, umum | [Subjek] baru diubah [nama] pukul [waktu]. Pilih versi yang dipakai. |
 | Subjek konflik dan tidak ditemukan | Transaksi ini, Akun ini, Kategori ini, Anggaran ini, Tagihan ini, Target ini, Setoran ini, Nilai ini, Pengguna ini, Data ini |

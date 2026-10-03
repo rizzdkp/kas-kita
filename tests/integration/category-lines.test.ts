@@ -218,3 +218,16 @@ describe("Transaksi dan CSV", () => {
     expect(splitDetailText(undefined)).toBeNull();
   });
 });
+
+describe("mengubah transaksi yang dipecah", () => {
+  it("menolak perubahan nominal dengan pesan jelas, tetapi tetap mengizinkan ubah catatan", async () => {
+    const { updateTransaction } = await import("@/server/mutations/transactions");
+    const [row] = await testDb.select().from(transactions).where(eq(transactions.id, receiptId));
+    await expect(updateTransaction(h.rizz, { id: receiptId, version: row!.version, patch: { amount: 170_000n } }, testDb)).rejects.toMatchObject({
+      code: "split_locked",
+    });
+    const updated = await updateTransaction(h.rizz, { id: receiptId, version: row!.version, patch: { note: "Indomaret Kemang" } }, testDb);
+    expect(updated.note).toBe("Indomaret Kemang");
+    expect(updated.amount).toBe(168_000n);
+  });
+});
