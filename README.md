@@ -6,41 +6,39 @@ Spesifikasi lengkap ada di [`docs/prd/`](docs/prd/): PRD, model data, arsitektur
 
 ## Stack
 
-Next.js 15 (App Router, server actions), TypeScript strict, PostgreSQL 16 + Drizzle, Better Auth (passkey, password + TOTP), Tailwind CSS v4 dengan token dari `DESIGN.md`, Radix UI, Recharts, Vitest, Playwright.
+Next.js 15 (App Router, server actions), TypeScript strict, PostgreSQL 16 + Drizzle, Better Auth (email + password), Tailwind CSS v4 dengan token dari `DESIGN.md`, Radix UI, Recharts, Vitest, Playwright.
 
 ## Status terhadap roadmap
 
 | Milestone | Status | Catatan |
 |---|---|---|
-| M0 Fondasi | Selesai | Skema, migrasi, auth passkey + password/TOTP, CLI buat user, token desain, shell glass G0/G1 |
+| M0 Fondasi | Selesai | Skema, migrasi, auth (sekarang email + password, keputusan 0010), CLI buat user, token desain, shell glass G0/G1 |
 | M1 Catat | Selesai | Akun, form transaksi, quick-add parser lokal (multi-baris, antrean offline), daftar transaksi virtual, audit, riwayat edit, dialog konflik, cakupan |
 | M2 Lihat | Selesai | Rumus metrik dengan panel "Cara menghitung", Ringkasan, Anggaran, Tagihan, Target |
 | M3 AI | Selesai | Pengaturan AI (F-AI-1), quick-add AI (F-IN-2), foto struk + lampiran (F-IN-3). Diuji terhadap server AI palsu `scripts/fake-ai-server.ts`, belum terhadap penyedia sungguhan |
 | M4 Impor | Selesai, kecuali parser PDF per bank | Impor CSV dengan pemetaan kolom dan templat per institusi (F-IN-4), impor PDF berpassword dan baca dengan AI lewat worker (F-IN-5), dedupe dan layar tinjau (F-IN-6). Parser PDF bank sungguhan menunggu item terbuka O-1; baru ada parser referensi `contoh-bank` |
-| M5 Lengkap | Sebagian | Selesai: rekonsiliasi (F-ACC-2), investasi (F-INV-1), laporan + ekspor CSV/PDF (F-REP-1), notifikasi dalam app (F-NOT-1), wawasan berbasis templat (F-AI-2 AC4), prediksi akhir bulan (F-BUD-2). Belum: transaksi berulang (F-IN-7), web push, service worker PWA, glass G2 refraksi, realtime SSE |
+| M5 Lengkap | Sebagian | Selesai: rekonsiliasi (F-ACC-2), investasi (F-INV-1), laporan + ekspor CSV/PDF (F-REP-1), notifikasi dalam app (F-NOT-1), wawasan berbasis templat (F-AI-2 AC4), prediksi akhir bulan (F-BUD-2). Juga: PWA dengan service worker (Serwist), web push (F-NOT-1 AC1), glass G2 refraksi. Belum: transaksi berulang (F-IN-7), realtime SSE |
 | M6 Go-live | Belum | Checklist `SECURITY.md` bagian 6 |
 
 Belum dijalankan: tes e2e di WebKit (Safari). Container pengembangan hanya punya Chromium; proyek `webkit` sudah dikonfigurasi di `playwright.config.ts` dan wajib dijalankan sebelum go-live.
 
 ## Menjalankan secara lokal
 
-Kebutuhan: Node 22, pnpm, PostgreSQL 16. Di container pengembangan tanpa Docker, `./scripts/dev-db-up.sh` menyalakan PostgreSQL lokal, membuat database, migrasi, dan seed bila kosong.
+Kebutuhan: Node 22, pnpm, dan Docker (untuk PostgreSQL 16).
 
 ```sh
 pnpm install
-docker compose -f docker/compose.dev.yml up -d db   # atau PostgreSQL lokal sendiri
-cp .env.example .env.local                           # isi APP_ENCRYPTION_KEY dan AUTH_SECRET: openssl rand -base64 32
-set -a; . ./.env.local; set +a
-pnpm db:migrate
-pnpm db:seed                                         # 2 user contoh, 10 akun, 6 bulan transaksi
-pnpm dev
-pnpm worker    # terminal lain, untuk baca PDF dengan AI dan job terjadwal
+pnpm setup:local   # buat .env.local berisi kunci acak, nyalakan PostgreSQL di Docker, migrasi, isi data contoh
+pnpm dev           # buka http://localhost:3000
 ```
 
-Masuk ke app:
+Masuk dengan `rizz@kaskita.local` atau `nadia@kaskita.local`, password `kaskita-dev-123` (atur lewat `DEV_SEED_PASSWORD` di `.env.local`). `pnpm worker` di terminal lain menjalankan baca PDF dengan AI dan job terjadwal.
 
-- Akun sungguhan: `pnpm user:create --email kamu@contoh.id --name Rizz --color violet --payday 25`, lalu buka tautan sekali pakai yang dicetak untuk mendaftarkan passkey. Tautan baru untuk user yang sudah ada: `pnpm user:create --email kamu@contoh.id --link`.
-- User seed tanpa passkey (hanya dev): `pnpm dev:session rizz@kaskita.local` mencetak cookie sesi `{name, value}` untuk dipasang di browser. Skrip ini menolak berjalan di `NODE_ENV=production`.
+- PostgreSQL sendiri tanpa Docker: isi `DATABASE_URL` di `.env.local`, lalu `pnpm setup:local --no-docker`. Di container pengembangan, `./scripts/dev-db-up.sh` juga bisa dipakai.
+- Semua skrip `db:*`, `user:create`, dan `dev:*` membaca `.env.local` sendiri.
+- Database yang di-seed sebelum ada login password: `pnpm dev:passwords` menyetel password kedua user seed (ditolak di `NODE_ENV=production`).
+- Akun sungguhan: `pnpm user:create --email kamu@contoh.id --name Rizz --color violet --payday 25`. Password diminta di terminal tanpa ditampilkan (minimal 12 karakter); untuk skrip pakai `--password-stdin` atau `--password-env NAMA_ENV`. Lupa password: `pnpm user:create --email kamu@contoh.id --reset-password`.
+- Cookie sesi tanpa form (dev dan e2e): `pnpm dev:session rizz@kaskita.local` mencetak `{name, value}`. Ditolak di `NODE_ENV=production`.
 
 `pnpm db:seed` mengosongkan data dan sesi, lalu mengisi ulang.
 
@@ -54,7 +52,8 @@ Masuk ke app:
 | `pnpm db:generate` | Generate migrasi dari skema |
 | `pnpm db:migrate` | Jalankan migrasi |
 | `pnpm db:seed` | Data contoh |
-| `pnpm user:create` | Satu-satunya cara membuat akun |
+| `pnpm setup:local` | Siapkan lingkungan lokal dari nol |
+| `pnpm user:create` | Satu-satunya cara membuat akun dan memulihkan password |
 
 ## Tes
 
@@ -69,6 +68,12 @@ Masuk ke app:
   ```
 
   `KASKITA_DEV_PAGES=1` membuka galeri komponen `/dev/komponen` yang dipakai tes visual. Jangan pernah menyetelnya di produksi. `NEXT_DIST_DIR` memisahkan folder build supaya beberapa server tidak saling menimpa. Data berawalan "E2E " dan pengaturan AI yang menunjuk server AI palsu dibersihkan otomatis sebelum dan sesudah run. Tes AI (proyek `chromium-ai`) menjalankan server AI palsu sendiri dan berjalan satu per satu setelah tes lain, karena pengaturan AI satu baris untuk seluruh rumah tangga.
+
+## PWA dan web push
+
+- Service worker (`src/app/sw.ts`, Serwist) hanya dibangun di `next build`; `pnpm dev` tidak memasangnya. Uji dengan build produksi (`next build` lalu `next start`). Shell app di-precache; halaman app disimpan NetworkFirst sebagai data terakhir untuk offline; `/api/*` (lampiran, ekspor) tidak pernah disimpan; halaman yang belum pernah dibuka menampilkan `/~offline`. Salinan halaman dihapus saat sesi berakhir (kembali ke login).
+- Web push opsional. Buat kunci sekali: `npx tsx scripts/generate-vapid.ts`, lalu isi `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT` (mailto: atau https://) di `.env`. Tanpa kunci, bagian Pengaturan → Notifikasi hanya menampilkan keterangan. Isi push tidak memuat nominal; lihat `docs/decisions/0011-isi-web-push.md`. Di iPhone/iPad push butuh iOS 16.4+ dan app dipasang ke layar utama.
+- Tes e2e PWA (`tests/e2e/pwa.spec.ts`) dilewati otomatis di `next dev`; jalankan terhadap build produksi seperti contoh di bagian Tes.
 
 ## Deploy
 

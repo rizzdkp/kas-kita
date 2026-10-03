@@ -7,6 +7,7 @@ import type { Scope } from "@/lib/scope";
 import { cn } from "@/components/ui/cn";
 import { REDUCED_FADE, SPRING_GLASS } from "@/styles/motion";
 import { selectWithArrows } from "@/components/ui/radio-arrows";
+import { GlassLens } from "./glass-lens";
 import { GlassSurface } from "./glass-surface";
 
 const ORDER: readonly Scope[] = ["me", "partner", "all"];
@@ -91,10 +92,12 @@ export function ScopeToggle({ value, onChange, partnerName, standalone = false, 
     </RadioGroup.Root>
   );
 
-  if (!standalone) return group;
+  if (!standalone) return <GlassLens>{group}</GlassLens>;
   return (
-    <GlassSurface variant="bar" className="p-0">
-      {group}
-    </GlassSurface>
+    <GlassLens>
+      <GlassSurface variant="bar" className="p-0">
+        {group}
+      </GlassSurface>
+    </GlassLens>
   );
 }

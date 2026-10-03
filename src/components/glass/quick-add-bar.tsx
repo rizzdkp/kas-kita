@@ -7,6 +7,7 @@ import { cn } from "@/components/ui/cn";
 import { Icon } from "@/components/ui/icon";
 import { IdentityDot } from "@/components/identity/identity-dot";
 import type { IdentityColor } from "@/components/identity/identity-colors";
+import { GlassLens } from "./glass-lens";
 import { GlassSurface } from "./glass-surface";
 
 export const FOCUS_QUICK_ADD_EVENT = "kaskita:focus-quick-add";
@@ -100,88 +101,90 @@ export function QuickAddBar({
   return (
     <div className={cn("flex w-full flex-col gap-2", className)}>
       {children}
-      <GlassSurface
-        as="form"
-        variant="bar"
-        aria-label="Catat transaksi"
-        onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
-          event.preventDefault();
-          const value = text.trim();
-          if (!value || busy) return;
-          onSubmit?.(value);
-        }}
-        className="flex min-h-13 items-center gap-2 pl-4 pr-1"
-      >
-        {forPartner && partnerColor ? (
-          <IdentityDot color={partnerColor} label={`Dicatat atas nama ${partnerName}`} />
-        ) : null}
-        <label htmlFor={inputId} className="sr-only">
-          Catat transaksi
-        </label>
-        <textarea
-          ref={inputRef}
-          id={inputId}
-          rows={1}
-          value={text}
-          onChange={(event) => setText(event.target.value)}
-          onKeyDown={(event) => {
-            if (event.key === "Escape" && onEscape) {
-              event.preventDefault();
-              onEscape();
-              return;
-            }
-            // Enter mengirim; Shift+Enter menambah baris untuk beberapa transaksi sekaligus
-            if (event.key !== "Enter" || event.shiftKey || event.nativeEvent.isComposing) return;
+      <GlassLens>
+        <GlassSurface
+          as="form"
+          variant="bar"
+          aria-label="Catat transaksi"
+          onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
             event.preventDefault();
-            event.currentTarget.form?.requestSubmit();
+            const value = text.trim();
+            if (!value || busy) return;
+            onSubmit?.(value);
           }}
-          placeholder={placeholder}
-          disabled={busy}
-          autoComplete="off"
-          autoCapitalize="off"
-          spellCheck={false}
-          enterKeyHint="done"
-          aria-keyshortcuts="/ Control+K Meta+K"
-          aria-describedby={`${inputId}-hint`}
-          className="block max-h-24 min-w-0 flex-1 resize-none bg-transparent py-3.5 placeholder-shown:overflow-hidden placeholder-shown:text-ellipsis placeholder-shown:whitespace-nowrap text-body font-medium text-primary outline-none placeholder:text-secondary disabled:opacity-(--disabled-opacity)"
-        />
-        <span id={`${inputId}-hint`} className="sr-only">
-          Enter untuk pratinjau. Shift+Enter untuk baris baru, satu transaksi per baris.
-        </span>
-        {busy ? (
-          <span role="status" className="inline-flex size-11 items-center justify-center text-secondary">
-            <Icon icon={LoaderCircle} className="kk-spin" />
-            <span className="sr-only">Memproses</span>
-          </span>
-        ) : null}
-        <input
-          ref={fileRef}
-          type="file"
-          accept="image/*"
-          capture="environment"
-          tabIndex={-1}
-          aria-hidden
-          className="sr-only"
-          onChange={(event) => {
-            const file = event.target.files?.[0];
-            if (file) onPhoto?.(file);
-            event.target.value = "";
-          }}
-        />
-        <button
-          type="button"
-          aria-label="Foto struk"
-          disabled={busy}
-          onClick={() => (onCameraClick ? onCameraClick() : fileRef.current?.click())}
-          className={cn(
-            "inline-flex size-11 shrink-0 items-center justify-center rounded-pill text-secondary",
-            "transition-colors duration-(--dur-fast) ease-(--ease-out) hover:bg-glass-active hover:text-primary",
-            "disabled:opacity-(--disabled-opacity)",
-          )}
+          className="flex min-h-13 items-center gap-2 pl-4 pr-1"
         >
-          <Icon icon={Camera} />
-        </button>
-      </GlassSurface>
+          {forPartner && partnerColor ? (
+            <IdentityDot color={partnerColor} label={`Dicatat atas nama ${partnerName}`} />
+          ) : null}
+          <label htmlFor={inputId} className="sr-only">
+            Catat transaksi
+          </label>
+          <textarea
+            ref={inputRef}
+            id={inputId}
+            rows={1}
+            value={text}
+            onChange={(event) => setText(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === "Escape" && onEscape) {
+                event.preventDefault();
+                onEscape();
+                return;
+              }
+              // Enter mengirim; Shift+Enter menambah baris untuk beberapa transaksi sekaligus
+              if (event.key !== "Enter" || event.shiftKey || event.nativeEvent.isComposing) return;
+              event.preventDefault();
+              event.currentTarget.form?.requestSubmit();
+            }}
+            placeholder={placeholder}
+            disabled={busy}
+            autoComplete="off"
+            autoCapitalize="off"
+            spellCheck={false}
+            enterKeyHint="done"
+            aria-keyshortcuts="/ Control+K Meta+K"
+            aria-describedby={`${inputId}-hint`}
+            className="block max-h-24 min-w-0 flex-1 resize-none bg-transparent py-3.5 placeholder-shown:overflow-hidden placeholder-shown:text-ellipsis placeholder-shown:whitespace-nowrap text-body font-medium text-primary outline-none placeholder:text-secondary disabled:opacity-(--disabled-opacity)"
+          />
+          <span id={`${inputId}-hint`} className="sr-only">
+            Enter untuk pratinjau. Shift+Enter untuk baris baru, satu transaksi per baris.
+          </span>
+          {busy ? (
+            <span role="status" className="inline-flex size-11 items-center justify-center text-secondary">
+              <Icon icon={LoaderCircle} className="kk-spin" />
+              <span className="sr-only">Memproses</span>
+            </span>
+          ) : null}
+          <input
+            ref={fileRef}
+            type="file"
+            accept="image/*"
+            capture="environment"
+            tabIndex={-1}
+            aria-hidden
+            className="sr-only"
+            onChange={(event) => {
+              const file = event.target.files?.[0];
+              if (file) onPhoto?.(file);
+              event.target.value = "";
+            }}
+          />
+          <button
+            type="button"
+            aria-label="Foto struk"
+            disabled={busy}
+            onClick={() => (onCameraClick ? onCameraClick() : fileRef.current?.click())}
+            className={cn(
+              "inline-flex size-11 shrink-0 items-center justify-center rounded-pill text-secondary",
+              "transition-colors duration-(--dur-fast) ease-(--ease-out) hover:bg-glass-active hover:text-primary",
+              "disabled:opacity-(--disabled-opacity)",
+            )}
+          >
+            <Icon icon={Camera} />
+          </button>
+        </GlassSurface>
+      </GlassLens>
     </div>
   );
 }

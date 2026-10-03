@@ -14,7 +14,9 @@ const vapidSchema = z.object({
 });
 
 /** Kunci VAPID dari env; null berarti web push mati dan UI-nya disembunyikan. */
-export function getVapidConfig(env: NodeJS.ProcessEnv = process.env): VapidConfig | null {
+type VapidEnv = Record<string, string | undefined>;
+
+export function getVapidConfig(env: VapidEnv = process.env): VapidConfig | null {
   const parsed = vapidSchema.safeParse({
     publicKey: env.VAPID_PUBLIC_KEY?.trim(),
     privateKey: env.VAPID_PRIVATE_KEY?.trim(),
@@ -23,6 +25,6 @@ export function getVapidConfig(env: NodeJS.ProcessEnv = process.env): VapidConfi
   return parsed.success ? parsed.data : null;
 }
 
-export function isPushConfigured(env: NodeJS.ProcessEnv = process.env): boolean {
+export function isPushConfigured(env: VapidEnv = process.env): boolean {
   return getVapidConfig(env) !== null;
 }

@@ -2,7 +2,7 @@ import { serializeMoney } from "@/lib/money";
 import type { Scope } from "@/lib/scope";
 import type { Viewer } from "@/server/auth/viewer";
 import { db as defaultDb, type DbOrTx } from "@/server/db/client";
-import { addDaysKey, monthStartKey, startOfKey } from "@/server/metrics/_time";
+import { addDaysKey, monthEndKey, monthStartKey, startOfKey } from "@/server/metrics/_time";
 import { categoryBreakdown } from "@/server/metrics/category-breakdown";
 import { expenseByCategory } from "@/server/queries/aggregates";
 import { listBills } from "@/server/queries/bills";
@@ -32,7 +32,8 @@ export async function collectWeeklyFacts(viewer: Viewer, scope: Scope, w: WeekWi
   const [nowRows, beforeRows, budgets, bills] = await Promise.all([
     expenseByCategory(viewer, scope, lastWeek, db),
     expenseByCategory(viewer, scope, before, db),
-    listBudgets(viewer, scope, { month: end, today: end }, db),
+    // laju anggaran per saat job berjalan, sama dengan yang tampil di dashboard pagi itu
+    listBudgets(viewer, scope, { month: end, today: w.today }, db),
     listBills(viewer, scope, { today: w.today }, db),
   ]);
   const totals = weekTotals(nowRows);
@@ -61,9 +62,10 @@ export async function collectWeeklyFacts(viewer: Viewer, scope: Scope, w: WeekWi
   );
   if (budget) {
     const month = monthStartKey(end);
-    const range = { start: startOfKey(month), end: lastWeek.end };
+    const until = w.today < monthEndKey(end) ? w.today : monthEndKey(end);
+    const range = { start: startOfKey(month), end: startOfKey(addDaysKey(until, 1)) };
     out.push({
-      fact: { ...budget.fact, link: { categoryIds: [budget.fact.categoryId], from: month, to: end } },
+      fact: { ...budget.fact, link: { categoryIds: [budget.fact.categoryId], from: month, to: until } },
       sourceTransactionIds: await insightSourceTransactionIds(
         viewer,
         scope,

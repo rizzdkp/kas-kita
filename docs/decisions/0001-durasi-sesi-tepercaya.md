@@ -1,5 +1,7 @@
 # 0001 Durasi sesi: 30 hari di perangkat tepercaya, 12 jam di perangkat lain
 
+> Digantikan sebagian oleh 0010 (login cukup email + password). Bagian tentang passkey, TOTP, dan tautan pendaftaran tidak berlaku lagi.
+
 ## Konteks
 
 F-AUTH-1 AC3 meminta sesi 30 hari di perangkat yang ditandai tepercaya dan 12 jam di perangkat lain. Better Auth 1.7.5 hanya punya satu `session.expiresIn` dan opsi `rememberMe` di `/sign-in/email` (tidak diingat berarti 24 jam dan cookie sesi browser). Endpoint passkey (`/passkey/verify-authentication`) tidak menerima `rememberMe` sama sekali dan selalu membuat sesi dengan `expiresIn` penuh.

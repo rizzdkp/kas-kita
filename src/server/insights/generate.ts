@@ -7,7 +7,8 @@ import { users } from "@/server/db/schema";
 import { loadViewerForUser } from "@/server/jobs/viewer";
 import { replaceWeeklyInsights } from "@/server/mutations/insights";
 import { collectWeeklyFacts } from "./collect";
-import { composeInsights, loadInsightWriter, type InsightWriter } from "./compose";
+import { loadInsightWriter } from "./ai-writer";
+import { composeInsights, type InsightWriter } from "./compose";
 import { ALL_SCOPE_KEY, personalScopeKey } from "./scope-key";
 import { summarizedWeekStart } from "./week";
 

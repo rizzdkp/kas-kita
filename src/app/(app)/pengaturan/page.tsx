@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { listSessions, requireViewer } from "@/server/auth/session";
 import { getAiSettingsView } from "@/server/queries/ai-settings";
+import { getVapidConfig } from "@/server/push/config";
 import { listCategories } from "@/server/queries/categories";
 import { AiSettingsForm } from "@/components/settings/ai-section";
 import { AppearanceSettings } from "@/components/settings/appearance-section";
 import { CategoriesManager } from "@/components/settings/categories-section";
+import { NotificationsPushSection } from "@/components/settings/notifications-push-section";
 import { ExportAllLink } from "@/components/settings/export-link";
 import { PaydayForm } from "@/components/settings/payday-section";
 import { ProfileForm } from "@/components/settings/profile-section";
@@ -20,6 +22,7 @@ const SECTIONS: readonly SettingsNavItem[] = [
   { id: "profil", label: "Profil" },
   { id: "gajian", label: "Gajian dan periode" },
   { id: "tampilan", label: "Tampilan" },
+  { id: "notifikasi", label: "Notifikasi" },
   { id: "kategori", label: "Kategori" },
   { id: "keamanan", label: "Keamanan" },
   { id: "sesi", label: "Sesi" },
@@ -56,6 +59,15 @@ export default async function PengaturanPage() {
 
         <SettingsSection id="tampilan" title="Tampilan">
           <AppearanceSettings />
+        </SettingsSection>
+
+        <SettingsSection
+          id="notifikasi"
+          title="Notifikasi"
+          description="Kabar selalu muncul di panel Notifikasi. Aktifkan notifikasi perangkat supaya kabarnya juga sampai saat Kas Kita tertutup."
+        >
+          {/* hanya kunci publik yang dikirim ke browser */}
+          <NotificationsPushSection publicKey={getVapidConfig()?.publicKey ?? null} />
         </SettingsSection>
 
         <SettingsSection

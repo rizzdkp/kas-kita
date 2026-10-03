@@ -2,9 +2,11 @@
 
 import { useCallback, useMemo, useState, useTransition } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { Check, Plus } from "lucide-react";
+import Link from "next/link";
+import { Check, Plus, Repeat } from "lucide-react";
 import type { Scope } from "@/lib/scope";
-import { Button } from "@/components/ui/button";
+import { Button, buttonClassName } from "@/components/ui/button";
+import { Icon } from "@/components/ui/icon";
 import { IconButton } from "@/components/ui/icon-button";
 import { cn } from "@/components/ui/cn";
 import { SegmentedControl } from "@/components/ui/segmented-control";
@@ -142,9 +144,15 @@ export function TransactionsView({ scope, query, filters, initialPage, formOptio
         <div className="w-full sm:hidden">
           <SegmentedControl label="Tampilan" value={query.view} onValueChange={(view) => onQueryChange({ view })} options={viewOptions(0)} className="w-full" />
         </div>
-        <Button variant="primary" icon={Plus} onClick={() => setFormScope(scope)} className="max-sm:hidden">
-          Tambah transaksi
-        </Button>
+        <div className="flex items-center gap-2 max-sm:w-full">
+          <Link href={scope === "me" ? "/transaksi/berulang" : `/transaksi/berulang?scope=${scope}`} className={buttonClassName("ghost", "max-sm:-ml-2")}>
+            <Icon icon={Repeat} />
+            Transaksi berulang
+          </Link>
+          <Button variant="primary" icon={Plus} onClick={() => setFormScope(scope)} className="max-sm:hidden">
+            Tambah transaksi
+          </Button>
+        </div>
       </div>
 
       <div className="flex items-start gap-2">

@@ -21,8 +21,9 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
       <LoginForm next={next} sessionExpired={params[SESSION_EXPIRED_PARAM] === "berakhir"} />
       {isProduction() ? null : (
         <p className="px-2 text-center text-small text-secondary">
-          Mode pengembangan: masuk dengan <span className="text-primary">{DEV_SEED_EMAILS[0]}</span> /{" "}
-          <span className="text-primary">{devSeedPassword()}</span>
+          Mode pengembangan
+          <br />
+          <span className="text-primary">{DEV_SEED_EMAILS[0]}</span> · <span className="text-primary">{devSeedPassword()}</span>
         </p>
       )}
     </>

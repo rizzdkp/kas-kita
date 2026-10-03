@@ -28,7 +28,7 @@ Satu VPS, empat container: `caddy`, `app`, `worker`, `db`. Tidak ada Redis. Antr
 | Framework | Next.js 15 App Router | Server components mengurangi JS di mobile |
 | Database | PostgreSQL 16 | Transaksi, constraint, trigger untuk audit |
 | ORM | Drizzle | Skema sebagai kode, SQL tetap terlihat |
-| Auth | Better Auth dengan plugin passkey dan two-factor | Passkey dan TOTP tanpa layanan eksternal |
+| Auth | Better Auth, email + password (keputusan 0010) | Tanpa layanan eksternal; plugin two-factor bisa dipasang lagi |
 | Validasi | Zod | Satu skema untuk form, API, dan output AI |
 | UI primitif | Radix UI | Aksesibilitas keyboard dan ARIA, gaya ditulis sendiri |
 | Styling | Tailwind CSS v4 dengan token dari `DESIGN.md` | Token jadi CSS variables |

@@ -7,7 +7,8 @@ Data di app ini adalah gambaran lengkap keuangan dua orang. Ancaman yang paling 
 | Ancaman | Penangkal |
 |---|---|
 | Orang asing mendaftar | Tidak ada signup. Akun dibuat lewat CLI di server. Trigger database menolak user ketiga. |
-| Tebak password | Passkey sebagai login utama. Password wajib 12+ karakter dan wajib TOTP. Rate limit 5 percobaan per 15 menit per IP dan per email. |
+| Tebak password | Password wajib 12+ karakter, di-hash scrypt. Rate limit 5 percobaan gagal per 15 menit per IP dan per email, lalu dikunci 15 menit. Tanpa faktor kedua (keputusan 0010): password yang bocor lewat phishing atau dipakai ulang cukup untuk masuk, jadi pakai password manager dan password unik. |
+| Password bocor | Ganti password di Pengaturan mencabut sesi lain. Pemulihan lewat `pnpm user:create --email ... --reset-password` di server, yang mencabut semua sesi. Password tidak pernah dicetak CLI atau masuk log. |
 | Perangkat hilang | Daftar sesi di Pengaturan, cabut per sesi. Sesi perangkat tidak tepercaya 12 jam. |
 | API key AI bocor | Dienkripsi di database, hanya didekripsi di server saat request, tidak pernah dikirim ke browser atau log |
 | Password PDF bocor | Hanya di memori worker selama parsing, tidak disimpan dan tidak di-log |
@@ -54,7 +55,8 @@ Browser tidak pernah menghubungi endpoint AI secara langsung, jadi `connect-src`
 
 ## 6. Checklist sebelum go-live
 
-- [ ] Kedua akun memakai passkey dan punya TOTP cadangan
+- [ ] Kedua akun memakai password unik 12+ karakter yang disimpan di password manager
+- [ ] `DEV_SEED_PASSWORD` tidak diisi dan `pnpm db:seed` tidak pernah dijalankan di produksi (`NODE_ENV=production`)
 - [ ] `APP_ENCRYPTION_KEY` dan password restic disimpan di password manager, di luar VPS
 - [ ] Backup pertama berhasil dan restore berhasil diuji ke database kosong
 - [ ] CSP aktif tanpa error di konsol Safari dan Chrome

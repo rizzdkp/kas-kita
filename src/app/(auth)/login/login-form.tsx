@@ -9,7 +9,7 @@ import { Field } from "@/components/ui/field";
 import { IconButton } from "@/components/ui/icon-button";
 import { Input } from "@/components/ui/input";
 import { authClient } from "../_components/auth-client";
-import { authErrorMessage, NETWORK_ERROR, safeNextPath } from "../_components/auth-errors";
+import { authErrorMessage, EMPTY_FIELDS, NETWORK_ERROR, safeNextPath } from "../_components/auth-errors";
 
 interface LoginFormProps {
   next?: string | undefined;
@@ -28,6 +28,10 @@ export function LoginForm({ next, sessionExpired }: LoginFormProps) {
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (pending) return;
+    if (!email.trim() || !password) {
+      setError(EMPTY_FIELDS);
+      return;
+    }
     setPending(true);
     setError(null);
     try {
@@ -94,7 +98,7 @@ export function LoginForm({ next, sessionExpired }: LoginFormProps) {
         <p role="alert" aria-live="assertive" className={error ? "text-small text-error" : "sr-only"}>
           {error}
         </p>
-        <Button type="submit" variant="primary" loading={pending} disabled={!email || !password} className="w-full">
+        <Button type="submit" variant="primary" loading={pending} className="w-full">
           Masuk
         </Button>
       </form>

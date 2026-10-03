@@ -1,5 +1,7 @@
 # 0002 Password wajib TOTP, rate limit login di database
 
+> Digantikan sebagian oleh 0010 (login cukup email + password). Bagian tentang passkey, TOTP, dan tautan pendaftaran tidak berlaku lagi.
+
 ## Konteks
 
 SECURITY.md: passkey login utama, password 12+ karakter dan wajib TOTP, rate limit 5 percobaan per 15 menit per IP dan per email. F-AUTH-1 AC2: setelah 5 percobaan gagal dalam 15 menit, login dikunci 15 menit. Rate limiter bawaan Better Auth memakai jendela geser pendek dan penyimpanan memori, jadi hilang saat restart dan tidak punya konsep "kunci".

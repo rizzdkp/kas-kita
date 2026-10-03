@@ -8,6 +8,7 @@ interface AuthErrorLike {
 const SERVER_MESSAGE_CODES = new Set(["LOGIN_LOCKED", "INVALID_EMAIL_OR_PASSWORD"]);
 
 export const INVALID_CREDENTIALS = "Email atau password salah. Cek lagi lalu coba lagi.";
+export const EMPTY_FIELDS = "Isi email dan password untuk masuk.";
 export const NETWORK_ERROR = "Tidak bisa masuk sekarang. Periksa koneksi lalu coba lagi.";
 const TOO_MANY = "Terlalu banyak percobaan. Tunggu sebentar lalu coba lagi.";
 

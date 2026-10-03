@@ -1,7 +1,8 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { LOGIN_PATH, PATHNAME_HEADER, SESSION_COOKIE_NAMES } from "@/server/auth/constants";
 
-const PUBLIC_PREFIXES = [LOGIN_PATH, "/api/auth", "/api/health"];
+// /~offline: halaman fallback service worker, di-precache juga saat belum masuk
+const PUBLIC_PREFIXES = [LOGIN_PATH, "/api/auth", "/api/health", "/~offline"];
 
 function isPublic(pathname: string): boolean {
   return PUBLIC_PREFIXES.some((prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`));

@@ -1,7 +1,11 @@
+import Link from "next/link";
+import { Repeat } from "lucide-react";
 import { formatDateWithYear, formatTime } from "@/lib/dates";
 import { Amount } from "@/components/money/amount";
 import { IdentityDot } from "@/components/identity/identity-dot";
 import { Badge } from "@/components/ui/badge";
+import { buttonClassName } from "@/components/ui/button";
+import { Icon } from "@/components/ui/icon";
 import { TransactionAttachments } from "@/components/receipts/transaction-attachments";
 import type { TransactionDetail } from "@/server/queries/transactions";
 import { beneficiaryLabel, KIND_LABEL, ownerDot, personById, SOURCE_LABEL } from "./labels";
@@ -65,6 +69,12 @@ export function TransactionDetailBody({ detail, names, people }: { detail: Trans
             </div>
           ))}
       </dl>
+      {!detail.deletedAt && detail.source !== "recurring" ? (
+        <Link href={`/transaksi/berulang?dari=${detail.id}`} className={buttonClassName("secondary", "self-start")}>
+          <Icon icon={Repeat} />
+          Jadikan berulang
+        </Link>
+      ) : null}
       <TransactionAttachments transactionId={detail.id} editable={!detail.deletedAt} />
     </div>
   );

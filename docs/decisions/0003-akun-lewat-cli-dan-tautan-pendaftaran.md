@@ -1,5 +1,7 @@
 # 0003 Akun lewat CLI dan tautan pendaftaran sekali pakai
 
+> Digantikan sebagian oleh 0010 (login cukup email + password). Bagian tentang passkey, TOTP, dan tautan pendaftaran tidak berlaku lagi.
+
 ## Konteks
 
 F-AUTH-1 AC1 dan DEPLOYMENT.md bagian 4: tidak ada signup, akun dibuat lewat CLI yang mencetak tautan sekali pakai (30 menit) untuk mendaftarkan passkey. Plugin passkey Better Auth mendukung pendaftaran tanpa sesi lewat `registration.requireSession = false`, `resolveUser`, dan parameter `context`.

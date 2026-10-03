@@ -53,7 +53,7 @@ const serwist = new Serwist({
   precacheEntries: self.__SW_MANIFEST,
   skipWaiting: true,
   clientsClaim: true,
-  navigationPreload: true,
+  navigationPreload: false,
   runtimeCaching: [
     // API memuat data pribadi, lampiran, dan ekspor: selalu ke jaringan, tidak pernah disimpan
     { matcher: ({ url, sameOrigin: same }) => same && url.pathname.startsWith("/api/"), handler: new NetworkOnly() },

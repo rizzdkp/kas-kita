@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Ellipsis, Plus } from "lucide-react";
+import { GlassLens } from "@/components/glass/glass-lens";
 import { GlassSurface } from "@/components/glass/glass-surface";
 import { cn } from "@/components/ui/cn";
 import { Icon } from "@/components/ui/icon";
@@ -45,18 +46,20 @@ export function TabBar({ pathname, onAdd }: TabBarProps) {
       <TabLink item={first} pathname={pathname} />
       <TabLink item={second} pathname={pathname} />
       <div className="flex justify-center">
-        <button
-          type="button"
-          onClick={onAdd}
-          aria-label="Catat transaksi"
-          className={cn(
-            "inline-flex size-12 items-center justify-center rounded-pill bg-accent text-on-accent",
-            "transition-[background-color,transform] duration-(--dur-spring) ease-(--ease-spring-glass)",
-            "hover:bg-accent-hover active:scale-[1.02] motion-reduce:transition-colors",
-          )}
-        >
-          <Icon icon={Plus} size={24} />
-        </button>
+        <GlassLens>
+          <button
+            type="button"
+            onClick={onAdd}
+            aria-label="Catat transaksi"
+            className={cn(
+              "inline-flex size-12 items-center justify-center rounded-pill bg-accent text-on-accent",
+              "transition-[background-color,transform] duration-(--dur-spring) ease-(--ease-spring-glass)",
+              "hover:bg-accent-hover active:scale-[1.02] motion-reduce:transition-colors",
+            )}
+          >
+            <Icon icon={Plus} size={24} />
+          </button>
+        </GlassLens>
       </div>
       <TabLink item={third} pathname={pathname} />
       <Sheet>

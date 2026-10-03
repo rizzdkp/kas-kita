@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { Button, buttonClassName } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 
 export function OfflineActions() {
   // koneksi kembali: muat ulang halaman yang tadi diminta, bukan halaman offline ini
@@ -16,10 +16,10 @@ export function OfflineActions() {
       <Button variant="primary" onClick={() => window.location.reload()}>
         Coba lagi
       </Button>
-      {/* tautan biasa, bukan next/link: navigasi dokumen penuh supaya salinan Ringkasan dari service worker yang dipakai */}
-      <a href="/" className={buttonClassName("secondary")}>
+      {/* navigasi dokumen penuh, bukan navigasi klien: salinan Ringkasan disajikan service worker sebagai dokumen */}
+      <Button variant="secondary" onClick={() => window.location.assign("/")}>
         Buka Ringkasan
-      </a>
+      </Button>
     </div>
   );
 }

@@ -170,3 +170,50 @@ html[data-transparency="reduced"] .ambient-field {
     display: none;
   }
 }
+
+/*
+ * G2 refraksi (DESIGN 5.5), hanya lewat <GlassLens>. Komponen mengisi --glass-lens dengan url(#filter)
+ * dan data-lens="on" hanya di Chromium dengan memori cukup dan tanpa pengurangan gerak/transparansi.
+ */
+.glass-lens-host {
+  display: contents;
+}
+
+.glass-lens-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.glass[data-lens="on"] {
+  backdrop-filter: var(--glass-lens) blur(var(--glass-blur)) saturate(var(--glass-saturate));
+}
+
+/* elemen di dalam glass lain (toggle di toolbar, tombol tambah di tab bar): lensa saja, tanpa blur kedua */
+[data-lens="on"]:not(.glass) {
+  backdrop-filter: var(--glass-lens);
+}
+
+/* pengaman CSS: komponen sudah mematikan lensa, tapi preferensi bisa berubah sebelum efek berjalan */
+@media (prefers-reduced-motion: reduce) {
+  .glass[data-lens="on"] {
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  }
+  [data-lens="on"]:not(.glass) {
+    backdrop-filter: none;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  [data-lens="on"],
+  .glass[data-lens="on"] {
+    backdrop-filter: none;
+  }
+}
+
+html[data-transparency="reduced"] [data-lens="on"],
+html[data-transparency="reduced"] .glass[data-lens="on"] {
+  backdrop-filter: none;
+}

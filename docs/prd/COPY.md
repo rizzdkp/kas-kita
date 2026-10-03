@@ -123,64 +123,21 @@ Tabel di bawah mencatat teks yang sudah dipakai di kode. Bagian dinamis ditulis 
 
 | Elemen | Copy |
 |---|---|
-| Judul halaman masuk | Masuk ke Kas Kita |
-| Tombol passkey | Masuk dengan passkey |
-| Tombol passkey, menunggu | Menunggu passkey |
-| Tautan ke password | Pakai password |
+| Judul halaman masuk | Kas Kita |
+| Keterangan halaman masuk | Masuk untuk melihat keuangan kalian berdua. |
 | Label | Email / Password |
-| Tombol lanjut | Lanjut / Memeriksa |
+| Tombol lihat password (aria) | Tampilkan password / Sembunyikan password |
 | Pilihan ingat perangkat | Ingat perangkat ini (30 hari) |
-| Langkah kode, judul | Masukkan kode |
-| Langkah kode, keterangan | Buka aplikasi autentikator lalu masukkan 6 angka untuk Kas Kita. |
-| Label kode | Kode autentikator |
-| Tombol kode | Masuk / Memeriksa |
-| Tombol kembali | Kembali |
-| Daftar perangkat, judul halaman | Daftarkan perangkat |
-| Daftar perangkat, sapaan | Hai, [nama] |
-| Daftar perangkat, keterangan | Daftarkan passkey di perangkat ini untuk [email]. Setelah itu kamu masuk dengan Face ID, sidik jari, atau PIN perangkat, tanpa password. |
-| Tombol daftar | Daftarkan passkey / Menunggu passkey |
-| Nama perangkat | iPhone / iPad / Android / Mac / Windows / Perangkat |
-| Berhasil, judul | Perangkat terdaftar |
-| Berhasil, keterangan | Mulai sekarang kamu bisa masuk dengan passkey di perangkat ini. |
-| Sudah aktif, keterangan | Passkey dan password cadangan sudah aktif untuk akunmu. |
-| Tombol setelah berhasil | Buka Kas Kita |
-| Tautan kedaluwarsa, judul | Tautan tidak berlaku |
-| Tautan kedaluwarsa, keterangan | Tautan pendaftaran sudah dipakai atau kedaluwarsa. Tautan berlaku 30 menit dan hanya sekali pakai. Minta tautan baru lewat perintah user:create --link di server. |
-| Tombol tautan kedaluwarsa | Ke halaman masuk |
-| Password cadangan, judul | Password cadangan |
-| Password cadangan, keterangan | Opsional. Password dan kode TOTP dipakai kalau passkey tidak tersedia, misalnya di perangkat baru. |
-| Label | Password / Ulangi password |
-| Petunjuk password | Minimal [n] karakter. |
-| Tombol | Lanjut / Menyimpan / Lewati |
-| TOTP, judul | Pasang kode autentikator |
-| TOTP, keterangan | Tambahkan Kas Kita ke aplikasi autentikator (misalnya Google Authenticator, 1Password, atau Aegis), lalu masukkan kode 6 angka yang muncul. |
-| TOTP, tautan | Buka di aplikasi autentikator |
-| TOTP, kunci manual | Atau ketik kunci ini secara manual: |
-| TOTP, tombol | Aktifkan / Memeriksa |
-| Error password pendek | Password minimal [n] karakter. (juga cadangan kalau pesan validasi tidak ada) |
-| Error password beda | Kedua password belum sama. |
-| Error password panjang | Password maksimal 128 karakter. |
-| Error kode bukan 6 angka | Kode terdiri dari 6 angka. / Kode terdiri dari 6 angka. Masukkan kode terbaru dari aplikasi autentikator. (cadangan kalau pesan validasi tidak ada) |
-| Error kode salah saat pasang | Kode tidak cocok. Pastikan jam ponselmu tepat lalu masukkan kode terbaru. |
-| Error kode salah saat masuk | Kode dari aplikasi autentikator salah. Cek jam di ponselmu lalu coba lagi. |
-| Error email atau password | Email atau password salah. Cek lagi, atau masuk dengan passkey. |
-| Error passkey dibatalkan (masuk) | Masuk dengan passkey dibatalkan. Coba lagi atau pakai password. |
-| Error passkey dibatalkan (daftar) | Pendaftaran passkey dibatalkan. Coba lagi. |
-| Error passkey sudah ada | Passkey ini sudah terdaftar di akunmu. |
-| Error passkey belum ada | Passkey ini belum terdaftar. Pakai password, atau minta tautan pendaftaran baru. |
-| Error verifikasi passkey | Passkey tidak bisa diverifikasi. Coba lagi. |
-| Error waktu habis | Waktu verifikasi habis. Coba lagi. |
-| Error langkah kedaluwarsa | Langkah verifikasi sudah kedaluwarsa. Masukkan email dan password lagi. |
-| Error kode salah berulang | Terlalu banyak kode salah. Masukkan email dan password lagi. |
-| Error kode dikunci | Terlalu banyak kode salah. Coba lagi dalam 15 menit. |
-| Error terlalu banyak percobaan | Terlalu banyak percobaan. Tunggu sebentar lalu coba lagi. |
+| Tombol masuk | Masuk |
+| Petunjuk mode pengembangan (hanya di luar produksi) | Mode pengembangan / [email] · [password] |
+| Error form kosong | Isi email dan password untuk masuk. |
+| Error email atau password | Email atau password salah. Cek lagi lalu coba lagi. |
 | Error kunci login | Terlalu banyak percobaan masuk yang gagal. Coba lagi dalam [n] menit. |
+| Error terlalu banyak percobaan | Terlalu banyak percobaan. Tunggu sebentar lalu coba lagi. |
 | Error koneksi saat masuk | Tidak bisa masuk sekarang. Periksa koneksi lalu coba lagi. |
-| Error passkey belum didaftarkan | Daftarkan passkey dulu. Password dan TOTP cadangan disetel setelah passkey aktif. |
-| Error cadangan sudah aktif | Password dan TOTP cadangan sudah aktif untuk akun ini. |
-| Error TOTP gagal disiapkan | TOTP gagal disiapkan. Coba lagi. |
-| Error cadangan gagal disetel | Password atau TOTP gagal disetel. Muat ulang halaman lalu coba lagi. |
-| Error tautan pendaftaran | Tautan pendaftaran sudah dipakai atau kedaluwarsa. Minta tautan baru lewat perintah user:create --link. |
+| Error password pendek | Password minimal [n] karakter. |
+| Error password panjang | Password maksimal 128 karakter. |
+| Error password beda | Kedua password belum sama. |
 
 ### Shell dan navigasi
 
@@ -225,6 +182,11 @@ Tabel di bawah mencatat teks yang sudah dipakai di kode. Bagian dinamis ditulis 
 | Field belum lengkap, banyak baris | Baris [n]: Lengkapi [field] untuk menyimpan. |
 | Tombol | Simpan / Simpan semua / Batal / Selesai |
 | Toast tersimpan offline | Tersimpan di perangkat. Dikirim otomatis saat koneksi kembali. |
+| Penanda offline | Offline. Yang tampil adalah data terakhir di perangkat ini. |
+| Halaman offline, judul | Kamu sedang offline |
+| Halaman offline, isi | Halaman ini belum pernah dibuka di perangkat ini, jadi belum ada salinannya. Halaman yang sudah pernah dibuka, seperti Ringkasan, tetap tampil dengan data terakhir. / Transaksi yang kamu ketik di bar bawah disimpan di perangkat dan dikirim otomatis saat koneksi kembali. |
+| Halaman offline, tombol | Coba lagi / Buka Ringkasan |
+| Manifest PWA, keterangan | Keuangan berdua: berapa yang aman dibelanjakan sampai gajian berikutnya. |
 | Toast antrean terkirim | Transaksi dari antrean tersimpan / [n] transaksi dari antrean tersimpan |
 | Toast antrean gagal | Antrean belum terkirim. [pesan error] |
 | Toast urungkan | Diurungkan |
@@ -319,6 +281,43 @@ Tabel di bawah mencatat teks yang sudah dipakai di kode. Bagian dinamis ditulis 
 | Kolom CSV | Tanggal, Waktu, Jenis, Nominal, Akun, Akun tujuan, Kategori, Catatan, Diisi oleh, Tag, Status |
 | Status di CSV | Terkonfirmasi / Perlu dikonfirmasi |
 | Nama file CSV | kas-kita-transaksi-[tanggal]-sampai-[tanggal].csv / kas-kita-transaksi-sejak-[tanggal].csv |
+
+### Transaksi berulang
+
+| Elemen | Copy |
+|---|---|
+| Tautan dari Transaksi | Transaksi berulang |
+| Tautan kembali | Semua transaksi |
+| Judul halaman | Transaksi berulang |
+| Pengantar | Dibuat pada tanggalnya. Yang tanpa konfirmasi otomatis menunggu di Perlu dikonfirmasi sampai kamu mengonfirmasinya. |
+| Kosong, judul | Belum ada transaksi berulang |
+| Kosong, isi | Gaji, sewa, langganan, atau kiriman rutin. Kas Kita membuatnya pada tanggalnya dan menaruhnya di Perlu dikonfirmasi, atau langsung mencatatnya kalau konfirmasi otomatis dinyalakan. |
+| Tombol | Tambah transaksi berulang |
+| Daftar (aria) | Daftar transaksi berulang |
+| Baris | [pengulangan] · [akun] · [kategori] / [pengulangan] · [akun] ke [akun] / Berikutnya [tanggal] · [hitung mundur] / [n] menunggu konfirmasi |
+| Pengulangan | Harian / Mingguan, [hari] / Bulanan, tanggal [n] / Tahunan, [tanggal] / Setiap [n] [hari/minggu/bulan/tahun], ... |
+| Penanda | Konfirmasi otomatis |
+| Menu aksi | Aksi untuk [nama] / Ubah jadwal / Hapus jadwal |
+| Sheet, judul | Tambah transaksi berulang / Ubah [nama] |
+| Sheet, label | Jenis transaksi, Nama atau catatan, Nominal, Akun, Dari akun, Ke akun, Kategori, Untuk siapa, Pengulangan, Berikutnya pada, Konfirmasi otomatis, Tag |
+| Sheet, petunjuk nama | Tampil di daftar jadwal dan di transaksi yang dibuat. |
+| Sheet, placeholder | Misalnya sewa kos / Misalnya 25rb / Pilih akun / Pilih akun tujuan / Pilih kategori |
+| Sheet, pengulangan | Harian / Mingguan / Bulanan / Tahunan |
+| Sheet, petunjuk tanggal | [pengulangan]. Di bulan yang lebih pendek, transaksi dibuat di hari terakhirnya. / [pengulangan]. Di tahun yang bukan kabisat, transaksi dibuat tanggal 28 Feb. |
+| Sheet, konfirmasi otomatis | Nyala: Transaksi langsung tercatat pada tanggalnya tanpa menunggu konfirmasi. / Mati: Transaksi masuk ke Perlu dikonfirmasi pada tanggalnya, lalu kamu yang mengonfirmasi. |
+| Sheet, error | Isi nominal, misalnya 25rb / Pilih akun / Pilih akun tujuan transfer / Akun tujuan harus berbeda dari akun asal / Pilih kategori / Isi tanggal berikutnya / Tanggal berikutnya tidak boleh sebelum hari ini. |
+| Sheet, konflik | Jadwal ini baru diubah di perangkat lain. Tutup lalu buka lagi untuk melihat versi terbaru. |
+| Sheet, tombol | Simpan / Batal |
+| Sheet, toast | Tersimpan / Tersimpan. [nama] akan melihat perubahan ini di riwayat. |
+| Hapus, judul | Hapus jadwal [nama]? |
+| Hapus, isi | Transaksi yang sudah dibuat dari jadwal ini tetap tersimpan. |
+| Hapus, tombol | Hapus jadwal / Batal |
+| Hapus, toast | Terhapus |
+| Detail transaksi, tombol | Jadikan berulang |
+| Objek notifikasi partner | Transaksi berulang [nama] |
+| Notifikasi, berulang | Transaksi berulang [nama] [Rp], [tanggal], menunggu konfirmasi. / [n] transaksi berulang [nama] menunggu konfirmasi. |
+| Notifikasi, tagihan | Tagihan [nama] [Rp] jatuh tempo [hitung mundur], [tanggal]. |
+| Notifikasi, anggaran | Anggaran wajib [kategori] lewat [Rp] dari [Rp]. |
 
 ### Akun
 
@@ -626,9 +625,25 @@ Tabel di bawah mencatat teks yang sudah dipakai di kode. Bagian dinamis ditulis 
 | Sesi, kosong | Tidak ada sesi aktif lain. Muat ulang halaman kalau baru masuk dari perangkat lain. |
 | Sesi, tombol | Keluar dari perangkat ini |
 | Sesi, toast | [perangkat] sudah keluar |
+| Keamanan | Ganti password untuk masuk ke Kas Kita. Perangkat lain yang sedang masuk akan dikeluarkan. |
+| Keamanan, label | Password sekarang / Password baru / Ulangi password baru |
+| Keamanan, petunjuk | Minimal [n] karakter. |
+| Keamanan, tombol | Ganti password |
+| Keamanan, toast | Password diganti. Perangkat lain sudah dikeluarkan. |
+| Keamanan, error | Isi password sekarang. / Password sekarang salah. / Password baru harus berbeda dari password sekarang. / Password gagal diganti. Muat ulang halaman lalu coba lagi. |
 | Ekspor | Satu file zip berisi data.json (akun, transaksi, kategori, anggaran, tagihan, target, dan riwayat perubahan) beserta lampiran struk. Data login dan API key tidak ikut. |
 | Ekspor, tombol | Ekspor semua data |
 | Ekspor, lampiran hilang | Lampiran ini tidak ditemukan di penyimpanan saat ekspor. |
+| Notifikasi | Kabar selalu muncul di panel Notifikasi. Aktifkan notifikasi perangkat supaya kabarnya juga sampai saat Kas Kita tertutup. |
+| Notifikasi, status | Memeriksa perangkat ini / Belum aktif di perangkat ini. / Aktif di perangkat ini. |
+| Notifikasi, privasi | Notifikasi perangkat tidak memuat nominal karena bisa terbaca di layar kunci. Detailnya ada di Kas Kita. |
+| Notifikasi, tombol | Aktifkan notifikasi di perangkat ini / Matikan |
+| Notifikasi, toast | Notifikasi perangkat aktif / Notifikasi perangkat dimatikan / Notifikasi perangkat belum bisa diaktifkan. Coba lagi. |
+| Notifikasi, server belum siap | Notifikasi perangkat belum disiapkan di server ini. Kabar tetap muncul di panel Notifikasi. |
+| Notifikasi, iPhone dan iPad | Di iPhone dan iPad, notifikasi perangkat hanya jalan setelah Kas Kita dipasang ke layar utama (iOS 16.4 ke atas). Di Safari, buka menu Bagikan, pilih Tambah ke Layar Utama, lalu buka Kas Kita dari ikon itu. |
+| Notifikasi, tidak didukung | Browser ini belum mendukung notifikasi perangkat. Kabar tetap muncul di panel Notifikasi. |
+| Notifikasi, service worker belum siap | Notifikasi perangkat belum siap di halaman ini. Muat ulang halaman lalu coba lagi. |
+| Notifikasi, izin ditolak | Izin notifikasi untuk Kas Kita ditolak di browser ini. Izinkan notifikasi di pengaturan situs browser, lalu muat ulang halaman ini. |
 | Toast simpan | Tersimpan |
 
 ### Pengenalan
@@ -677,6 +692,8 @@ Tabel di bawah mencatat teks yang sudah dipakai di kode. Bagian dinamis ditulis 
 | Cadangan, tagihan | Ada tagihan yang jatuh tempo 3 hari lagi. |
 | Cadangan, anggaran | Ada anggaran wajib yang lewat. |
 | Cadangan, berulang | Ada transaksi berulang yang menunggu konfirmasi. |
+| Notifikasi perangkat (web push), judul | Kas Kita |
+| Notifikasi perangkat, isi | Tanpa nominal (docs/decisions/0011): [nama] mengubah [objek]. / [nama] menghapus [objek]. / [nama] memulihkan [objek]. / kalimat Cadangan untuk jenis lain / Ada notifikasi baru. (isi push rusak) |
 
 ### Impor mutasi
 
