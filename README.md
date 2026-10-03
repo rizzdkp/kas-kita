@@ -17,10 +17,14 @@ Next.js 15 (App Router, server actions), TypeScript strict, PostgreSQL 16 + Driz
 | M2 Lihat | Selesai | Rumus metrik dengan panel "Cara menghitung", Ringkasan, Anggaran, Tagihan, Target |
 | M3 AI | Selesai | Pengaturan AI (F-AI-1), quick-add AI (F-IN-2), foto struk + lampiran (F-IN-3). Diuji terhadap server AI palsu `scripts/fake-ai-server.ts`, belum terhadap penyedia sungguhan |
 | M4 Impor | Selesai, kecuali parser PDF per bank | Impor CSV dengan pemetaan kolom dan templat per institusi (F-IN-4), impor PDF berpassword dan baca dengan AI lewat worker (F-IN-5), dedupe dan layar tinjau (F-IN-6). Parser PDF bank sungguhan menunggu item terbuka O-1; baru ada parser referensi `contoh-bank` |
-| M5 Lengkap | Sebagian | Selesai: rekonsiliasi (F-ACC-2), investasi (F-INV-1), laporan + ekspor CSV/PDF (F-REP-1), notifikasi dalam app (F-NOT-1), wawasan berbasis templat (F-AI-2 AC4), prediksi akhir bulan (F-BUD-2). Juga: PWA dengan service worker (Serwist), web push (F-NOT-1 AC1), glass G2 refraksi. Belum: transaksi berulang (F-IN-7), realtime SSE |
+| M5 Lengkap | Selesai | Transaksi berulang (F-IN-7), rekonsiliasi (F-ACC-2), investasi (F-INV-1), laporan + ekspor CSV/PDF (F-REP-1), notifikasi dalam app dan web push (F-NOT-1), wawasan mingguan (F-AI-2), prediksi akhir bulan (F-BUD-2), realtime SSE, PWA (Serwist), glass G2. Struk yang dipecah dihitung per kategori rincian (keputusan 0015) |
 | M6 Go-live | Belum | Checklist `SECURITY.md` bagian 6 |
 
 Belum dijalankan: tes e2e di WebKit (Safari). Container pengembangan hanya punya Chromium; proyek `webkit` sudah dikonfigurasi di `playwright.config.ts` dan wajib dijalankan sebelum go-live.
+
+## Aset
+
+Logo bank dan e-wallet dari idn-finlogos (CC BY-NC 4.0, hanya untuk pemakaian non-komersial) dan gambar 3D dari Microsoft Fluent Emoji (MIT), keputusan 0016. Daftar sumber dan lisensi di `public/assets/CREDITS.md` dan Pengaturan → Kredit. Kalau app dipakai komersial, logo bank harus diganti atau diminta izinnya.
 
 ## Menjalankan secara lokal
 
