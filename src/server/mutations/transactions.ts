@@ -2,8 +2,8 @@ import { eq } from "drizzle-orm";
 import { z } from "zod";
 import type { Viewer } from "@/server/auth/viewer";
 import { db as defaultDb, type DbOrTx, type Tx } from "@/server/db/client";
-import { transactions } from "@/server/db/schema";
-import { DomainError, NotFoundError } from "@/server/errors";
+import { transactions, transactionSplits } from "@/server/db/schema";
+import { DomainError, NotFoundError, ValidationError } from "@/server/errors";
 import { RESTORE_WINDOW_DAYS } from "@/server/queries/transactions";
 import { inTransaction, parseInput, versionSchema, pickProvided } from "./_shared";
 import { insertWithAudit, restoreWithAudit, selectById, softDeleteWithAudit, updateWithAudit, type AuditDiff } from "./audit";
@@ -26,6 +26,12 @@ export type TransactionRow = typeof transactions.$inferSelect;
 
 // field yang mengubah saldo; edit catatan saja tidak perlu dicek ulang terhadap saldo
 const BALANCE_FIELDS = ["kind", "amount", "accountId", "toAccountId", "status"] as const;
+
+// COPY.md "Ubah transaksi dipecah, error"; split belum bisa diubah dari form (decision 0016)
+export const SPLIT_EDIT_MESSAGES = {
+  amount: "Nominal transaksi yang dipecah per kategori tidak bisa diubah. Hapus transaksi ini lalu catat ulang dengan nominal yang benar.",
+  kind: "Jenis transaksi yang dipecah per kategori tidak bisa diubah. Hapus transaksi ini lalu catat ulang dengan jenis yang benar.",
+} as const;
 
 async function insertOne(tx: Tx, viewer: Viewer, input: z.output<typeof createTransactionSchema>): Promise<TransactionRow> {
   const { tagNames, ...fields } = input;
@@ -108,6 +114,20 @@ async function notifyTransactionOwners(
   });
 }
 
+/** Tanpa ini trigger transaction_splits_sum menolak saat commit dengan error mentah 23514. */
+async function assertSplitsUnaffected(tx: Tx, current: TransactionRow, next: Pick<TransactionRow, "amount" | "kind">): Promise<void> {
+  if (next.amount === current.amount && next.kind === current.kind) return;
+  const [split] = await tx
+    .select({ id: transactionSplits.id })
+    .from(transactionSplits)
+    .where(eq(transactionSplits.transactionId, current.id))
+    .limit(1);
+  if (!split) return;
+  if (next.amount !== current.amount) throw new ValidationError(SPLIT_EDIT_MESSAGES.amount, { amount: [SPLIT_EDIT_MESSAGES.amount] });
+  // tanpa fieldErrors: form tidak punya slot error untuk jenis, jadi pesan tampil sebagai error form
+  throw new ValidationError(SPLIT_EDIT_MESSAGES.kind);
+}
+
 export async function updateTransaction(viewer: Viewer, input: UpdateTransactionInput, db: DbOrTx = defaultDb): Promise<TransactionRow> {
   const parsed = parseInput(updateTransactionSchema, input);
   const { id, version } = parsed;
@@ -117,6 +137,7 @@ export async function updateTransaction(viewer: Viewer, input: UpdateTransaction
     const { tagNames, ...fields } = patch;
     const merged = normalizeShape({ ...current, ...fields });
     assertShape(merged);
+    await assertSplitsUnaffected(tx, current, merged);
     await assertReferences(tx, [merged]);
     const balanceChanged = BALANCE_FIELDS.some((f) => merged[f] !== current[f]);
     if (balanceChanged && !current.deletedAt) {

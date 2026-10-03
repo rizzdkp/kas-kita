@@ -280,6 +280,7 @@ Tabel di bawah mencatat teks yang sudah dipakai di kode. Bagian dinamis ditulis 
 | Konflik, penanda | Berbeda |
 | Konflik, nilai tak dikenal | Akun lain / Kategori lain / orang lain |
 | Baris, transaksi dipecah | dipecah ke [n] kategori |
+| Ubah transaksi dipecah, error | Nominal transaksi yang dipecah per kategori tidak bisa diubah. Hapus transaksi ini lalu catat ulang dengan nominal yang benar. / Jenis transaksi yang dipecah per kategori tidak bisa diubah. Hapus transaksi ini lalu catat ulang dengan jenis yang benar. |
 | Kolom CSV | Tanggal, Waktu, Jenis, Nominal, Akun, Akun tujuan, Kategori, Rincian kategori, Catatan, Diisi oleh, Tag, Status |
 | Rincian kategori di CSV | [kategori] [Rp]; [kategori] [Rp] (hanya transaksi yang dipecah; kosong selain itu) |
 | Status di CSV | Terkonfirmasi / Perlu dikonfirmasi |
