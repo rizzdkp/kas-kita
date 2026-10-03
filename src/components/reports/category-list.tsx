@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { formatPercent, formatRupiah, percentOf } from "@/lib/money";
 import type { Scope } from "@/lib/scope";
+import { CategoryIcon } from "@/components/categories/category-icon";
 import { BarTrack } from "@/components/charts/bar-track";
 import { FormulaExplainer } from "@/components/dashboard/formula-explainer";
 import { SectionCard } from "@/components/dashboard/section-card";
@@ -56,9 +57,10 @@ export function CategoryList({ id, title, kind, categories, range, previousLabel
               <li key={c.categoryId}>
                 <Link
                   href={transactionHref({ scope, categoryIds: [c.categoryId], kinds: [kind], from: range.from, to: range.to })}
-                  className="group flex items-center gap-2 rounded-md px-2 py-3 hover:bg-surface-sunken"
+                  className="group flex items-center gap-3 rounded-md px-2 py-3 hover:bg-surface-sunken"
                   data-category-id={c.categoryId}
                 >
+                  <CategoryIcon icon={c.icon} name={c.name} kind={kind} className="self-start" />
                   <span className="flex min-w-0 flex-1 flex-col gap-2">
                     <span className="flex items-baseline justify-between gap-3">
                       <span className="min-w-0 text-body text-primary">{c.name}</span>

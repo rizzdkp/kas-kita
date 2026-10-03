@@ -63,8 +63,8 @@ export function CategoryFilter({ query, onChange, options, compact, className }:
         onValueChange={(v) => onChange({ categoryId: v === ALL ? null : v })}
         groups={[
           { options: [{ value: ALL, label: "Semua kategori" }] },
-          { label: "Pengeluaran", options: categoryOptions(options.categories.expense) },
-          { label: "Pemasukan", options: categoryOptions(options.categories.income) },
+          { label: "Pengeluaran", options: categoryOptions(options.categories.expense, "expense") },
+          { label: "Pemasukan", options: categoryOptions(options.categories.income, "income") },
         ]}
       />
     </Field>

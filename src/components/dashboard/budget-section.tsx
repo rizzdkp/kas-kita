@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { formatPercent, formatRupiah } from "@/lib/money";
+import { CategoryIcon } from "@/components/categories/category-icon";
 import { BarTrack } from "@/components/charts/bar-track";
 import { Amount } from "@/components/money/amount";
 import type { BudgetWithStatus } from "@/server/queries/budgets";
@@ -66,7 +67,8 @@ export function BudgetSection({ budgets, scope, pastMonth, className }: BudgetSe
               return (
                 <li key={b.id} className="flex flex-col gap-1.5">
                   <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-                    <span className="text-small text-primary">
+                    <span className="flex items-center gap-2 text-small text-primary">
+                      <CategoryIcon icon={b.categoryIcon} name={b.categoryName} kind="expense" size="sm" />
                       {b.categoryName}
                       {b.isMandatory ? <span className="ml-2 text-caption text-secondary">Wajib</span> : null}
                     </span>

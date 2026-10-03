@@ -1,5 +1,6 @@
 import { formatRupiah } from "@/lib/money";
 import type { Scope } from "@/lib/scope";
+import { InstitutionBadge } from "@/components/brand/institution-badge";
 import { IdentityDot } from "@/components/identity/identity-dot";
 import { Amount } from "@/components/money/amount";
 import type { AccountGroups, AccountWithBalance } from "@/server/queries/accounts";
@@ -41,7 +42,9 @@ function Group({ title, total, rows, people, showOwner, useValue }: {
           return (
             <li key={a.id} className="flex items-center justify-between gap-3 py-1.5">
               <span className="flex min-w-0 items-center gap-2 text-small text-primary">
-                {showOwner ? <IdentityDot {...s.dot} label={`Milik ${s.name}`} /> : null}
+                <InstitutionBadge slug={a.institutionSlug} name={a.institutionName} type={a.type} size="sm">
+                  {showOwner ? <IdentityDot {...s.dot} label={`Milik ${s.name}`} /> : null}
+                </InstitutionBadge>
                 <span className="truncate">{a.name}</span>
               </span>
               <Amount value={useValue ? a.value : a.balance} className="shrink-0 text-small text-primary" />

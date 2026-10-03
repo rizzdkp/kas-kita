@@ -42,7 +42,7 @@ export interface CategoryOptionGroups {
 
 /** Opsi kategori dibuat sekali per layar, bukan per baris. */
 export function buildCategoryOptionGroups(categories: { expense: CategoryGroup[]; income: CategoryGroup[] }): CategoryOptionGroups {
-  return { expense: [{ options: categoryOptions(categories.expense) }], income: [{ options: categoryOptions(categories.income) }] };
+  return { expense: [{ options: categoryOptions(categories.expense, "expense") }], income: [{ options: categoryOptions(categories.income, "income") }] };
 }
 
 type FieldsProps = {

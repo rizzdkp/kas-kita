@@ -21,6 +21,9 @@ export interface QuickAddContextAccount {
   /** Nama pemilik untuk label "milik Rizz"; null untuk Bersama. */
   ownerName: string | null;
   aliases: string[];
+  /** Untuk lencana institusi di chip; opsional supaya antrean offline lama tetap terbaca. */
+  institutionSlug?: string | null;
+  institutionName?: string | null;
 }
 
 export interface QuickAddContextCategory {
@@ -29,6 +32,7 @@ export interface QuickAddContextCategory {
   kind: "income" | "expense";
   parentName: string | null;
   keywords?: string[];
+  icon?: string;
 }
 
 /** Data yang dimuat layout sekali per render; semua nilai serializable. */

@@ -72,6 +72,8 @@ async function loadAccounts(viewer: Viewer, db: DbOrTx): Promise<QuickAddContext
       owner: partyOf(r.ownerId, viewer),
       ownerName: r.ownerId ? (names.get(r.ownerId) ?? null) : null,
       aliases: accountAliases(r.name, r.institutionName, r.institutionSlug, r.type),
+      institutionSlug: r.institutionSlug,
+      institutionName: r.institutionName,
     }));
 }
 
@@ -82,8 +84,8 @@ async function loadCategories(db: DbOrTx): Promise<QuickAddContextCategory[]> {
     if (root.kind === "system") continue;
     const kind = root.kind as "income" | "expense";
     // induk yang punya anak tetap bisa dipilih, sesuai form transaksi
-    out.push({ id: root.id, name: root.name, kind, parentName: null });
-    for (const child of root.children) out.push({ id: child.id, name: child.name, kind, parentName: root.name });
+    out.push({ id: root.id, name: root.name, kind, parentName: null, icon: root.icon });
+    for (const child of root.children) out.push({ id: child.id, name: child.name, kind, parentName: root.name, icon: child.icon });
   }
   return out;
 }

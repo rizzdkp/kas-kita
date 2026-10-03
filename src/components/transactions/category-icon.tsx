@@ -5,6 +5,7 @@ import {
   Bike,
   BookOpen,
   Briefcase,
+  Bus,
   Car,
   Circle,
   CircleEllipsis,
@@ -46,8 +47,6 @@ import {
   Zap,
   type LucideIcon,
 } from "lucide-react";
-import { cn } from "@/components/ui/cn";
-import { Icon } from "@/components/ui/icon";
 
 // peta statis supaya bundle tidak memuat seluruh set Lucide; nama tak dikenal jatuh ke Circle
 const CATEGORY_ICONS: Record<string, LucideIcon> = {
@@ -57,6 +56,7 @@ const CATEGORY_ICONS: Record<string, LucideIcon> = {
   bike: Bike,
   "book-open": BookOpen,
   briefcase: Briefcase,
+  bus: Bus,
   car: Car,
   circle: Circle,
   "circle-ellipsis": CircleEllipsis,
@@ -102,23 +102,4 @@ export const CATEGORY_ICON_NAMES = Object.keys(CATEGORY_ICONS);
 
 export function categoryIcon(name: string | null | undefined): LucideIcon {
   return (name && CATEGORY_ICONS[name]) || Circle;
-}
-
-/** Ikon kategori dalam lingkaran surface-sunken; `size` 32 untuk baris transaksi (DESIGN 8). */
-export function CategoryIconCircle({
-  icon,
-  className,
-  children,
-}: {
-  icon: string | null | undefined;
-  className?: string;
-  /** Titik identitas di sudut kanan bawah. */
-  children?: React.ReactNode;
-}) {
-  return (
-    <span className={cn("relative inline-flex size-8 shrink-0 items-center justify-center rounded-pill bg-surface-sunken text-secondary", className)}>
-      <Icon icon={categoryIcon(icon)} size={16} />
-      {children ? <span className="absolute -bottom-0.5 -right-0.5 inline-flex">{children}</span> : null}
-    </span>
-  );
 }

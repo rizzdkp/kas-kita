@@ -21,6 +21,9 @@ export interface FormAccount {
   /** null = Bersama. */
   ownerId: string | null;
   archived: boolean;
+  /** Untuk lencana institusi; null = akun tanpa institusi. */
+  institutionSlug?: string | null;
+  institutionName?: string | null;
 }
 
 export interface CategoryLeaf {

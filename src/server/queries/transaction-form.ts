@@ -30,6 +30,8 @@ export async function loadTransactionFormOptions(viewer: Viewer, scope: Scope): 
       type: a.type,
       ownerId: a.ownerId,
       archived: a.archivedAt !== null,
+      institutionSlug: a.institutionSlug,
+      institutionName: a.institutionName,
     })),
     categories: { expense: toGroups(expense), income: toGroups(income) },
     people: { me: person(viewer.user), partner: viewer.partner ? person(viewer.partner) : null },

@@ -4,13 +4,13 @@ import { useState } from "react";
 import { Archive, ArchiveRestore, Lock, Pencil, Plus } from "lucide-react";
 import type { CategoryNode } from "@/server/queries/categories";
 import { archiveCategoryAction } from "@/server/actions/settings";
+import { CategoryIcon } from "@/components/categories/category-icon";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { IconButton } from "@/components/ui/icon-button";
 import { SegmentedControl } from "@/components/ui/segmented-control";
 import { useToast } from "@/components/ui/toast";
 import { CategoryDialog, type CategoryDialogState } from "./category-dialog";
-import { categoryIcon } from "./category-icons";
 import { useSave } from "./use-save";
 
 type Kind = "expense" | "income";
@@ -53,11 +53,18 @@ export function CategoriesManager({ categories }: CategoriesManagerProps) {
     });
   }
 
-  function row(category: CategoryNode, level: 0 | 1) {
+  function row(category: CategoryNode, level: 0 | 1, parent?: CategoryNode) {
     return (
       <li key={category.id} className={level === 1 ? "pl-8" : undefined}>
         <div className="flex min-h-13 items-center gap-3 border-b border-border py-1">
-          <Icon icon={categoryIcon(category.icon)} className="shrink-0 text-secondary" />
+          <CategoryIcon
+            icon={category.icon}
+            name={category.name}
+            parentName={parent?.name}
+            parentIcon={parent?.icon}
+            kind={kind}
+            size={level === 0 ? "md" : "sm"}
+          />
           <span className={level === 0 ? "min-w-0 flex-1 truncate text-control text-primary" : "min-w-0 flex-1 truncate text-body text-primary"}>
             {category.name}
           </span>
@@ -65,7 +72,7 @@ export function CategoriesManager({ categories }: CategoriesManagerProps) {
           <IconButton icon={Archive} label={`Arsipkan ${category.name}`} disabled={pending} onClick={() => setArchived(category, true)} />
         </div>
         {level === 0 && category.children.some((c) => !c.archivedAt) ? (
-          <ul>{category.children.filter((c) => !c.archivedAt).map((child) => row({ ...child, children: [] }, 1))}</ul>
+          <ul>{category.children.filter((c) => !c.archivedAt).map((child) => row({ ...child, children: [] }, 1, category))}</ul>
         ) : null}
       </li>
     );
@@ -98,7 +105,7 @@ export function CategoriesManager({ categories }: CategoriesManagerProps) {
           <ul className="border-t border-border">
             {archived.map((c) => (
               <li key={c.id} className="flex min-h-13 items-center gap-3 border-b border-border py-1">
-                <Icon icon={categoryIcon(c.icon)} className="shrink-0 text-tertiary" />
+                <CategoryIcon icon={c.icon} tone="neutral" size="sm" />
                 <span className="min-w-0 flex-1 truncate text-body text-secondary">{c.name}</span>
                 <Button variant="ghost" icon={ArchiveRestore} disabled={pending} onClick={() => setArchived(c, false)}>
                   Pulihkan

@@ -6,6 +6,7 @@ import { Archive, ArchiveRestore, FileUp, MoreHorizontal, Pencil, Scale, Trash2,
 import { parseDateKey } from "@/lib/dates";
 import { formatRupiah, percentOf, formatPercent } from "@/lib/money";
 import type { Scope } from "@/lib/scope";
+import { InstitutionBadge } from "@/components/brand/institution-badge";
 import { IdentityDot } from "@/components/identity/identity-dot";
 import { Amount } from "@/components/money/amount";
 import { Button, buttonClassName } from "@/components/ui/button";
@@ -75,7 +76,9 @@ export function AccountRow({ account, people, scope, onAction }: AccountRowProps
 
   return (
     <li className="group/row relative flex min-h-16 items-center gap-3 px-4 py-3 transition-colors duration-(--dur-fast) hover:bg-surface-sunken sm:gap-4 sm:px-(--space-card)">
-      <IdentityDot color={dot.color} shared={dot.shared} label={dot.label} />
+      <InstitutionBadge slug={account.institutionSlug} name={account.institutionName} type={account.type}>
+        <IdentityDot color={dot.color} shared={dot.shared} label={dot.label} />
+      </InstitutionBadge>
       <div className="flex min-w-0 flex-1 flex-col gap-1 sm:flex-row sm:items-center sm:gap-4">
         <div className="flex min-w-0 flex-1 flex-col">
           <Link

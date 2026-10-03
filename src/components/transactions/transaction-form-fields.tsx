@@ -8,7 +8,7 @@ import { SegmentedControl } from "@/components/ui/segmented-control";
 import type { FormValues } from "./form-values";
 import { GroupedSelect } from "./grouped-select";
 import { KIND_OPTIONS, type BeneficiaryChoice } from "./labels";
-import { accountOptionGroups, categoryOptions } from "./option-groups";
+import { accountOptionGroups, categoryKind, categoryOptions } from "./option-groups";
 import type { TransactionFormOptions } from "./types";
 
 type FieldsProps = {
@@ -79,7 +79,7 @@ export function TransactionFormFields({ values, onChange, errors, options, mode,
           <GroupedSelect
             value={values.categoryId}
             onValueChange={(categoryId) => onChange({ categoryId })}
-            groups={[{ options: categoryOptions(options.categories[values.kind === "income" ? "income" : "expense"]) }]}
+            groups={[{ options: categoryOptions(options.categories[categoryKind(values.kind)], categoryKind(values.kind)) }]}
             placeholder="Pilih kategori"
           />
         </Field>

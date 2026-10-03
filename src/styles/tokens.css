@@ -99,6 +99,63 @@
   --selection: rgba(1, 106, 113, 0.18);
   --scrollbar-thumb: rgba(39, 26, 0, 0.22);
   --scrollbar-thumb-hover: rgba(39, 26, 0, 0.36);
+
+  /* kategori: tint lembut + ikon, di luar hue accent/positive/attention (docs/decisions/0012) */
+  --cat-orange-bg: #ffe6d3;
+  --cat-orange-fg: #994a00;
+  --cat-mustard-bg: #f7ecd1;
+  --cat-mustard-fg: #7f5e00;
+  --cat-sky-bg: #d8f1ff;
+  --cat-sky-fg: #0c6a9b;
+  --cat-indigo-bg: #e4ebff;
+  --cat-indigo-fg: #4f5aac;
+  --cat-purple-bg: #f2e7ff;
+  --cat-purple-fg: #724ea0;
+  --cat-pink-bg: #ffe4ee;
+  --cat-pink-fg: #934566;
+  --cat-magenta-bg: #fee3fb;
+  --cat-magenta-fg: #8b4486;
+  --cat-brown-bg: #f8eae2;
+  --cat-brown-fg: #7f5a45;
+  --cat-olive-bg: #eeeedb;
+  --cat-olive-fg: #68672e;
+  --cat-slate-bg: #e6eef7;
+  --cat-slate-fg: #50667d;
+  --cat-gray-bg: #eeecea;
+  --cat-gray-fg: #66635d;
+  --cat-sand-bg: #f2ece4;
+  --cat-sand-fg: #71604a;
+
+  /* lencana institusi: warna merek, sama di kedua mode; ring hanya di gelap supaya tidak melompat dari kanvas hitam */
+  --inst-bca-bg: #0060af;
+  --inst-bca-fg: #ffffff;
+  --inst-jago-bg: #fdb913;
+  --inst-jago-fg: #1c1c1c;
+  --inst-gopay-bg: #00aed6;
+  --inst-gopay-fg: #062a36;
+  --inst-ovo-bg: #4c2a86;
+  --inst-ovo-fg: #ffffff;
+  --inst-mandiri-bg: #003d79;
+  --inst-mandiri-fg: #ffb700;
+  --inst-bri-bg: #00529c;
+  --inst-bri-fg: #ffffff;
+  --inst-bni-bg: #f15a23;
+  --inst-bni-fg: #1c1c1c;
+  --inst-dana-bg: #0b6fc4;
+  --inst-dana-fg: #ffffff;
+  --inst-shopeepay-bg: #d0391b;
+  --inst-shopeepay-fg: #ffffff;
+  --inst-seabank-bg: #ff6a13;
+  --inst-seabank-fg: #1c1c1c;
+  --inst-jenius-bg: #00a9e0;
+  --inst-jenius-fg: #062a36;
+  --inst-blu-bg: #1e9bf0;
+  --inst-blu-fg: #062a36;
+  --inst-cimb-bg: #7b0f14;
+  --inst-cimb-fg: #ffffff;
+  --inst-permata-bg: #008343;
+  --inst-permata-fg: #ffffff;
+  --badge-ring: transparent;
 }
 
 /* nilai gelap ditulis dua kali: sekali untuk preferensi sistem, sekali untuk paksaan manual */
@@ -145,6 +202,32 @@
     --selection: rgba(69, 184, 192, 0.3);
     --scrollbar-thumb: rgba(255, 255, 255, 0.2);
     --scrollbar-thumb-hover: rgba(255, 255, 255, 0.34);
+
+    --cat-orange-bg: #412714;
+    --cat-orange-fg: #fab688;
+    --cat-mustard-bg: #372c11;
+    --cat-mustard-fg: #e0c482;
+    --cat-sky-bg: #183141;
+    --cat-sky-fg: #94cff9;
+    --cat-indigo-bg: #262c47;
+    --cat-indigo-fg: #b4c3ff;
+    --cat-purple-bg: #322843;
+    --cat-purple-fg: #d3b8fe;
+    --cat-pink-bg: #3f252f;
+    --cat-pink-fg: #f5b1ca;
+    --cat-magenta-bg: #3c243a;
+    --cat-magenta-fg: #edb0e6;
+    --cat-brown-bg: #372b24;
+    --cat-brown-fg: #e1c0ae;
+    --cat-olive-bg: #2f2f1d;
+    --cat-olive-fg: #cacb9e;
+    --cat-slate-bg: #272f36;
+    --cat-slate-fg: #b7cade;
+    --cat-gray-bg: #2f2e2c;
+    --cat-gray-fg: #cac7c2;
+    --cat-sand-bg: #322d26;
+    --cat-sand-fg: #d3c5b2;
+    --badge-ring: rgba(255, 255, 255, 0.12);
   }
 }
 
@@ -190,4 +273,30 @@
   --selection: rgba(69, 184, 192, 0.3);
   --scrollbar-thumb: rgba(255, 255, 255, 0.2);
   --scrollbar-thumb-hover: rgba(255, 255, 255, 0.34);
+
+  --cat-orange-bg: #412714;
+  --cat-orange-fg: #fab688;
+  --cat-mustard-bg: #372c11;
+  --cat-mustard-fg: #e0c482;
+  --cat-sky-bg: #183141;
+  --cat-sky-fg: #94cff9;
+  --cat-indigo-bg: #262c47;
+  --cat-indigo-fg: #b4c3ff;
+  --cat-purple-bg: #322843;
+  --cat-purple-fg: #d3b8fe;
+  --cat-pink-bg: #3f252f;
+  --cat-pink-fg: #f5b1ca;
+  --cat-magenta-bg: #3c243a;
+  --cat-magenta-fg: #edb0e6;
+  --cat-brown-bg: #372b24;
+  --cat-brown-fg: #e1c0ae;
+  --cat-olive-bg: #2f2f1d;
+  --cat-olive-fg: #cacb9e;
+  --cat-slate-bg: #272f36;
+  --cat-slate-fg: #b7cade;
+  --cat-gray-bg: #2f2e2c;
+  --cat-gray-fg: #cac7c2;
+  --cat-sand-bg: #322d26;
+  --cat-sand-fg: #d3c5b2;
+  --badge-ring: rgba(255, 255, 255, 0.12);
 }

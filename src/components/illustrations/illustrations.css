@@ -1,0 +1,94 @@
+/*
+ * Nada ilustrasi isometrik. Setiap nada punya tiga permukaan: atas (t) terang, kiri (l) sedang, kanan (r) gelap.
+ * Semua turunan token di tokens.css lewat color-mix, jadi ikut berganti di mode gelap.
+ */
+
+.kk-il {
+  /* tanpa props identitas, nada pemilik jatuh ke aksen dan koin supaya tidak mengklaim warna orang yang salah */
+  --il-me: var(--il-me-src, var(--accent));
+  --il-partner: var(--il-partner-src, var(--identity-gold));
+  --il-coin: var(--identity-gold);
+  --il-steel: color-mix(in oklab, var(--text-primary) 52%, var(--surface));
+
+  --il-paper-t: color-mix(in oklab, var(--text-primary) 3%, var(--surface));
+  --il-paper-l: color-mix(in oklab, var(--text-primary) 9%, var(--surface));
+  --il-paper-r: color-mix(in oklab, var(--text-primary) 17%, var(--surface));
+  --il-ground-t: color-mix(in oklab, var(--accent) 9%, var(--surface));
+  --il-ground-l: color-mix(in oklab, var(--accent) 17%, var(--surface));
+  --il-ground-r: color-mix(in oklab, var(--accent) 26%, var(--surface));
+  --il-ink: color-mix(in oklab, var(--text-primary) 22%, transparent);
+  --il-edge: color-mix(in oklab, var(--text-primary) 12%, transparent);
+  --il-shadow: color-mix(in oklab, var(--text-primary) 7%, transparent);
+  --il-glass: color-mix(in oklab, var(--accent) 34%, var(--surface));
+
+  overflow: visible;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  animation: kk-il-in var(--dur-base) var(--ease-out) both;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .kk-il {
+    --il-paper-t: color-mix(in oklab, var(--text-primary) 34%, var(--surface));
+    --il-paper-l: color-mix(in oklab, var(--text-primary) 24%, var(--surface));
+    --il-paper-r: color-mix(in oklab, var(--text-primary) 15%, var(--surface));
+    --il-ground-t: color-mix(in oklab, var(--accent) 22%, var(--surface));
+    --il-ground-l: color-mix(in oklab, var(--accent) 15%, var(--surface));
+    --il-ground-r: color-mix(in oklab, var(--accent) 9%, var(--surface));
+    --il-shadow: rgba(0, 0, 0, 0.45);
+  }
+}
+
+:root[data-theme="dark"] .kk-il {
+  --il-paper-t: color-mix(in oklab, var(--text-primary) 34%, var(--surface));
+  --il-paper-l: color-mix(in oklab, var(--text-primary) 24%, var(--surface));
+  --il-paper-r: color-mix(in oklab, var(--text-primary) 15%, var(--surface));
+  --il-ground-t: color-mix(in oklab, var(--accent) 22%, var(--surface));
+  --il-ground-l: color-mix(in oklab, var(--accent) 15%, var(--surface));
+  --il-ground-r: color-mix(in oklab, var(--accent) 9%, var(--surface));
+  --il-shadow: rgba(0, 0, 0, 0.45);
+}
+
+/* nada berwarna: atas dicampur putih, kanan dicampur hitam; sama di kedua mode karena cahaya tetap dari atas */
+.kk-il .accent-t { fill: color-mix(in oklab, var(--accent) 70%, white); }
+.kk-il .accent-l { fill: var(--accent); }
+.kk-il .accent-r { fill: color-mix(in oklab, var(--accent) 72%, black); }
+.kk-il .me-t { fill: color-mix(in oklab, var(--il-me) 70%, white); }
+.kk-il .me-l { fill: var(--il-me); }
+.kk-il .me-r { fill: color-mix(in oklab, var(--il-me) 72%, black); }
+.kk-il .partner-t { fill: color-mix(in oklab, var(--il-partner) 70%, white); }
+.kk-il .partner-l { fill: var(--il-partner); }
+.kk-il .partner-r { fill: color-mix(in oklab, var(--il-partner) 72%, black); }
+.kk-il .coin-t { fill: color-mix(in oklab, var(--il-coin) 62%, white); }
+.kk-il .coin-l { fill: var(--il-coin); }
+.kk-il .coin-r { fill: color-mix(in oklab, var(--il-coin) 74%, black); }
+.kk-il .steel-t { fill: color-mix(in oklab, var(--il-steel) 72%, white); }
+.kk-il .steel-l { fill: var(--il-steel); }
+.kk-il .steel-r { fill: color-mix(in oklab, var(--il-steel) 74%, black); }
+.kk-il .positive-t { fill: color-mix(in oklab, var(--positive) 70%, white); }
+.kk-il .positive-l { fill: var(--positive); }
+.kk-il .positive-r { fill: color-mix(in oklab, var(--positive) 72%, black); }
+.kk-il .paper-t { fill: var(--il-paper-t); }
+.kk-il .paper-l { fill: var(--il-paper-l); }
+.kk-il .paper-r { fill: var(--il-paper-r); }
+.kk-il .ground-t { fill: var(--il-ground-t); }
+.kk-il .ground-l { fill: var(--il-ground-l); }
+.kk-il .ground-r { fill: var(--il-ground-r); }
+.kk-il .glass-t,
+.kk-il .glass-l { fill: var(--il-glass); }
+.kk-il .glass-r { fill: color-mix(in oklab, var(--il-glass) 80%, black); }
+
+.kk-il .il-edge { fill: none; stroke: var(--il-edge); stroke-width: 0.75; }
+.kk-il .il-ink { fill: none; stroke: var(--il-ink); stroke-width: 2; }
+.kk-il .il-check { fill: none; stroke: var(--positive); stroke-width: 2.5; }
+.kk-il .il-accent-line { fill: none; stroke: var(--accent); stroke-width: 3; }
+.kk-il .il-shadow { fill: var(--il-shadow); }
+
+@keyframes kk-il-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kk-il { animation: none; }
+}

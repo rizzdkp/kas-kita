@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { formatRupiah } from "@/lib/money";
 import type { Scope } from "@/lib/scope";
+import { CategoryIcon } from "@/components/categories/category-icon";
 import { BarTrack } from "@/components/charts/bar-track";
 import { Amount } from "@/components/money/amount";
 import { transactionHref } from "@/components/reports/transaction-link";
@@ -67,7 +68,10 @@ export function CategorySection({ categories, scope, people, range, className }:
                     className="flex flex-col gap-1.5 rounded-md px-2 py-1.5 hover:bg-surface-sunken"
                   >
                     <span className="flex items-baseline justify-between gap-3">
-                      <span className="min-w-0 text-small text-primary">{c.name}</span>
+                      <span className="flex min-w-0 items-center gap-2 text-small text-primary">
+                        <CategoryIcon icon={c.icon} name={c.name} kind="expense" size="sm" className="self-center" />
+                        {c.name}
+                      </span>
                       <Amount value={c.total} className="shrink-0 text-small text-primary" />
                     </span>
                     <BarTrack

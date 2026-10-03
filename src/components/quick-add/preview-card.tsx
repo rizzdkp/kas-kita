@@ -4,12 +4,14 @@ import { CircleAlert, X } from "lucide-react";
 import type { QuickAddKind } from "@/lib/quick-add-parser";
 import { IconButton } from "@/components/ui/icon-button";
 import { Icon } from "@/components/ui/icon";
+import { InstitutionBadge } from "@/components/brand/institution-badge";
+import { CategoryIcon } from "@/components/categories/category-icon";
 import { IdentityDot } from "@/components/identity/identity-dot";
 import type { IdentityColor } from "@/components/identity/identity-colors";
 import { ChipSelect, type ChipOptionGroup } from "./chip-select";
 import { AmountEditor, DateEditor, NoteEditor } from "./field-editors";
 import { accountById, effectiveRecipient, missingFields, type PreviewPatch } from "./preview-model";
-import type { Party, PreviewItem, QuickAddContextAccount, QuickAddContextData } from "./types";
+import type { Party, PreviewItem, QuickAddContextAccount, QuickAddContextCategory, QuickAddContextData } from "./types";
 
 export type PartyColors = { me: IdentityColor; partner: IdentityColor | null };
 
@@ -27,7 +29,13 @@ function accountGroups(ctx: QuickAddContextData): ChipOptionGroup[] {
   return (["me", "partner", "shared"] as Party[])
     .map((owner) => ({
       label: title[owner],
-      options: ctx.accounts.filter((a) => a.owner === owner).map((a) => ({ value: a.id, label: a.name })),
+      options: ctx.accounts
+        .filter((a) => a.owner === owner)
+        .map((a) => ({
+          value: a.id,
+          label: a.name,
+          leading: <InstitutionBadge slug={a.institutionSlug} name={a.institutionName} type={a.type} size="sm" />,
+        })),
     }))
     .filter((g) => g.options.length > 0);
 }
@@ -37,9 +45,25 @@ function categoryGroups(ctx: QuickAddContextData, kind: "income" | "expense"): C
     {
       options: ctx.categories
         .filter((c) => c.kind === kind)
-        .map((c) => ({ value: c.id, label: c.name, indent: c.parentName !== null })),
+        .map((c) => ({ value: c.id, label: c.name, indent: c.parentName !== null, leading: <QuickAddCategoryIcon ctx={ctx} category={c} /> })),
     },
   ];
+}
+
+function QuickAddCategoryIcon({ ctx, category }: { ctx: QuickAddContextData; category: QuickAddContextCategory }) {
+  const parent = category.parentName ? ctx.categories.find((c) => c.parentName === null && c.kind === category.kind && c.name === category.parentName) : undefined;
+  return <CategoryIcon icon={category.icon} name={category.name} parentName={category.parentName} parentIcon={parent?.icon} kind={category.kind} size="sm" />;
+}
+
+function CategoryChip({ ctx, id }: { ctx: QuickAddContextData; id: string | null }) {
+  const category = id ? ctx.categories.find((c) => c.id === id) : undefined;
+  if (!category) return undefined;
+  return (
+    <span className="inline-flex items-center gap-1.5">
+      <QuickAddCategoryIcon ctx={ctx} category={category} />
+      <span>{category.name}</span>
+    </span>
+  );
 }
 
 function AccountChip({ account, colors }: { account: QuickAddContextAccount; colors: PartyColors }) {
@@ -51,7 +75,9 @@ function AccountChip({ account, colors }: { account: QuickAddContextAccount; col
     );
   return (
     <span className="inline-flex items-center gap-1.5">
-      {dot}
+      <InstitutionBadge slug={account.institutionSlug} name={account.institutionName} type={account.type} size="sm">
+        {dot}
+      </InstitutionBadge>
       <span>{account.name}</span>
       <span className="text-secondary">({ownerLabel(account)})</span>
     </span>
@@ -142,6 +168,7 @@ export function PreviewCard({ item, ctx, colors, now, index, total, onChange, on
               missing={missing.has("category")}
               missingText="Pilih kategori"
               ai={ai.has("category")}
+              display={CategoryChip({ ctx, id: item.categoryId })}
             />
           ) : null}
           <DateEditor value={item.occurredAt} now={now} onChange={(occurredAt) => onChange({ occurredAt })} ai={ai.has("date")} />

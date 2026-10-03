@@ -4,7 +4,7 @@ import { useMemo, useState, useTransition } from "react";
 import { AmountInput } from "@/components/money/amount-input";
 import { GroupedSelect } from "@/components/transactions/grouped-select";
 import { KIND_OPTIONS, type BeneficiaryChoice } from "@/components/transactions/labels";
-import { accountOptionGroups, categoryOptions } from "@/components/transactions/option-groups";
+import { accountOptionGroups, categoryKind, categoryOptions } from "@/components/transactions/option-groups";
 import { categoryExists } from "@/components/transactions/form-values";
 import type { TransactionFormOptions } from "@/components/transactions/types";
 import { Button } from "@/components/ui/button";
@@ -140,7 +140,7 @@ export function RecurringSheet({ editing, initial, options, scope, today, onDone
             <GroupedSelect
               value={values.categoryId}
               onValueChange={(categoryId) => onChange({ categoryId })}
-              groups={[{ options: categoryOptions(options.categories[values.kind === "income" ? "income" : "expense"]) }]}
+              groups={[{ options: categoryOptions(options.categories[categoryKind(values.kind)], categoryKind(values.kind)) }]}
               placeholder="Pilih kategori"
             />
           </Field>

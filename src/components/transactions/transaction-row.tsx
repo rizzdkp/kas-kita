@@ -3,7 +3,7 @@ import { Amount } from "@/components/money/amount";
 import { IdentityDot } from "@/components/identity/identity-dot";
 import { cn } from "@/components/ui/cn";
 import type { TransactionListRow } from "@/server/queries/transactions";
-import { CategoryIconCircle } from "./category-icon";
+import { CategoryIcon } from "@/components/categories/category-icon";
 import { ownerDot, ownerName } from "./labels";
 import type { People } from "./types";
 
@@ -56,7 +56,7 @@ type TransactionRowProps = {
   className?: string;
 };
 
-/** Baris 56px: ikon kategori + titik pemilik, judul dan keterangan, nominal dan waktu. */
+/** Baris 56px: ikon kategori berwarna + titik pemilik, judul dan keterangan, nominal dan waktu. */
 export function TransactionRow({ row, people, onOpen, trailing, className }: TransactionRowProps) {
   const text = rowText(row, people);
   const dot = ownerDot(people, row.ownerId);
@@ -68,9 +68,9 @@ export function TransactionRow({ row, people, onOpen, trailing, className }: Tra
         onClick={() => onOpen(row)}
         className="flex h-14 min-w-0 flex-1 items-center gap-3 rounded-md px-2 text-left transition-colors duration-(--dur-fast) ease-(--ease-out) hover:bg-surface-sunken"
       >
-        <CategoryIconCircle icon={icon}>
+        <CategoryIcon icon={icon} name={row.categoryName} parentName={row.parentCategoryName} kind={row.kind}>
           <IdentityDot color={dot.color} shared={dot.shared} label={dot.label} />
-        </CategoryIconCircle>
+        </CategoryIcon>
         <span className="flex min-w-0 flex-1 flex-col">
           <span className="truncate text-body text-primary">{text.title}</span>
           <span className="truncate text-caption text-secondary">

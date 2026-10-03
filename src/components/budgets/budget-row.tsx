@@ -1,3 +1,4 @@
+import { CategoryIcon } from "@/components/categories/category-icon";
 import { formatPercent, formatRupiah } from "@/lib/money";
 import type { BudgetWithStatus } from "@/server/queries/budgets";
 import { BudgetStatusBadge, PaceBadge } from "./budget-status-badge";
@@ -17,7 +18,8 @@ export function BudgetRowContent({ budget, showToday }: BudgetRowProps) {
   return (
     <div className="flex w-full flex-col gap-2 text-left">
       <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-        <span className="flex min-w-0 items-baseline gap-2">
+        <span className="flex min-w-0 items-center gap-2">
+          <CategoryIcon icon={budget.categoryIcon} name={budget.categoryName} kind="expense" size="sm" />
           <span className="text-card text-primary">{budget.categoryName}</span>
           <span className="text-caption text-secondary">{budget.isMandatory ? "Wajib" : "Fleksibel"}</span>
         </span>

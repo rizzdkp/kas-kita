@@ -8,7 +8,7 @@ import { cn } from "@/components/ui/cn";
 import { Icon } from "@/components/ui/icon";
 import { AiMark, chipClassName } from "./field-chip";
 
-export type ChipOption = { value: string; label: string; indent?: boolean };
+export type ChipOption = { value: string; label: string; indent?: boolean; leading?: ReactNode };
 export type ChipOptionGroup = { label?: string; options: ChipOption[] };
 
 type ChipSelectProps = {
@@ -65,11 +65,12 @@ export function ChipSelect({ field, value, onValueChange, groups, missing, missi
                       key={option.value}
                       value={option.value}
                       className={cn(
-                        "relative flex h-11 cursor-default select-none items-center rounded-md pr-9 text-control text-primary outline-none sm:h-10",
+                        "relative flex h-11 cursor-default select-none items-center gap-2 rounded-md pr-9 text-control text-primary outline-none sm:h-10",
                         option.indent ? "pl-6" : "pl-3",
                         "data-highlighted:bg-glass-active",
                       )}
                     >
+                      {option.leading}
                       <SelectPrimitive.ItemText>{option.label}</SelectPrimitive.ItemText>
                       <SelectPrimitive.ItemIndicator className="absolute right-3 inline-flex">
                         <Icon icon={Check} size={16} />
