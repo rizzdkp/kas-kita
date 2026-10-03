@@ -37,6 +37,7 @@ const ENTITY_ROUTES: Record<string, (id: string) => string> = {
   goal_contributions: () => "/target",
   budgets: () => "/anggaran",
   categories: () => "/pengaturan#kategori",
+  recurring_rules: () => "/transaksi/berulang",
 };
 
 // hanya ada dua pengguna, jadi pengubah data milik viewer pasti partner

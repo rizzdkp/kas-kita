@@ -41,9 +41,11 @@ export function isActivePath(pathname: string, href: string): boolean {
 }
 
 export function titleForPath(pathname: string): string {
+  // halaman turunan yang punya judul sendiri didahulukan sebelum pencocokan item navigasi
+  if (EXTRA_TITLES[pathname]) return EXTRA_TITLES[pathname];
   const all = [...NAV_ITEMS, SETTINGS_ITEM];
   return all.find((item) => isActivePath(pathname, item.href))?.label ?? EXTRA_TITLES[pathname] ?? (isActivePath(pathname, "/impor") ? "Impor mutasi" : "Kas Kita");
 }
 
 // halaman di luar navigasi utama
-const EXTRA_TITLES: Record<string, string> = { "/mulai": "Pengenalan", "/notifikasi": "Notifikasi", "/struk": "Foto struk" };
+const EXTRA_TITLES: Record<string, string> = { "/mulai": "Pengenalan", "/notifikasi": "Notifikasi", "/struk": "Foto struk", "/transaksi/berulang": "Transaksi berulang" };
