@@ -23,7 +23,7 @@ test.describe("layar tinjau impor", () => {
 
   test("tiga kelompok dengan default F-IN-6 AC3 dan penanda saldo", async ({ page }) => {
     const b = stageBatch();
-    await page.goto(`/impor/${b.batchId}`, { waitUntil: "networkidle" });
+    await page.goto(`/impor/${b.batchId}`, { waitUntil: "load" });
 
     await expect(page.getByRole("heading", { name: `Tinjau mutasi E2E Impor ${b.token}` })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Baru (4)" })).toBeVisible();
@@ -54,7 +54,7 @@ test.describe("layar tinjau impor", () => {
 
   test("kategori wajib, tautkan duplikat, lalu commit ke daftar transaksi dengan filter batch", async ({ page }) => {
     const b = stageBatch();
-    await page.goto(`/impor/${b.batchId}`, { waitUntil: "networkidle" });
+    await page.goto(`/impor/${b.batchId}`, { waitUntil: "load" });
 
     // klik sebelum hidrasi selesai bisa hilang di dev server, jadi diulang sampai state React ikut berubah
     await expect(async () => {
@@ -86,24 +86,24 @@ test.describe("layar tinjau impor", () => {
     await expect(page.getByText(`KOPI KENANGAN ${b.token}`)).toHaveCount(0);
 
     // layar tinjau batch yang sudah disimpan menawarkan hasilnya
-    await page.goto(`/impor/${b.batchId}`, { waitUntil: "networkidle" });
+    await page.goto(`/impor/${b.batchId}`, { waitUntil: "load" });
     await expect(page.getByRole("heading", { name: "Impor ini sudah disimpan" })).toBeVisible();
   });
 
   test("batch hasil AI menampilkan peringatan cek baris per baris", async ({ page }) => {
     const b = stageBatch("ai_pdf");
-    await page.goto(`/impor/${b.batchId}`, { waitUntil: "networkidle" });
+    await page.goto(`/impor/${b.batchId}`, { waitUntil: "load" });
     await expect(page.getByText("Mutasi ini dibaca model AI. Cek tanggal, deskripsi, dan nominal setiap baris sebelum mengimpor.")).toBeVisible();
     await expect(page.getByText("6 baris dari PDF, dibaca AI", { exact: false })).toBeVisible();
   });
 
   test("batal impor menghapus batch", async ({ page }) => {
     const b = stageBatch();
-    await page.goto(`/impor/${b.batchId}`, { waitUntil: "networkidle" });
+    await page.goto(`/impor/${b.batchId}`, { waitUntil: "load" });
     await page.getByRole("button", { name: "Batalkan impor" }).click();
     await page.getByRole("dialog").getByRole("button", { name: "Batalkan impor" }).click();
     await page.waitForURL(/\/impor(\?|$)/);
-    await page.goto(`/impor/${b.batchId}`, { waitUntil: "networkidle" });
+    await page.goto(`/impor/${b.batchId}`, { waitUntil: "load" });
     await expect(page.getByRole("heading", { name: "Impor ini tidak ditemukan" })).toBeVisible();
   });
 });

@@ -6,6 +6,7 @@ import { parseInput } from "@/server/mutations/_shared";
 import { markNotificationsRead } from "@/server/mutations/notifications";
 import { countUnreadNotifications, listNotifications, type NotificationRow } from "@/server/queries/notifications";
 import { runAction, toActionError, type ActionResult } from "./result";
+import { ENTITY_ROUTES } from "@/lib/entity-routes";
 
 export interface NotificationItem {
   id: string;
@@ -29,16 +30,6 @@ const payloadSchema = z.object({
 });
 
 // tujuan tautan per entitas; entitas tanpa halaman detail membuka halaman daftarnya
-const ENTITY_ROUTES: Record<string, (id: string) => string> = {
-  transactions: (id) => `/transaksi?id=${id}`,
-  accounts: (id) => `/akun?id=${id}`,
-  bills: (id) => `/tagihan?id=${id}`,
-  goals: (id) => `/target?id=${id}`,
-  goal_contributions: () => "/target",
-  budgets: () => "/anggaran",
-  categories: () => "/pengaturan#kategori",
-  recurring_rules: () => "/transaksi/berulang",
-};
 
 // hanya ada dua pengguna, jadi pengubah data milik viewer pasti partner
 function fallbackMessage(kind: NotificationRow["kind"], partnerName: string | null): string {

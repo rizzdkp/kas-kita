@@ -40,7 +40,9 @@ const shellMask = (page: Page) => [
 
 async function settle(page: Page) {
   await page.evaluate(() => document.fonts.ready);
-  await page.waitForLoadState("networkidle");
+  // koneksi SSE realtime selalu terbuka, jadi "networkidle" tidak pernah tercapai
+  await page.waitForLoadState("load");
+  await page.waitForTimeout(800);
 }
 
 for (const viewport of VIEWPORTS) {

@@ -62,7 +62,6 @@ export default async function BerulangPage({ searchParams }: { searchParams: Sea
           <Icon icon={ChevronLeft} size={16} />
           Semua transaksi
         </Link>
-        <h2 className="text-section text-primary">Transaksi berulang</h2>
       </div>
       <RecurringView scope={scope} rules={rules} options={options} today={today} prefill={prefill} />
     </div>

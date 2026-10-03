@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { ENTITY_ROUTES } from "@/lib/entity-routes";
 
 export type NotificationKind = "partner_edit" | "bill_due" | "budget_over" | "recurring_pending";
 
@@ -27,15 +28,6 @@ const FALLBACK_URL: Record<NotificationKind, string> = {
   recurring_pending: "/transaksi",
 };
 
-const ENTITY_ROUTES: Record<string, (id: string) => string> = {
-  transactions: (id) => `/transaksi?id=${id}`,
-  accounts: (id) => `/akun?id=${id}`,
-  bills: (id) => `/tagihan?id=${id}`,
-  goals: (id) => `/target?id=${id}`,
-  goal_contributions: () => "/target",
-  budgets: () => "/anggaran",
-  categories: () => "/pengaturan#kategori",
-};
 
 const payloadSchema = z.object({
   entity: z.string().optional(),
