@@ -21,6 +21,7 @@ import { BillRow } from "./bill-row";
 import { BillSheet } from "./bill-sheet";
 import { PayDialog } from "./pay-dialog";
 import type { AccountOption, BillItem, PaidItem } from "./types";
+import { AllBillsPaid, EmptyBills } from "@/components/illustrations";
 
 type BillsViewProps = {
   scope: Scope;
@@ -62,6 +63,7 @@ export function BillsView(props: BillsViewProps) {
       {bills.length === 0 ? (
         <Card>
           <EmptyState
+            illustration={<EmptyBills decorative />}
             title="Catat tagihan rutin"
             action={
               <Button variant="primary" icon={Plus} onClick={() => setPanel({ kind: "new" })}>
@@ -86,7 +88,10 @@ export function BillsView(props: BillsViewProps) {
                   </p>
                 </>
               ) : (
-                <p className="text-section text-primary">Tidak ada tagihan yang belum dibayar di periode ini</p>
+                <div className="flex items-center gap-3">
+                  <AllBillsPaid decorative className="w-16 sm:w-20" />
+                  <p className="text-section text-primary">Tidak ada tagihan yang belum dibayar di periode ini</p>
+                </div>
               )}
             </div>
             <Button variant="primary" icon={Plus} onClick={() => setPanel({ kind: "new" })}>

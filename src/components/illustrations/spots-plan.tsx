@@ -1,9 +1,9 @@
 import { Box, CoinStack, Cylinder, Line, Poly, Shadow, Spot, rectY, type IllustrationProps, type P3 } from "./iso";
 
 // kalender berdiri: muka depan di bidang y = FACE, sel 4 kolom x 3 baris
-const CAL = { x0: -40, x1: 36, y0: -14, face: -4, h: 84, head: 64 };
+const CAL = { x0: -40, x1: 36, y0: -14, face: -4, h: 76, head: 58 };
 const COLS = [-34, -17, 0, 17] as const;
-const ROWS = [44, 28, 12] as const;
+const ROWS = [40, 25, 10] as const;
 const CELL = 12;
 
 function cellCheck(x: number, z: number): P3[] {
@@ -19,7 +19,7 @@ function Calendar({ checked }: { checked: (col: number, row: number) => boolean 
   const { x0, x1, y0, face, h, head } = CAL;
   return (
     <g>
-      <Shadow at={[0, 0, 0]} rx={64} ry={22} />
+      <Shadow at={[2, 4, 0]} rx={58} ry={20} />
       <Box at={[x0, y0, 0]} size={[x1 - x0, face - y0, head]} tone="paper" />
       <Box at={[x0, y0, head]} size={[x1 - x0, face - y0, h - head]} tone="accent" />
       <Cylinder at={[-22, -9, h]} r={2.6} h={7} tone="steel" />
@@ -41,7 +41,7 @@ export function EmptyBills(props: IllustrationProps) {
     <Spot {...props} defaultLabel="Kalender tagihan dengan tanda centang">
       <Calendar checked={(col, row) => row === 0 && col < 2} />
       <Poly tone="accent" face="l" pts={rectY(CAL.face + 0.4, COLS[2], COLS[2] + CELL, ROWS[1], ROWS[1] + CELL - 2)} />
-      <CoinStack at={[30, 30, 0]} count={3} r={8} />
+      <CoinStack at={[22, 20, 0]} count={3} r={8} />
     </Spot>
   );
 }
@@ -50,7 +50,7 @@ export function AllBillsPaid(props: IllustrationProps) {
   return (
     <Spot {...props} defaultLabel="Kalender tagihan yang semua tanggalnya sudah dicentang">
       <Calendar checked={() => true} />
-      <CoinStack at={[30, 30, 0]} count={1} r={8} />
+      <CoinStack at={[22, 20, 0]} count={2} r={8} />
     </Spot>
   );
 }
@@ -59,8 +59,8 @@ function FlagOnCoins({ tone, coins }: { tone: "accent" | "positive"; coins: numb
   const top = coins * 4;
   return (
     <g>
-      <Shadow at={[0, 4, 0]} rx={58} ry={20} />
-      <CoinStack at={[-30, 22, 0]} count={2} r={9} tone="partner" />
+      <Shadow at={[0, 8, 0]} rx={50} ry={18} />
+      <CoinStack at={[-24, 18, 0]} count={2} r={9} tone="partner" />
       <CoinStack at={[0, 0, 0]} count={coins} r={13} />
       <Box at={[-1.2, -1.2, top]} size={[2.4, 2.4, 52]} tone="steel" />
       <Poly
@@ -81,7 +81,7 @@ function FlagOnCoins({ tone, coins }: { tone: "accent" | "positive"; coins: numb
           [22, 0, top + 40],
         ]}
       />
-      <CoinStack at={[26, 26, 0]} count={1} r={9} tone="me" />
+      <CoinStack at={[22, 18, 0]} count={1} r={9} tone="me" />
     </g>
   );
 }

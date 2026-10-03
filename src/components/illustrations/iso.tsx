@@ -175,11 +175,11 @@ export function IsoFrame({ viewBox, width, height, defaultLabel, label, decorati
 }
 
 // ilustrasi kecil untuk state kosong; satu bingkai 160 x 160 supaya ukurannya seragam
-export const SPOT_VIEWBOX = "-80 -104 160 160";
+export const SPOT_VIEWBOX = "-82 -116 164 164";
 
 export function Spot({ defaultLabel, children, ...props }: IllustrationProps & { defaultLabel: string; children: ReactNode }) {
   return (
-    <IsoFrame {...props} viewBox={SPOT_VIEWBOX} width={160} height={160} defaultLabel={defaultLabel}>
+    <IsoFrame {...props} viewBox={SPOT_VIEWBOX} width={164} height={164} defaultLabel={defaultLabel}>
       {children}
     </IsoFrame>
   );

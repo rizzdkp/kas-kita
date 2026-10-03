@@ -11,6 +11,7 @@ import { formatDateWithYear } from "@/lib/dates";
 import { progressReachedTarget } from "@/lib/goals";
 import { formatRupiah } from "@/lib/money";
 import type { GoalItem } from "./types";
+import { GoalReached } from "@/components/illustrations";
 
 type AchievedSectionProps = {
   goals: GoalItem[];
@@ -29,7 +30,8 @@ export function AchievedSection({ goals, people, onReopen, onDelete }: AchievedS
         Tercapai
         <span className="font-normal text-secondary">({goals.length})</span>
       </summary>
-      <ul className={`${listSurface} mt-3 divide-y divide-border`}>
+      <GoalReached decorative className="mt-2 w-20" />
+      <ul className={`${listSurface} mt-1 divide-y divide-border`}>
         {goals.map((g) => (
           <li key={g.id} className="flex items-center justify-between gap-4 px-4 py-3 sm:px-5">
             <span className="flex min-w-0 flex-col gap-1">

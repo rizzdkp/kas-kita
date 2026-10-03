@@ -22,6 +22,7 @@ import { AccountRow, type AccountAction } from "./account-row";
 import { DeleteAccountDialog } from "./delete-account-dialog";
 import { GROUP_LABEL } from "./labels";
 import { ReconcileSheet } from "./reconcile-sheet";
+import { EmptyAccounts } from "@/components/illustrations";
 
 type AccountsViewProps = {
   accounts: AccountWithBalance[];
@@ -106,6 +107,7 @@ export function AccountsView({ accounts, people, institutions, scope, today, ope
       {active.length === 0 ? (
         <Card>
           <EmptyState
+            illustration={<EmptyAccounts decorative />}
             title="Tambahkan akun pertama"
             action={
               <Button icon={Plus} onClick={() => setForm({ account: null })}>

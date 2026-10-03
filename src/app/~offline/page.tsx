@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Offline } from "@/components/illustrations";
 import { OfflineActions } from "./offline-actions";
 
 export const metadata: Metadata = { title: "Offline" };
@@ -8,6 +9,7 @@ export default function OfflinePage() {
   return (
     <main className="flex min-h-dvh flex-col justify-center bg-canvas px-4 py-12">
       <div className="mx-auto flex w-full max-w-[44ch] flex-col gap-3">
+        <Offline decorative className="-ml-2 mb-2 w-32 sm:w-40" />
         <h1 className="text-title text-primary">Kamu sedang offline</h1>
         <p className="text-body text-secondary">
           Halaman ini belum pernah dibuka di perangkat ini, jadi belum ada salinannya. Halaman yang sudah pernah dibuka, seperti

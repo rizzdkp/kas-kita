@@ -1,6 +1,8 @@
 "use client";
 
+import { InstitutionBadge } from "@/components/brand/institution-badge";
 import type { IdentityColor } from "@/components/identity/identity-colors";
+import type { AccountType } from "@/server/db/schema";
 import { IdentityDot } from "@/components/identity/identity-dot";
 import { cn } from "@/components/ui/cn";
 
@@ -12,6 +14,7 @@ export interface ImportAccountOption {
   dot: { color?: IdentityColor; shared?: [IdentityColor, IdentityColor]; label: string };
   /** Nama institusi bila templat CSV-nya sudah tersimpan. */
   templateFor: string | null;
+  institution?: { slug: string | null; name: string | null; type: AccountType };
 }
 
 type UploadAccountPickerProps = {
@@ -48,7 +51,9 @@ export function UploadAccountPicker({ accounts, value, onChange, disabled }: Upl
                   "checked:border-[6px] checked:border-accent",
                 )}
               />
-              <IdentityDot color={account.dot.color} shared={account.dot.shared} label={account.dot.label} />
+              <InstitutionBadge slug={account.institution?.slug} name={account.institution?.name} type={account.institution?.type}>
+                <IdentityDot color={account.dot.color} shared={account.dot.shared} label={account.dot.label} />
+              </InstitutionBadge>
               <span className="flex min-w-0 flex-1 flex-col">
                 <span className="truncate text-card text-primary">{account.name}</span>
                 <span className="truncate text-small text-secondary">{account.meta}</span>

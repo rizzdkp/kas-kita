@@ -12,6 +12,7 @@ import { UploadAccountPicker, type ImportAccountOption } from "./upload-account-
 import { UploadDropzone } from "./upload-dropzone";
 import { UploadPasswordDialog } from "./upload-password-dialog";
 import { uploadImportFile, type ImportUploadOutcome } from "./upload-request";
+import { EmptyImports } from "@/components/illustrations";
 
 export type { ImportAccountOption };
 
@@ -82,6 +83,7 @@ export function UploadScreen({ accounts, initialAccountId }: UploadScreenProps) 
     return (
       <Card className="max-w-3xl">
         <EmptyState
+          illustration={<EmptyImports decorative />}
           title="Belum ada akun untuk menerima mutasi"
           action={
             <Link href="/akun?baru=1&jenis=bank" className={buttonClassName("primary")}>

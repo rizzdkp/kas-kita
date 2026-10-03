@@ -18,6 +18,7 @@ import type { RecurringRuleItem } from "@/server/queries/recurring";
 import type { RecurringInitial } from "./form-model";
 import { RecurringRow } from "./recurring-row";
 import { RecurringSheet } from "./recurring-sheet";
+import { EmptyTransactions } from "@/components/illustrations";
 
 type RecurringViewProps = {
   scope: Scope;
@@ -52,6 +53,7 @@ export function RecurringView({ scope, rules, options, today, prefill }: Recurri
       {rules.length === 0 ? (
         <Card>
           <EmptyState
+            illustration={<EmptyTransactions decorative />}
             title="Belum ada transaksi berulang"
             action={
               <Button variant="primary" icon={Plus} onClick={add}>

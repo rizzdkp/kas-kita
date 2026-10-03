@@ -27,6 +27,7 @@ import { savingsRate } from "@/server/metrics/savings-rate";
 import { getStoredInsights } from "@/server/insights/read";
 import { getDashboard, type Dashboard } from "@/server/queries/dashboard";
 import { flowsByOwner, getWeeklyInsights, scopeHasTransactions } from "@/server/queries/reports-dashboard";
+import { EmptyAccounts, EmptyTransactions } from "@/components/illustrations";
 
 // Kecil satu kolom urut UX-FLOWS 3; sedang dua kolom; besar 12 kolom diurutkan ulang lewat order
 // supaya layar pertama 1440x900 memuat hero, arus, grafik saldo, dan satu baris kartu.
@@ -88,6 +89,7 @@ export default async function RingkasanPage({ searchParams }: PageProps) {
     return (
       <Card>
         <EmptyState
+          illustration={<EmptyAccounts decorative />}
           title="Tambahkan akun pertama"
           action={
             <Link href="/akun" className={buttonClassName("primary")}>
@@ -124,7 +126,7 @@ export default async function RingkasanPage({ searchParams }: PageProps) {
       <ScopeCrossfade scope={scope}>
         {hero}
         <Card>
-          <EmptyState title={`${partnerName} belum mencatat transaksi`} action={<RecordForPartnerButton name={partnerName} />}>
+          <EmptyState illustration={<EmptyTransactions decorative />} title={`${partnerName} belum mencatat transaksi`} action={<RecordForPartnerButton name={partnerName} />}>
             Kamu bisa mencatat atas namanya dari sini.
           </EmptyState>
         </Card>

@@ -1,4 +1,4 @@
-import { Box, CoinStack, Cylinder, Disc, IsoFrame, Line, Poly, Shadow, rectX, rectY, rectZ, type IllustrationProps, type P3 } from "./iso";
+import { Box, CoinStack, project, Cylinder, Disc, IsoFrame, Line, Poly, Shadow, rectX, rectY, rectZ, type IllustrationProps, type P3 } from "./iso";
 
 // rumah: dinding x -90..20, y -100..-20, tinggi 70; atap pelana dengan bubungan sejajar sumbu x
 const H = { x0: -90, x1: 20, y0: -100, y1: -20, h: 70, ridgeY: -60, ridgeZ: 112, eave: 7 };
@@ -38,14 +38,15 @@ function House() {
 }
 
 function Plant() {
+  const leaf = project([52, -78, 44]);
   return (
     <g>
       <Shadow at={[52, -78, 0]} rx={20} ry={8} />
       <Cylinder at={[52, -78, 0]} r={9} h={14} tone="steel" />
       <Box at={[50.5, -79.5, 14]} size={[3, 3, 20]} tone="steel" />
-      <circle cx={113.3} cy={-75} r={17} className="accent-l" />
-      <circle cx={104} cy={-62} r={12} className="accent-r" />
-      <circle cx={109} cy={-82} r={10} className="accent-t" />
+      <circle cx={leaf[0]} cy={leaf[1]} r={17} className="accent-l" />
+      <circle cx={leaf[0] + 7} cy={leaf[1] + 6} r={11} className="accent-r" />
+      <circle cx={leaf[0] - 4} cy={leaf[1] - 6} r={9} className="accent-t" />
     </g>
   );
 }
@@ -80,8 +81,7 @@ function Card() {
 /** Ilustrasi besar halaman masuk: rumah, brankas, dua tumpukan koin berwarna identitas, kartu, tanaman. */
 export function HouseholdHero(props: IllustrationProps) {
   return (
-    <IsoFrame {...props} viewBox="-236 -150 472 380" width={472} height={380} defaultLabel="Rumah dengan brankas, dua tumpukan koin, dan kartu">
-      <Shadow at={[0, 0, -14]} rx={210} ry={70} />
+    <IsoFrame {...props} viewBox="-212 -200 424 342" width={424} height={342} defaultLabel="Rumah dengan brankas, dua tumpukan koin, dan kartu">
       <Box at={[-118, -118, -12]} size={[236, 236, 12]} tone="ground" />
       <Poly tone="paper" face="t" pts={rectZ(0.2, -50, -22, -20, 60)} />
       <Shadow at={[-30, -54, 0]} rx={96} ry={30} />

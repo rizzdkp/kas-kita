@@ -32,11 +32,12 @@ const COPY = {
   failed: "Notifikasi perangkat belum bisa diaktifkan. Coba lagi.",
 } as const;
 
-// service worker hanya terpasang di build produksi; jangan menunggu ready selamanya
+// service worker hanya terpasang di build produksi dan baru aktif setelah precache; jangan menunggu selamanya
+const WORKER_TIMEOUT_MS = 8000;
+
 async function getRegistration(): Promise<ServiceWorkerRegistration | null> {
-  const existing = await navigator.serviceWorker.getRegistration();
-  if (!existing) return null;
-  return navigator.serviceWorker.ready;
+  const timeout = new Promise<null>((resolve) => window.setTimeout(() => resolve(null), WORKER_TIMEOUT_MS));
+  return Promise.race([navigator.serviceWorker.ready, timeout]);
 }
 
 /** Pengaturan → Notifikasi: langganan web push untuk perangkat ini (F-NOT-1 AC1). */

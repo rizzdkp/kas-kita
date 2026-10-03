@@ -5,6 +5,7 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { focusQuickAdd } from "@/components/glass/quick-add-bar";
 import type { Scope } from "@/lib/scope";
 import type { TransactionQuery } from "@/components/transactions/filter-params";
+import { EmptyTransactions } from "@/components/illustrations";
 
 type EmptyProps = {
   scope: Scope;
@@ -41,6 +42,7 @@ export function TransactionsEmpty({ scope, view, filtered, partnerName, onClearF
   if (scope === "partner" && partnerName) {
     return (
       <EmptyState
+        illustration={<EmptyTransactions decorative />}
         className="px-3"
         title={`${partnerName} belum mencatat transaksi`}
         action={
@@ -55,6 +57,7 @@ export function TransactionsEmpty({ scope, view, filtered, partnerName, onClearF
   }
   return (
     <EmptyState
+      illustration={<EmptyTransactions decorative />}
       className="px-3"
       title="Catat transaksi pertama"
       action={

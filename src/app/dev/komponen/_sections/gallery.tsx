@@ -11,6 +11,7 @@ import { ContentSection } from "./content-section";
 import { FormsSection } from "./forms-section";
 import { FoundationSection } from "./foundation-section";
 import { GlassSection } from "./glass-section";
+import { IllustrationsSection } from "./illustrations";
 import { OverlaySection } from "./overlay-section";
 import { PreferencesBar } from "./preferences-bar";
 
@@ -45,6 +46,7 @@ export function Gallery() {
           <FormsSection />
           <OverlaySection />
           <ContentSection />
+          <IllustrationsSection />
         </div>
       </ToastProvider>
     </TooltipProvider>

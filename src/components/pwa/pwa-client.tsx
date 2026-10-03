@@ -73,7 +73,7 @@ export function PwaClient() {
     >
       <p className="inline-flex max-w-full items-center gap-2 rounded-pill border border-border bg-surface px-4 py-2 text-small text-secondary shadow-glass">
         <Icon icon={WifiOff} size={16} className="shrink-0" />
-        Offline. Yang tampil adalah data terakhir di perangkat ini.
+        Offline. Menampilkan data terakhir.
       </p>
     </div>
   );

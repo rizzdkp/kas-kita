@@ -69,7 +69,7 @@ test("offline: Ringkasan menampilkan data terakhir, halaman yang belum dibuka me
   await goOffline(context);
   await page.reload();
   await expect(page.getByTestId("hero-value")).toHaveText(heroOnline ?? "");
-  await expect(page.getByRole("status").filter({ hasText: "Offline. Yang tampil adalah data terakhir di perangkat ini." })).toBeVisible();
+  await expect(page.getByRole("status").filter({ hasText: "Offline. Menampilkan data terakhir." })).toBeVisible();
 
   await page.goto("/laporan");
   await expect(page.getByRole("heading", { name: "Kamu sedang offline" })).toBeVisible();

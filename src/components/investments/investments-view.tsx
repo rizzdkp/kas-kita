@@ -15,6 +15,7 @@ import { deleteValuationAction } from "@/server/actions/investments";
 import type { InvestmentSummary, ValuationRow } from "@/server/queries/investments";
 import { dayText, InvestmentCard, signedPercent } from "./investment-card";
 import { ValuationSheet, type ValuationTarget } from "./valuation-sheet";
+import { EmptyInvestments } from "@/components/illustrations";
 
 type Props = {
   items: InvestmentSummary[];
@@ -60,6 +61,7 @@ export function InvestmentsView({ items, people, scope, today }: Props) {
     return (
       <Card>
         <EmptyState
+          illustration={<EmptyInvestments decorative />}
           title={`${whose} akun Investasi`}
           action={
             <Link href={`/akun?baru=1&jenis=investment&scope=${scope}`} className={buttonClassName("primary")}>

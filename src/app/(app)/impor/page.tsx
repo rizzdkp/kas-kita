@@ -35,6 +35,7 @@ export default async function ImporPage({ searchParams }: { searchParams: Search
         meta: [a.institutionName, ACCOUNT_TYPE_LABEL[a.type], ownerLabel].filter(Boolean).join(" · "),
         dot: ownerDot(people, a.ownerId),
         templateFor: a.institutionId && withTemplate.has(a.institutionId) ? a.institutionName : null,
+        institution: { slug: a.institutionSlug, name: a.institutionName, type: a.type },
       };
     });
   const akun = typeof params.akun === "string" && isUuid(params.akun) ? params.akun : null;

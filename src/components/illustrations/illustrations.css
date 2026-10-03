@@ -18,7 +18,7 @@
   --il-ground-r: color-mix(in oklab, var(--accent) 26%, var(--surface));
   --il-ink: color-mix(in oklab, var(--text-primary) 22%, transparent);
   --il-edge: color-mix(in oklab, var(--text-primary) 12%, transparent);
-  --il-shadow: color-mix(in oklab, var(--text-primary) 7%, transparent);
+  --il-shadow: color-mix(in oklab, var(--text-primary) 4.5%, transparent);
   --il-glass: color-mix(in oklab, var(--accent) 34%, var(--surface));
 
   overflow: visible;
@@ -35,7 +35,7 @@
     --il-ground-t: color-mix(in oklab, var(--accent) 22%, var(--surface));
     --il-ground-l: color-mix(in oklab, var(--accent) 15%, var(--surface));
     --il-ground-r: color-mix(in oklab, var(--accent) 9%, var(--surface));
-    --il-shadow: rgba(0, 0, 0, 0.45);
+    --il-shadow: rgba(0, 0, 0, 0.4);
   }
 }
 

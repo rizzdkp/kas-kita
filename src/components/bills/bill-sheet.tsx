@@ -7,6 +7,7 @@ import { useActionRunner } from "@/components/budgets/use-action";
 import { AmountInput } from "@/components/money/amount-input";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { GroupedSelect } from "@/components/transactions/grouped-select";
 import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { SegmentedControl } from "@/components/ui/segmented-control";
@@ -17,6 +18,7 @@ import { useToast } from "@/components/ui/toast";
 import { formatAmountInput } from "@/lib/money";
 import { createBillAction, updateBillAction } from "@/server/actions/bills";
 import { buildRrule, frequencyOf, type BillFrequency } from "./rrule";
+import { billAccountGroups } from "./account-options";
 import type { AccountOption, BillItem } from "./types";
 
 type BillSheetProps = {
@@ -104,7 +106,7 @@ export function BillSheet({ bill, people, initialOwner, payAccounts, cardAccount
         ) : null}
         {isCard ? (
           <Field label="Kartu kredit">
-            <Select value={cardId} onValueChange={setCardId} options={cardAccounts.map((a) => ({ value: a.id, label: a.label }))} />
+            <GroupedSelect value={cardId} onValueChange={setCardId} groups={billAccountGroups(cardAccounts)} />
           </Field>
         ) : (
           <>
@@ -135,7 +137,7 @@ export function BillSheet({ bill, people, initialOwner, payAccounts, cardAccount
           </>
         )}
         <Field label="Akun pembayar">
-          <Select value={payFrom} onValueChange={setPayFrom} options={payAccounts.map((a) => ({ value: a.id, label: a.label }))} placeholder="Pilih akun" />
+          <GroupedSelect value={payFrom} onValueChange={setPayFrom} groups={billAccountGroups(payAccounts)} placeholder="Pilih akun" />
         </Field>
         <div className="flex flex-col gap-2">
           <span className="text-small font-medium text-primary">Pengulangan</span>

@@ -7,7 +7,20 @@ export type BillItem = BillWithStatus & {
   history: BillPaymentEntry[];
 };
 
-export type AccountOption = { id: string; label: string };
+import type { AccountType } from "@/server/db/schema";
+
+export type AccountOption = {
+  id: string;
+  label: string;
+  /** Untuk lencana institusi di pilihan akun. */
+  institutionSlug?: string | null;
+  institutionName?: string | null;
+  type?: AccountType;
+};
+
+export function billAccountOption(a: { id: string; name: string; type: AccountType; institutionSlug: string | null; institutionName: string | null }): AccountOption {
+  return { id: a.id, label: a.name, type: a.type, institutionSlug: a.institutionSlug, institutionName: a.institutionName };
+}
 
 export type PaidItem = {
   id: string;

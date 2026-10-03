@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/components/ui/cn";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatNotificationTime } from "./format-time";
+import { EmptyNotifications } from "@/components/illustrations";
 
 type NotificationsPanelProps = {
   /** Dipanggil setiap jumlah belum dibaca berubah, supaya titik di NotificationsButton ikut. */
@@ -82,11 +83,14 @@ export function NotificationsPanel({ onUnreadChange, partnerName, inPopover = tr
           </Button>
         </div>
       ) : state.feed.items.length === 0 ? (
-        <p className="py-2 text-control text-secondary">
-          {partnerName
-            ? `Belum ada notifikasi. Kabar muncul di sini saat ${partnerName} mengubah data milikmu, tagihan jatuh tempo 3 hari lagi, atau anggaran wajib lewat.`
-            : "Belum ada notifikasi. Kabar muncul di sini saat tagihan jatuh tempo 3 hari lagi atau anggaran wajib lewat."}
-        </p>
+        <div className="flex flex-col items-start gap-1 py-2">
+          <EmptyNotifications decorative className="-ml-2 w-20" />
+          <p className="text-control text-secondary">
+            {partnerName
+              ? `Belum ada notifikasi. Kabar muncul di sini saat ${partnerName} mengubah data milikmu, tagihan jatuh tempo 3 hari lagi, atau anggaran wajib lewat.`
+              : "Belum ada notifikasi. Kabar muncul di sini saat tagihan jatuh tempo 3 hari lagi atau anggaran wajib lewat."}
+          </p>
+        </div>
       ) : (
         <ul aria-label="Daftar notifikasi" className="-mx-2 flex max-h-[min(420px,60dvh)] flex-col overflow-y-auto">
           {state.feed.items.map((item) => (

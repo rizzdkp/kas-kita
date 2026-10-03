@@ -20,6 +20,7 @@ import { ContributionHistorySheet } from "./contribution-history";
 import { GoalRow } from "./goal-row";
 import { GoalSheet } from "./goal-sheet";
 import type { GoalItem } from "./types";
+import { EmptyGoals } from "@/components/illustrations";
 
 type GoalsViewProps = {
   scope: Scope;
@@ -58,6 +59,7 @@ export function GoalsView({ scope, people, active, achieved, accounts, today }: 
       {active.length === 0 ? (
         <Card>
           <EmptyState
+            illustration={<EmptyGoals decorative />}
             title={achieved.length > 0 ? "Semua target sudah tercapai" : "Buat target tabungan pertama"}
             action={
               <Button variant="primary" icon={Plus} onClick={() => setPanel({ kind: "new" })}>

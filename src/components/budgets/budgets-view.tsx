@@ -16,6 +16,7 @@ import { BudgetSheet, budgetKey, type CategoryOption } from "./budget-sheet";
 import { listSurface } from "./meter-bar";
 import { choiceFromScope, ownerName, OwnerDot, type PlanningPeople } from "./owner";
 import { useActionRunner } from "./use-action";
+import { EmptyBudgets } from "@/components/illustrations";
 
 type BudgetsViewProps = {
   month: string;
@@ -76,6 +77,7 @@ export function BudgetsView({ month, isCurrentMonth, scope, people, budgets, cat
       {budgets.length === 0 ? (
         <Card>
           <EmptyState
+            illustration={<EmptyBudgets decorative />}
             title={isCurrentMonth ? "Atur anggaran bulan ini" : "Belum ada anggaran di bulan ini"}
             action={
               <div className="flex flex-wrap gap-2">

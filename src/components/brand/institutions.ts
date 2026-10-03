@@ -4,25 +4,25 @@ import type { AccountType } from "@/server/db/schema";
 export interface InstitutionMark {
   /** Monogram di lencana 32px, maksimal 4 huruf. */
   label: string;
-  /** Monogram di lencana 20px, maksimal 3 huruf sempit. */
+  /** Monogram di lencana 20px, maksimal 2 huruf; tiga huruf terpotong di kotak sekecil itu. */
   short: string;
   /** Kunci token warna: --inst-<token>-bg dan --inst-<token>-fg. */
   token: string;
 }
 
 const MARKS: Record<string, InstitutionMark> = {
-  bca: { label: "BCA", short: "BCA", token: "bca" },
+  bca: { label: "BCA", short: "B", token: "bca" },
   jago: { label: "Jago", short: "J", token: "jago" },
   gopay: { label: "GP", short: "GP", token: "gopay" },
   ovo: { label: "OVO", short: "O", token: "ovo" },
   mandiri: { label: "mdr", short: "m", token: "mandiri" },
-  bri: { label: "BRI", short: "BRI", token: "bri" },
-  bni: { label: "BNI", short: "BNI", token: "bni" },
+  bri: { label: "BRI", short: "BR", token: "bri" },
+  bni: { label: "BNI", short: "BN", token: "bni" },
   dana: { label: "DANA", short: "D", token: "dana" },
   shopeepay: { label: "SP", short: "SP", token: "shopeepay" },
   seabank: { label: "Sea", short: "S", token: "seabank" },
   jenius: { label: "Jen", short: "J", token: "jenius" },
-  blu: { label: "blu", short: "blu", token: "blu" },
+  blu: { label: "blu", short: "b", token: "blu" },
   cimb: { label: "CIMB", short: "C", token: "cimb" },
   permata: { label: "PB", short: "P", token: "permata" },
 };

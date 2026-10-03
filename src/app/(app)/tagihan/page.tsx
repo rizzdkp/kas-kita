@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { flattenCategories } from "@/components/budgets/options";
 import { planningPeople } from "@/components/budgets/people";
 import { BillsView } from "@/components/bills/bills-view";
-import type { BillItem, PaidItem } from "@/components/bills/types";
+import { billAccountOption, type BillItem, type PaidItem } from "@/components/bills/types";
 import { formatRangeLabel, parseDateKey, periodRange, todayJakarta } from "@/lib/dates";
 import { parseScope } from "@/lib/scope";
 import { requireViewer } from "@/server/auth/session";
@@ -63,10 +63,10 @@ export default async function TagihanPage({ searchParams }: { searchParams: Sear
       paid={paid}
       periodLabel={formatRangeLabel(period)}
       periodLast={addDaysKey(keyOf(period.end), -1)}
-      payAccounts={accounts.liquid.map((a) => ({ id: a.id, label: a.name }))}
+      payAccounts={accounts.liquid.map(billAccountOption)}
       cardAccounts={accounts.liability
         .filter((a) => a.type === "credit_card" || a.type === "paylater")
-        .map((a) => ({ id: a.id, label: a.name }))}
+        .map(billAccountOption)}
       categories={flattenCategories(categoryTree)}
       today={today}
     />

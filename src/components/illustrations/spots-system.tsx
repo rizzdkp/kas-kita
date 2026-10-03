@@ -4,9 +4,9 @@ export function EmptyImports(props: IllustrationProps) {
   return (
     <Spot {...props} defaultLabel="Dokumen mutasi masuk ke akun">
       <Shadow at={[0, 4, 0]} rx={66} ry={22} />
-      <Box at={[-46, -34, 0]} size={[42, 4, 74]} tone="paper" edge />
-      <Poly tone="accent" face="l" pts={rectY(-29.8, -40, -24, 62, 68)} />
-      {[52, 44, 36, 28, 20].map((z, i) => (
+      <Box at={[-46, -34, 0]} size={[42, 4, 66]} tone="paper" edge />
+      <Poly tone="accent" face="l" pts={rectY(-29.8, -40, -24, 54, 60)} />
+      {[46, 38, 30, 22, 14].map((z, i) => (
         <Line key={z} pts={[[-40, -29.8, z], [i % 2 ? -14 : -10, -29.8, z]]} />
       ))}
       <Box at={[2, 8, 0]} size={[48, 30, 5]} tone="me" />

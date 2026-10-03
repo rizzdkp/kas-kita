@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { buttonClassName } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Skeleton } from "@/components/ui/skeleton";
+import { EmptyImports } from "@/components/illustrations";
 
 // batch "parsing" diisi worker (PDF lewat AI bisa beberapa menit), jadi halaman menanyakan ulang secara berkala
 const POLL_MS = 2500;
@@ -76,6 +77,7 @@ export function ReviewCommitted({ batchId }: { batchId: string }) {
 export function ReviewNotFound() {
   return (
     <EmptyState
+      illustration={<EmptyImports decorative />}
       title="Impor ini tidak ditemukan"
       action={
         <Link href="/impor" className={buttonClassName("primary")}>
@@ -91,6 +93,7 @@ export function ReviewNotFound() {
 export function ReviewEmpty({ accountId }: { accountId: string }) {
   return (
     <EmptyState
+      illustration={<EmptyImports decorative />}
       title="File ini tidak berisi transaksi"
       action={
         <Link href={importUploadHref(accountId)} className={buttonClassName("primary")}>

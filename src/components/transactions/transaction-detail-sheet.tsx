@@ -102,7 +102,7 @@ export function TransactionDetailSheet({ id, onClose, people, scope, formOptions
         <SheetContent title={text?.title ?? "Detail transaksi"}>
           {detail && data ? (
             <div className="flex flex-col gap-6">
-              <TransactionDetailBody detail={detail} names={data.names} people={people} />
+              <TransactionDetailBody detail={detail} names={data.names} people={people} accounts={formOptions?.accounts} />
               <div className="flex flex-wrap gap-2">
                 {detail.deletedAt ? (
                   <Button

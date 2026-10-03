@@ -6,12 +6,13 @@ import { useActionRunner } from "@/components/budgets/use-action";
 import { AmountInput } from "@/components/money/amount-input";
 import { Button } from "@/components/ui/button";
 import { DialogContent } from "@/components/ui/dialog";
+import { GroupedSelect } from "@/components/transactions/grouped-select";
 import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Select } from "@/components/ui/select";
 import { useToast } from "@/components/ui/toast";
 import { formatAmountInput, formatRupiah } from "@/lib/money";
 import { payBillAction } from "@/server/actions/bills";
+import { billAccountGroups } from "./account-options";
 import type { AccountOption, BillItem } from "./types";
 
 type PayDialogProps = {
@@ -92,7 +93,7 @@ export function PayDialog({ bill, accounts, today, onDone }: PayDialogProps) {
           </div>
         )}
         <Field label="Dibayar dari">
-          <Select value={accountId} onValueChange={setAccountId} options={accountOptions.map((a) => ({ value: a.id, label: a.label }))} />
+          <GroupedSelect value={accountId} onValueChange={setAccountId} groups={billAccountGroups(accountOptions)} />
         </Field>
         <Field label="Tanggal bayar">
           <Input type="date" value={paidOn} max={today} onChange={(event) => setPaidOn(event.target.value)} />

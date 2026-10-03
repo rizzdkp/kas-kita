@@ -125,6 +125,7 @@ Tabel di bawah mencatat teks yang sudah dipakai di kode. Bagian dinamis ditulis 
 |---|---|
 | Judul halaman masuk | Kas Kita |
 | Keterangan halaman masuk | Masuk untuk melihat keuangan kalian berdua. |
+| Kalimat nilai produk di panel ilustrasi (layar besar) | Uang kalian berdua, dalam satu tempat. |
 | Label | Email / Password |
 | Tombol lihat password (aria) | Tampilkan password / Sembunyikan password |
 | Pilihan ingat perangkat | Ingat perangkat ini (30 hari) |
@@ -182,7 +183,7 @@ Tabel di bawah mencatat teks yang sudah dipakai di kode. Bagian dinamis ditulis 
 | Field belum lengkap, banyak baris | Baris [n]: Lengkapi [field] untuk menyimpan. |
 | Tombol | Simpan / Simpan semua / Batal / Selesai |
 | Toast tersimpan offline | Tersimpan di perangkat. Dikirim otomatis saat koneksi kembali. |
-| Penanda offline | Offline. Yang tampil adalah data terakhir di perangkat ini. |
+| Penanda offline | Offline. Menampilkan data terakhir. |
 | Halaman offline, judul | Kamu sedang offline |
 | Halaman offline, isi | Halaman ini belum pernah dibuka di perangkat ini, jadi belum ada salinannya. Halaman yang sudah pernah dibuka, seperti Ringkasan, tetap tampil dengan data terakhir. / Transaksi yang kamu ketik di bar bawah disimpan di perangkat dan dikirim otomatis saat koneksi kembali. |
 | Halaman offline, tombol | Coba lagi / Buka Ringkasan |
