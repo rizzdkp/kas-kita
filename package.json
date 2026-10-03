@@ -14,10 +14,12 @@
     "check": "pnpm typecheck && pnpm lint && pnpm test",
     "e2e": "playwright test",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "tsx scripts/migrate.ts",
-    "db:seed": "tsx scripts/seed.ts",
-    "user:create": "tsx scripts/create-user.ts",
-    "dev:session": "tsx scripts/dev-session.ts",
+    "db:migrate": "tsx --env-file-if-exists=.env.local scripts/migrate.ts",
+    "db:seed": "tsx --env-file-if-exists=.env.local scripts/seed.ts",
+    "user:create": "tsx --env-file-if-exists=.env.local scripts/create-user.ts",
+    "dev:session": "tsx --env-file-if-exists=.env.local scripts/dev-session.ts",
+    "dev:passwords": "tsx --env-file-if-exists=.env.local scripts/dev-set-passwords.ts",
+    "setup:local": "node scripts/setup-local.mjs",
     "worker": "tsx src/worker/index.ts"
   },
   "dependencies": {

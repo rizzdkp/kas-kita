@@ -4,6 +4,7 @@ import type { Tx } from "@/server/db/client";
 import { auditLog, users } from "@/server/db/schema";
 import { ConflictError, NotFoundError } from "@/server/errors";
 import type { AuditValue } from "@/server/queries/audit";
+import { publishChange } from "@/server/realtime/publish";
 
 /** Tabel ber-audit: punya id dan version (DATA-MODEL aturan 4 dan 6). */
 export type AuditedTable = PgTable & { id: PgColumn; version: PgColumn };
@@ -47,6 +48,8 @@ export async function writeAudit(
   entry: { actorId: string; entity: string; entityId: string; action: AuditAction; diff: AuditDiff },
 ): Promise<void> {
   await tx.insert(auditLog).values(entry);
+  // semua mutasi lewat sini; NOTIFY ikut transaksi sehingga layar lain baru tahu setelah commit
+  await publishChange(tx, entry.entity, entry.entityId);
 }
 
 async function lastEditor(tx: Tx, entity: string, entityId: string): Promise<{ name: string | null; at: Date | null }> {

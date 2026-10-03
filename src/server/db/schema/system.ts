@@ -124,3 +124,20 @@ export const loginAttempts = pgTable(
   (t) => [index("login_attempts_key_at_idx").on(t.key, t.at)],
 );
 
+
+// langganan web push per perangkat (F-NOT-1 AC1); endpoint unik karena satu perangkat satu langganan
+export const pushSubscriptions = pgTable(
+  "push_subscriptions",
+  {
+    id: id(),
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    endpoint: text("endpoint").notNull(),
+    p256dh: text("p256dh").notNull(),
+    auth: text("auth").notNull(),
+    userAgent: text("user_agent"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [uniqueIndex("push_subscriptions_endpoint_idx").on(t.endpoint), index("push_subscriptions_user_idx").on(t.userId)],
+);

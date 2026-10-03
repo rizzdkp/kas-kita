@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
+import { Suspense } from "react";
 import { GeistSans } from "geist/font/sans";
+import { PwaClient } from "@/components/pwa/pwa-client";
 import { PREFERENCES_SCRIPT } from "@/styles/preferences";
 import "./globals.css";
 
@@ -33,7 +35,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* atribut transparansi dan tema dipasang sebelum paint supaya tidak ada kilatan glass */}
         <script dangerouslySetInnerHTML={{ __html: PREFERENCES_SCRIPT }} />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        {/* useSearchParams butuh batas Suspense supaya halaman statis tetap dirender di server */}
+        <Suspense fallback={null}>
+          <PwaClient />
+        </Suspense>
+      </body>
     </html>
   );
 }

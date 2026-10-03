@@ -9,6 +9,8 @@ import {
   PGBOSS_SCHEMA,
 } from "@/server/jobs/names";
 import { handlePdfAiJob } from "./jobs/pdf-ai";
+import { registerScheduledJobs } from "./jobs/register-scheduled";
+import { handleWeeklyInsightsJob, JOB_WEEKLY_INSIGHTS, WEEKLY_INSIGHTS_CRON } from "./jobs/weekly-insights";
 import { errorName, logEvent } from "./log";
 
 // Worker pg-boss (ARCHITECTURE 1 dan 7): antrean impor AI dan job terjadwal, di database yang sama dengan app.
@@ -28,6 +30,7 @@ async function main(): Promise<void> {
   await boss.createQueue(JOB_PDF_AI, PDF_AI_QUEUE_OPTIONS);
   await boss.createQueue(JOB_CLEANUP_IMPORTS, MAINTENANCE_QUEUE);
   await boss.createQueue(JOB_CLEANUP_ATTACHMENTS, MAINTENANCE_QUEUE);
+  await boss.createQueue(JOB_WEEKLY_INSIGHTS, MAINTENANCE_QUEUE);
 
   await boss.work<unknown>(JOB_PDF_AI, { batchSize: 1 }, async ([job]) => {
     if (!job) return;
@@ -50,11 +53,20 @@ async function main(): Promise<void> {
     logEvent("info", "job_done", { job: JOB_CLEANUP_ATTACHMENTS, removed, failed });
   });
 
+  await boss.work(JOB_WEEKLY_INSIGHTS, async () => {
+    const run = await handleWeeklyInsightsJob();
+    logEvent("info", "job_done", { job: JOB_WEEKLY_INSIGHTS, scopes: run.scopes, insights: run.insights, ai: run.ai, template: run.template });
+  });
+
   // 03:15 dan 03:30 WIB, setelah hapus permanen 03:00 (ARCHITECTURE 7)
   await boss.schedule(JOB_CLEANUP_IMPORTS, "15 3 * * *", null, { tz: TZ });
   await boss.schedule(JOB_CLEANUP_ATTACHMENTS, "30 3 * * *", null, { tz: TZ });
+  await boss.schedule(JOB_WEEKLY_INSIGHTS, WEEKLY_INSIGHTS_CRON, null, { tz: TZ });
 
-  logEvent("info", "worker_started", { queues: [JOB_PDF_AI, JOB_CLEANUP_IMPORTS, JOB_CLEANUP_ATTACHMENTS].join(",") });
+  // transaksi berulang, salin anggaran, tagihan kartu kredit, hapus permanen, notifikasi jatuh tempo
+  const scheduled = await registerScheduledJobs(boss);
+
+  logEvent("info", "worker_started", { queues: [JOB_PDF_AI, JOB_CLEANUP_IMPORTS, JOB_CLEANUP_ATTACHMENTS, JOB_WEEKLY_INSIGHTS, ...scheduled].join(",") });
 
   let stopping = false;
   const stop = async (signal: string) => {

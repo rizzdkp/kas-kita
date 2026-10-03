@@ -24,6 +24,7 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { requireViewer } from "@/server/auth/session";
 import { addDaysKey, monthEndKey, startOfKey } from "@/server/metrics/_time";
 import { savingsRate } from "@/server/metrics/savings-rate";
+import { getStoredInsights } from "@/server/insights/read";
 import { getDashboard, type Dashboard } from "@/server/queries/dashboard";
 import { flowsByOwner, getWeeklyInsights, scopeHasTransactions } from "@/server/queries/reports-dashboard";
 
@@ -103,7 +104,10 @@ export default async function RingkasanPage({ searchParams }: PageProps) {
   const [hasTransactions, ownerFlows, insights] = await Promise.all([
     scope === "partner" ? scopeHasTransactions(viewer, scope) : Promise.resolve(true),
     scope === "all" ? flowsByOwner(viewer, scope, d.ranges.current) : Promise.resolve(null),
-    getWeeklyInsights(viewer, scope, { today: d.today, budgets: d.topBudgets, bills: d.upcomingBills }),
+    // F-AI-2: wawasan job Senin; sebelum job jalan, templat dihitung langsung
+    getStoredInsights(viewer, scope, d.today).then(
+      (stored) => stored ?? getWeeklyInsights(viewer, scope, { today: d.today, budgets: d.topBudgets, bills: d.upcomingBills }),
+    ),
   ]);
 
   const hero = (

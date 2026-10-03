@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { ENROLL_PATH, LOGIN_PATH, PATHNAME_HEADER, SESSION_COOKIE_NAMES } from "@/server/auth/constants";
+import { LOGIN_PATH, PATHNAME_HEADER, SESSION_COOKIE_NAMES } from "@/server/auth/constants";
 
-const PUBLIC_PREFIXES = [LOGIN_PATH, ENROLL_PATH, "/api/auth", "/api/health"];
+const PUBLIC_PREFIXES = [LOGIN_PATH, "/api/auth", "/api/health"];
 
 function isPublic(pathname: string): boolean {
   return PUBLIC_PREFIXES.some((prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`));

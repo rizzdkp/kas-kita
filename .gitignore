@@ -10,3 +10,7 @@ test-results
 playwright-report
 /data
 .next-*
+
+public/sw.js
+public/sw.js.map
+public/swe-worker-*.js

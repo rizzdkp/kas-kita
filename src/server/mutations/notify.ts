@@ -3,6 +3,7 @@ import { formatRupiah } from "@/lib/money";
 import type { UserRow } from "@/server/auth/viewer";
 import type { Tx } from "@/server/db/client";
 import { notifications } from "@/server/db/schema";
+import { announceNotifications } from "@/server/push/dispatch";
 import type { AuditValue } from "@/server/queries/audit";
 import type { AuditAction, AuditDiff } from "./audit";
 
@@ -65,5 +66,10 @@ export async function notifyOwners(
     changes: Object.entries(opts.diff).map(([field, [before, after]]) => ({ field, before, after })),
   };
   const payload: PartnerEditPayload = { ...base, message: partnerEditMessage(base) };
-  await tx.insert(notifications).values(recipients.map((recipientId) => ({ recipientId, kind: "partner_edit" as const, payload })));
+  const rows = await tx
+    .insert(notifications)
+    .values(recipients.map((recipientId) => ({ recipientId, kind: "partner_edit" as const, payload })))
+    .returning({ id: notifications.id });
+  // web push dikirim setelah commit oleh listener di proses app, di luar transaksi ini
+  await announceNotifications(tx, rows.map((r) => r.id));
 }

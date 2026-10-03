@@ -1,0 +1,10 @@
+{
+  "kalimat": [
+    { "id": "kategori_naik", "teks": "Minggu lalu pengeluaran {{kategori_1}} mencapai {{nominal_1}}, {{persen_1}} di atas rata-rata mingguan sebelumnya." },
+    { "id": "kategori_baru", "teks": "Minggu lalu muncul pengeluaran {{kategori_1}} sebesar {{nominal_1}}, yang sebelumnya tidak ada." },
+    { "id": "anggaran_lewat", "teks": "Anggaran wajib {{kategori_1}} sudah melewati batas dan kini terpakai {{persen_1}}." },
+    { "id": "anggaran_cepat", "teks": "Anggaran wajib {{kategori_1}} terpakai {{persen_1}}, lebih cepat dari bulan yang baru berjalan {{persen_2}}." },
+    { "id": "tagihan", "teks": "Minggu ini tagihan {{tagihan_1}} sebesar {{nominal_1}} jatuh tempo pada {{tanggal_1}}." },
+    { "id": "total_minggu", "teks": "Sepanjang minggu lalu pengeluaran tercatat {{nominal_1}} dalam {{jumlah_1}} transaksi." }
+  ]
+}

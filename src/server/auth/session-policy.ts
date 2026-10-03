@@ -7,15 +7,16 @@ const rememberBody = z.object({ rememberMe: z.boolean().optional() });
 interface SessionCreateContext {
   path?: string | undefined;
   body?: unknown;
-  context?: { session?: { session?: { trusted?: unknown } } | null } | undefined;
+  context?: { session?: { session?: Record<string, unknown> } | null } | undefined;
 }
 
-// tanpa centang "Ingat perangkat ini" yang eksplisit, perangkat dianggap tidak tepercaya
+// form masuk selalu mengirim rememberMe; sesi yang dibuat di luar endpoint masuk dianggap tidak tepercaya
 export function isTrustedSessionRequest(ctx: SessionCreateContext | null | undefined): boolean {
   if (!ctx) return false;
   if (ctx.path === SIGN_IN_PATH) {
+    // Zod Better Auth sudah mengisi rememberMe kosong dengan true, sama dengan umur cookie yang dipasangnya
     const parsed = rememberBody.safeParse(ctx.body);
-    return parsed.success && parsed.data.rememberMe === true;
+    return parsed.success && parsed.data.rememberMe !== false;
   }
   // sesi pengganti (mis. setelah ganti password) mewarisi status sesi yang sedang dipakai
   return ctx.context?.session?.session?.trusted === true;
