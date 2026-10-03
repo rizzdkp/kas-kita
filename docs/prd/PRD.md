@@ -118,11 +118,12 @@ Setiap fitur punya ID. Coding agent mengerjakan per ID dan menandai selesai hany
 
 ### 7.1 Autentikasi
 
-**F-AUTH-1 Login.** Login dengan passkey. Password + TOTP tersedia sebagai cadangan.
-- AC1. Tidak ada halaman signup. Akun dibuat lewat perintah CLI di server (`DEPLOYMENT.md`).
+**F-AUTH-1 Login.** Login dengan email dan password dalam satu layar, tanpa langkah kedua (keputusan `docs/decisions/0010-login-email-password.md`).
+- AC1. Tidak ada halaman signup. Akun dibuat lewat perintah CLI di server (`DEPLOYMENT.md`), yang juga menyetel password (minimal 12 karakter) dan bisa menggantinya untuk pemulihan.
 - AC2. Setelah 5 percobaan gagal dalam 15 menit, login dari IP tersebut dikunci 15 menit.
 - AC3. Sesi berlaku 30 hari di perangkat yang ditandai tepercaya, 12 jam di perangkat lain.
 - AC4. Halaman Pengaturan menampilkan daftar sesi aktif dan tombol "Keluar dari perangkat ini" per sesi.
+- AC5. Pengaturan punya "Ganti password" (password sekarang, password baru minimal 12 karakter, ulangi). Setelah diganti, sesi di perangkat lain dicabut.
 
 ### 7.2 Cakupan
 

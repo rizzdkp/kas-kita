@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { boolean, customType, date, index, integer, jsonb, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import { boolean, customType, date, index, integer, jsonb, pgTable, text, timestamp, uniqueIndex, uuid } from "drizzle-orm/pg-core";
 import { id, timestamps, versioned } from "./common";
 import { accounts, institutions, transactions } from "./finance";
 import { users } from "./users";
@@ -28,9 +28,15 @@ export const importRows = pgTable(
     parsed: jsonb("parsed").notNull(),
     decision: text("decision").$type<"new" | "duplicate_of" | "skip">().notNull().default("new"),
     matchedTransactionId: uuid("matched_transaction_id").references(() => transactions.id),
+    // salinan status committed batch supaya unique parsial "Duplikat pasti" bisa dicek di satu tabel
+    committedAt: timestamp("committed_at", { withTimezone: true }),
     ...timestamps,
   },
-  (t) => [index("import_rows_hash_idx").on(t.rowHash)],
+  (t) => [
+    index("import_rows_hash_idx").on(t.rowHash),
+    index("import_rows_batch_idx").on(t.batchId),
+    uniqueIndex("import_rows_committed_hash_uq").on(t.rowHash).where(sql`${t.decision} <> 'skip' and ${t.committedAt} is not null`),
+  ],
 );
 
 export const importTemplates = pgTable("import_templates", {
@@ -118,3 +124,20 @@ export const loginAttempts = pgTable(
   (t) => [index("login_attempts_key_at_idx").on(t.key, t.at)],
 );
 
+
+// langganan web push per perangkat (F-NOT-1 AC1); endpoint unik karena satu perangkat satu langganan
+export const pushSubscriptions = pgTable(
+  "push_subscriptions",
+  {
+    id: id(),
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    endpoint: text("endpoint").notNull(),
+    p256dh: text("p256dh").notNull(),
+    auth: text("auth").notNull(),
+    userAgent: text("user_agent"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [uniqueIndex("push_subscriptions_endpoint_idx").on(t.endpoint), index("push_subscriptions_user_idx").on(t.userId)],
+);

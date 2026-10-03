@@ -1,0 +1,36 @@
+/* halaman cetak laporan: hanya dokumen yang tercetak, shell dan kontrol disembunyikan */
+@media print {
+  @page {
+    size: A4;
+    margin: 16mm;
+  }
+  html,
+  body {
+    background: #ffffff !important;
+  }
+  body * {
+    visibility: hidden;
+  }
+  .kk-print-doc,
+  .kk-print-doc * {
+    visibility: visible;
+  }
+  .kk-print-doc {
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 100%;
+    border: 0 !important;
+    padding: 0 !important;
+    color: #000000;
+    --text-primary: #000000;
+    --text-secondary: rgba(0, 0, 0, 0.7);
+    --border: rgba(0, 0, 0, 0.2);
+    --surface: #ffffff;
+  }
+  .kk-print-doc section {
+    break-inside: avoid;
+  }
+  .kk-no-print {
+    display: none !important;
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "rows": [
+    { "date": "2026-08-03", "time": null, "description": "Pembayaran merchant KEDAI CONTOH", "amount": "-Rp27.500", "balance": null },
+    { "date": "2026-08-09", "time": "10:05", "description": "Isi saldo dari rekening", "amount": "+Rp300.000", "balance": null },
+    { "date": "2026-08-14", "time": null, "description": "Kirim ke teman", "amount": -50000, "balance": null }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "merchant": "INDOMARET MERDEKA RAYA",
+  "date": "2026-09-20",
+  "time": "19:42",
+  "total": 168000,
+  "items": [
+    { "name": "INDOMIE GORENG 5PCS", "amount": 15500, "categoryName": "Belanja dapur" },
+    { "name": "BERAS SANIA 5KG", "amount": 72900, "categoryName": "Belanja dapur" },
+    { "name": "TELUR AYAM 10S", "amount": 28500, "categoryName": "Belanja dapur" },
+    { "name": "AQUA 1500ML 2X", "amount": 9000, "categoryName": "Kopi dan jajan" },
+    { "name": "CHITATO SAPI BBQ 68G", "amount": 11900, "categoryName": "Kopi dan jajan" },
+    { "name": "SUNLIGHT JERUK 755ML", "amount": 17500, "categoryName": "Rumah" },
+    { "name": "PEPSODENT 190G", "amount": 14300, "categoryName": "Belanja pribadi" },
+    { "name": "HEMAT INDOMIE", "amount": -1600, "categoryName": "Belanja dapur" }
+  ]
+}

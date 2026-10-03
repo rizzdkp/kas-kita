@@ -1,0 +1,307 @@
+/*
+ * Token desain Kas Kita (docs/prd/DESIGN.md). Komponen hanya membaca variabel di file ini.
+ * Mode: ikut prefers-color-scheme, bisa dipaksa lewat html[data-theme="light" | "dark"].
+ */
+
+:root {
+  color-scheme: light;
+
+  /* warna, mode terang */
+  --canvas: #fdfbfa;
+  --surface: #ffffff;
+  --surface-sunken: rgba(39, 26, 0, 0.035);
+  --text-primary: #000000;
+  --text-secondary: rgba(39, 37, 30, 0.68);
+  --text-tertiary: rgba(39, 37, 30, 0.52);
+  --border: rgba(39, 26, 0, 0.14);
+  --border-strong: rgba(39, 26, 0, 0.25);
+  --accent: #016a71;
+  --accent-hover: #014f54;
+  --on-accent: #ffffff;
+  --positive: #2f7a4b;
+  --attention: #a23544;
+  --due-soon: #97431a;
+  --error: #c40500;
+
+  /* glass, mode terang */
+  --glass-fill: rgba(255, 255, 255, 0.58);
+  /* +8% isian saat konten di bawah toolbar di-scroll (DESIGN 5.6) */
+  --glass-fill-scrolled: rgba(255, 255, 255, 0.66);
+  --glass-fill-active: rgba(255, 255, 255, 0.82);
+  /* isian aktif di terang nyaris putih di atas putih, butuh bayangan tipis supaya terbaca */
+  --glass-active-shadow: 0 1px 3px rgba(39, 26, 0, 0.1), inset 0 0 0 1px rgba(39, 26, 0, 0.04);
+  --glass-blur: 24px;
+  --glass-saturate: 180%;
+  --glass-rim: rgba(255, 255, 255, 0.7);
+  --glass-highlight: rgba(255, 255, 255, 0.95);
+  --glass-shadow: 0 1px 2px rgba(39, 26, 0, 0.06), 0 10px 32px rgba(39, 26, 0, 0.1);
+  --scrim: rgba(253, 251, 250, 0.72);
+
+  /* kontrol nonaktif; satu nilai untuk semua komponen */
+  --disabled-opacity: 0.48;
+
+  /* medan ambien (DESIGN 6) */
+  --ambient-opacity: 0.16;
+
+  /* warna identitas, mode terang */
+  --identity-violet: #6e5bd6;
+  --identity-rose: #c8577e;
+  --identity-gold: #b07a1f;
+  --identity-ocean: #2f7fb8;
+  --identity-plum: #8e4e9e;
+  --identity-slate: #5c6b7a;
+
+  /* radius */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-card: 12px;
+  --radius-glass-bar: 22px;
+  --radius-pill: 9999px;
+
+  /* spasi: 4, 8, 12, 16, 24, 32, 48, 64 */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+  /* padding kartu 20px disebut eksplisit di DESIGN 8, di luar skala */
+  --space-card: 20px;
+
+  /* ukuran shell */
+  --sidebar-width: 248px;
+  --sidebar-rail: 60px;
+  --shell-gap: 12px;
+  --content-max: 1200px;
+  --quick-add-max: 640px;
+
+  /* gerak */
+  --dur-fast: 120ms;
+  --dur-base: 220ms;
+  --dur-slow: 480ms;
+  --dur-hero-count: 400ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  /* pegas stiffness 420, damping 32, mass 1 disampel ke linear(); selesai sekitar 460ms */
+  --dur-spring: 460ms;
+  --ease-spring-glass: linear(
+    0, 0.073 4.5%, 0.225 8.8%, 0.4 13.2%, 0.566 17.5%, 0.706 21.8%, 0.816 26.2%, 0.896 30.5%,
+    0.951 34.9%, 0.986 39.2%, 1.006 43.6%, 1.016 47.9%, 1.019 52.3%, 1.016 61%, 1.009 69.7%,
+    1.004 78.4%, 1.001 87.1%, 1
+  );
+
+  /* tipografi */
+  --font-family-base: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* permukaan browser */
+  --selection: rgba(1, 106, 113, 0.18);
+  --scrollbar-thumb: rgba(39, 26, 0, 0.22);
+  --scrollbar-thumb-hover: rgba(39, 26, 0, 0.36);
+
+  /* kategori: tint lembut + ikon, di luar hue accent/positive/attention (docs/decisions/0012) */
+  --cat-orange-bg: #ffe6d3;
+  --cat-orange-fg: #994a00;
+  --cat-mustard-bg: #f7ecd1;
+  --cat-mustard-fg: #7f5e00;
+  --cat-sky-bg: #d8f1ff;
+  --cat-sky-fg: #0c6a9b;
+  --cat-indigo-bg: #e4ebff;
+  --cat-indigo-fg: #4f5aac;
+  --cat-purple-bg: #f2e7ff;
+  --cat-purple-fg: #724ea0;
+  --cat-pink-bg: #ffe4ee;
+  --cat-pink-fg: #934566;
+  --cat-magenta-bg: #fee3fb;
+  --cat-magenta-fg: #8b4486;
+  --cat-brown-bg: #f8eae2;
+  --cat-brown-fg: #7f5a45;
+  --cat-olive-bg: #eeeedb;
+  --cat-olive-fg: #68672e;
+  --cat-slate-bg: #e6eef7;
+  --cat-slate-fg: #50667d;
+  --cat-gray-bg: #eeecea;
+  --cat-gray-fg: #66635d;
+  --cat-sand-bg: #f2ece4;
+  --cat-sand-fg: #71604a;
+
+  /* lencana institusi: warna merek, sama di kedua mode; ring hanya di gelap supaya tidak melompat dari kanvas hitam */
+  --inst-bca-bg: #0060af;
+  --inst-bca-fg: #ffffff;
+  --inst-jago-bg: #fdb913;
+  --inst-jago-fg: #1c1c1c;
+  --inst-gopay-bg: #00aed6;
+  --inst-gopay-fg: #062a36;
+  --inst-ovo-bg: #4c2a86;
+  --inst-ovo-fg: #ffffff;
+  --inst-mandiri-bg: #003d79;
+  --inst-mandiri-fg: #ffb700;
+  --inst-bri-bg: #00529c;
+  --inst-bri-fg: #ffffff;
+  --inst-bni-bg: #f15a23;
+  --inst-bni-fg: #1c1c1c;
+  --inst-dana-bg: #0b6fc4;
+  --inst-dana-fg: #ffffff;
+  --inst-shopeepay-bg: #d0391b;
+  --inst-shopeepay-fg: #ffffff;
+  --inst-seabank-bg: #ff6a13;
+  --inst-seabank-fg: #1c1c1c;
+  --inst-jenius-bg: #00a9e0;
+  --inst-jenius-fg: #062a36;
+  --inst-blu-bg: #1e9bf0;
+  --inst-blu-fg: #062a36;
+  --inst-cimb-bg: #7b0f14;
+  --inst-cimb-fg: #ffffff;
+  --inst-permata-bg: #008343;
+  --inst-permata-fg: #ffffff;
+  --badge-ring: transparent;
+  /* ubin logo merek: putih di kedua mode supaya warna asli logo benar; ring tipis memisahkan dari kartu putih */
+  --logo-tile: #ffffff;
+  --logo-tile-ring: rgba(39, 26, 0, 0.12);
+}
+
+/* nilai gelap ditulis dua kali: sekali untuk preferensi sistem, sekali untuk paksaan manual */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+
+    --canvas: #000000;
+    --surface: #111110;
+    --surface-sunken: rgba(255, 255, 255, 0.04);
+    --text-primary: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.68);
+    --text-tertiary: rgba(255, 255, 255, 0.5);
+    --border: rgba(255, 255, 255, 0.12);
+    --border-strong: rgba(255, 255, 255, 0.22);
+    --accent: #45b8c0;
+    --accent-hover: #6ccad1;
+    --on-accent: #001f21;
+    --positive: #6cc48a;
+    --attention: #e07a86;
+    --due-soon: #e0935f;
+    --error: #ff6b61;
+
+    --glass-fill: rgba(30, 30, 32, 0.52);
+    --glass-fill-scrolled: rgba(30, 30, 32, 0.6);
+    --glass-fill-active: rgba(255, 255, 255, 0.14);
+    --glass-active-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    --glass-blur: 28px;
+    --glass-saturate: 160%;
+    --glass-rim: rgba(255, 255, 255, 0.14);
+    --glass-highlight: rgba(255, 255, 255, 0.22);
+    --glass-shadow: 0 1px 2px rgba(0, 0, 0, 0.5), 0 12px 36px rgba(0, 0, 0, 0.55);
+    --scrim: rgba(0, 0, 0, 0.64);
+
+    --ambient-opacity: 0.22;
+
+    --identity-violet: #9a8cf0;
+    --identity-rose: #e88aab;
+    --identity-gold: #e0b55a;
+    --identity-ocean: #6db3e6;
+    --identity-plum: #c08ad0;
+    --identity-slate: #9aa8b6;
+
+    --selection: rgba(69, 184, 192, 0.3);
+    --scrollbar-thumb: rgba(255, 255, 255, 0.2);
+    --scrollbar-thumb-hover: rgba(255, 255, 255, 0.34);
+
+    --cat-orange-bg: #412714;
+    --cat-orange-fg: #fab688;
+    --cat-mustard-bg: #372c11;
+    --cat-mustard-fg: #e0c482;
+    --cat-sky-bg: #183141;
+    --cat-sky-fg: #94cff9;
+    --cat-indigo-bg: #262c47;
+    --cat-indigo-fg: #b4c3ff;
+    --cat-purple-bg: #322843;
+    --cat-purple-fg: #d3b8fe;
+    --cat-pink-bg: #3f252f;
+    --cat-pink-fg: #f5b1ca;
+    --cat-magenta-bg: #3c243a;
+    --cat-magenta-fg: #edb0e6;
+    --cat-brown-bg: #372b24;
+    --cat-brown-fg: #e1c0ae;
+    --cat-olive-bg: #2f2f1d;
+    --cat-olive-fg: #cacb9e;
+    --cat-slate-bg: #272f36;
+    --cat-slate-fg: #b7cade;
+    --cat-gray-bg: #2f2e2c;
+    --cat-gray-fg: #cac7c2;
+    --cat-sand-bg: #322d26;
+    --cat-sand-fg: #d3c5b2;
+    --badge-ring: rgba(255, 255, 255, 0.12);
+    --logo-tile-ring: rgba(255, 255, 255, 0.18);
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --canvas: #000000;
+  --surface: #111110;
+  --surface-sunken: rgba(255, 255, 255, 0.04);
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.68);
+  --text-tertiary: rgba(255, 255, 255, 0.5);
+  --border: rgba(255, 255, 255, 0.12);
+  --border-strong: rgba(255, 255, 255, 0.22);
+  --accent: #45b8c0;
+  --accent-hover: #6ccad1;
+  --on-accent: #001f21;
+  --positive: #6cc48a;
+  --attention: #e07a86;
+  --due-soon: #e0935f;
+  --error: #ff6b61;
+
+  --glass-fill: rgba(30, 30, 32, 0.52);
+  --glass-fill-scrolled: rgba(30, 30, 32, 0.6);
+  --glass-fill-active: rgba(255, 255, 255, 0.14);
+  --glass-active-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --glass-blur: 28px;
+  --glass-saturate: 160%;
+  --glass-rim: rgba(255, 255, 255, 0.14);
+  --glass-highlight: rgba(255, 255, 255, 0.22);
+  --glass-shadow: 0 1px 2px rgba(0, 0, 0, 0.5), 0 12px 36px rgba(0, 0, 0, 0.55);
+  --scrim: rgba(0, 0, 0, 0.64);
+
+  --ambient-opacity: 0.22;
+
+  --identity-violet: #9a8cf0;
+  --identity-rose: #e88aab;
+  --identity-gold: #e0b55a;
+  --identity-ocean: #6db3e6;
+  --identity-plum: #c08ad0;
+  --identity-slate: #9aa8b6;
+
+  --selection: rgba(69, 184, 192, 0.3);
+  --scrollbar-thumb: rgba(255, 255, 255, 0.2);
+  --scrollbar-thumb-hover: rgba(255, 255, 255, 0.34);
+
+  --cat-orange-bg: #412714;
+  --cat-orange-fg: #fab688;
+  --cat-mustard-bg: #372c11;
+  --cat-mustard-fg: #e0c482;
+  --cat-sky-bg: #183141;
+  --cat-sky-fg: #94cff9;
+  --cat-indigo-bg: #262c47;
+  --cat-indigo-fg: #b4c3ff;
+  --cat-purple-bg: #322843;
+  --cat-purple-fg: #d3b8fe;
+  --cat-pink-bg: #3f252f;
+  --cat-pink-fg: #f5b1ca;
+  --cat-magenta-bg: #3c243a;
+  --cat-magenta-fg: #edb0e6;
+  --cat-brown-bg: #372b24;
+  --cat-brown-fg: #e1c0ae;
+  --cat-olive-bg: #2f2f1d;
+  --cat-olive-fg: #cacb9e;
+  --cat-slate-bg: #272f36;
+  --cat-slate-fg: #b7cade;
+  --cat-gray-bg: #2f2e2c;
+  --cat-gray-fg: #cac7c2;
+  --cat-sand-bg: #322d26;
+  --cat-sand-fg: #d3c5b2;
+  --badge-ring: rgba(255, 255, 255, 0.12);
+  --logo-tile-ring: rgba(255, 255, 255, 0.18);
+}

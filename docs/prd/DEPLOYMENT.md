@@ -72,6 +72,7 @@ kas.domainkamu.id {
 | `APP_ENCRYPTION_KEY` | 32 byte base64 (`openssl rand -base64 32`) |
 | `AUTH_SECRET` | 32 byte base64 |
 | `ATTACHMENTS_DIR` | `/data/attachments` |
+| `IMPORTS_DIR` | `/data/imports` (file mutasi sementara, dihapus setelah impor atau > 7 hari) |
 | `TZ` | `Asia/Jakarta` |
 | `RESTIC_REPOSITORY`, `RESTIC_PASSWORD`, `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` | Backup |
 
@@ -81,7 +82,7 @@ kas.domainkamu.id {
 2. Arahkan DNS subdomain ke IP VPS.
 3. Salin `compose.yml`, `Caddyfile`, `.env`, `.env.db`.
 4. `docker compose up -d db`, lalu jalankan migrasi: `docker compose run --rm app node migrate.js`.
-5. Buat dua akun: `docker compose run --rm app node scripts/create-user.js --email ... --name ...`. Perintah mencetak tautan sekali pakai untuk mendaftarkan passkey, berlaku 30 menit.
+5. Buat dua akun: `docker compose run --rm -it app node scripts/create-user.js --email ... --name ... [--color violet] [--payday 25]`. Perintah meminta password (minimal 12 karakter) di terminal tanpa menampilkannya; tanpa terminal pakai `--password-stdin` atau `--password-env NAMA_ENV`. Setelah itu masuk di `/login` dengan email dan password tersebut. Lupa password: jalankan perintah yang sama dengan `--email ... --reset-password`; semua sesi pengguna itu dikeluarkan.
 6. `docker compose up -d`.
 
 ## 5. Backup
