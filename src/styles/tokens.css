@@ -156,6 +156,9 @@
   --inst-permata-bg: #008343;
   --inst-permata-fg: #ffffff;
   --badge-ring: transparent;
+  /* ubin logo merek: putih di kedua mode supaya warna asli logo benar; ring tipis memisahkan dari kartu putih */
+  --logo-tile: #ffffff;
+  --logo-tile-ring: rgba(39, 26, 0, 0.12);
 }
 
 /* nilai gelap ditulis dua kali: sekali untuk preferensi sistem, sekali untuk paksaan manual */
@@ -228,6 +231,7 @@
     --cat-sand-bg: #322d26;
     --cat-sand-fg: #d3c5b2;
     --badge-ring: rgba(255, 255, 255, 0.12);
+    --logo-tile-ring: rgba(255, 255, 255, 0.18);
   }
 }
 
@@ -299,4 +303,5 @@
   --cat-sand-bg: #322d26;
   --cat-sand-fg: #d3c5b2;
   --badge-ring: rgba(255, 255, 255, 0.12);
+  --logo-tile-ring: rgba(255, 255, 255, 0.18);
 }

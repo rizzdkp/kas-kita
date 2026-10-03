@@ -5,6 +5,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { parseScope, type Scope } from "@/lib/scope";
 import { AmbientField } from "@/components/glass/ambient-field";
 import { QuickAddBar, focusQuickAdd } from "@/components/glass/quick-add-bar";
+import { PageArt } from "@/components/assets/page-art";
 import { ToastProvider } from "@/components/ui/toast";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { titleForPath } from "./nav-items";
@@ -108,6 +109,7 @@ export function AppShell({
               />
               <Toolbar
                 title={pageTitle}
+                titleArt={<PageArt pathname={pathname} size={40} className="-my-2" />}
                 viewer={viewer}
                 scope={effectiveScope}
                 onScopeChange={setScope}
@@ -120,7 +122,10 @@ export function AppShell({
 
             <main id="konten" tabIndex={-1} className="mx-auto w-full max-w-(--content-max) outline-none">
               <div className="flex flex-wrap items-center justify-between gap-3 px-1 pb-2 pt-6 lg:hidden">
-                <h1 className="text-title text-primary">{pageTitle}</h1>
+                <div className="flex min-w-0 items-center gap-3">
+                  <PageArt pathname={pathname} size={40} />
+                  <h1 className="min-w-0 text-title text-primary">{pageTitle}</h1>
+                </div>
                 {periodSlot ? <div className="sm:hidden">{periodSlot}</div> : null}
               </div>
               <div className="pt-4 lg:pt-8">{children}</div>

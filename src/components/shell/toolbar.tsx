@@ -11,6 +11,8 @@ import { useScrolled } from "./use-scrolled";
 
 type ToolbarProps = {
   title: string;
+  /** Aset kepala halaman di kiri judul (>=1024px). */
+  titleArt?: ReactNode;
   viewer: ShellViewer;
   scope: Scope;
   onScopeChange: (scope: Scope) => void;
@@ -21,7 +23,7 @@ type ToolbarProps = {
 };
 
 /** Toolbar glass atas (>=600px). Judul tampil di sini mulai 1024px; di bawahnya judul pindah ke konten. */
-export function Toolbar({ title, viewer, scope, onScopeChange, periodSlot, notificationsSlot, notificationsUnread, onSignOut }: ToolbarProps) {
+export function Toolbar({ title, titleArt, viewer, scope, onScopeChange, periodSlot, notificationsSlot, notificationsUnread, onSignOut }: ToolbarProps) {
   const scrolled = useScrolled();
   return (
     <GlassSurface
@@ -29,7 +31,10 @@ export function Toolbar({ title, viewer, scope, onScopeChange, periodSlot, notif
       scrolled={scrolled}
       className="sticky top-3 z-20 hidden h-15 items-center gap-2 pl-6 pr-2 sm:flex"
     >
-      <h1 className="hidden min-w-0 flex-1 truncate text-title text-primary lg:block">{title}</h1>
+      <div className="hidden min-w-0 flex-1 items-center gap-3 lg:flex">
+        {titleArt}
+        <h1 className="min-w-0 truncate text-title text-primary">{title}</h1>
+      </div>
       {viewer.partner ? (
         <ScopeToggle value={scope} onChange={onScopeChange} partnerName={viewer.partner.name} />
       ) : null}

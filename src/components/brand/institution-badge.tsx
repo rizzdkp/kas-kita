@@ -1,18 +1,19 @@
 import type { CSSProperties, ReactNode } from "react";
-import { Banknote, ChartLine, CreditCard, Gem, HandCoins, Landmark, Wallet, type LucideIcon } from "lucide-react";
+import { Asset3D } from "@/components/assets/asset-3d";
+import type { Asset3DName } from "@/components/assets/asset-names";
 import { cn } from "@/components/ui/cn";
-import { ICON_STROKE } from "@/components/ui/icon";
 import type { AccountType } from "@/server/db/schema";
-import { accountGlyph, institutionMark, institutionMonogram, type AccountGlyph } from "./institutions";
+import { accountGlyph, institutionLogo, institutionMark, institutionMonogram, type AccountGlyph } from "./institutions";
 
-const GLYPHS: Record<AccountGlyph, LucideIcon> = {
-  cash: Banknote,
-  investment: ChartLine,
-  asset: Gem,
-  card: CreditCard,
-  loan: HandCoins,
-  bank: Landmark,
-  wallet: Wallet,
+// jenis akun tanpa institusi: benda yang mewakili isinya
+const GLYPH_ASSETS: Record<AccountGlyph, Asset3DName> = {
+  cash: "purse",
+  investment: "chart-increasing",
+  asset: "gem-stone",
+  card: "credit-card",
+  loan: "money-with-wings",
+  bank: "bank",
+  wallet: "mobile-phone",
 };
 
 // monogram lewat ::before supaya tidak ikut textContent nama akun di sebelahnya (tes dan salin teks)
@@ -32,13 +33,25 @@ type InstitutionBadgeProps = {
   className?: string;
 };
 
-/** Lencana akun: monogram warna merek, monogram netral, atau ikon jenis akun. Dekoratif; nama akun selalu tampil di sebelahnya. */
+/** Lencana akun: logo merek di ubin putih, monogram warna merek, monogram netral, atau aset 3D jenis akun. Dekoratif; nama akun selalu tampil di sebelahnya. */
 export function InstitutionBadge({ slug, name, type, size = "md", children, className }: InstitutionBadgeProps) {
   const sm = size === "sm";
   const mark = institutionMark(slug);
+  const logo = institutionLogo(mark);
   const box = sm ? "size-5" : "size-8";
   let face: ReactNode;
-  if (mark) {
+  if (mark && logo) {
+    // ubin putih di kedua mode supaya warna asli logo tetap benar di kanvas gelap
+    face = (
+      <span
+        data-institution={mark.token}
+        className={cn(box, "inline-flex items-center justify-center overflow-hidden bg-logo-tile shadow-[inset_0_0_0_1px_var(--logo-tile-ring)]", sm ? "rounded-xs p-px" : "rounded-sm p-0.5")}
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element -- SVG statis kecil, tanpa optimizer */}
+        <img src={logo} alt="" width={sm ? 18 : 28} height={sm ? 18 : 28} loading="lazy" decoding="async" draggable={false} className="size-full object-contain" />
+      </span>
+    );
+  } else if (mark) {
     const style: CSSProperties = {
       background: `var(--inst-${mark.token}-bg)`,
       color: `var(--inst-${mark.token}-fg)`,
@@ -60,10 +73,9 @@ export function InstitutionBadge({ slug, name, type, size = "md", children, clas
       />
     );
   } else {
-    const Glyph = GLYPHS[accountGlyph(type)];
     face = (
-      <span className={cn(box, "inline-flex items-center justify-center rounded-pill bg-surface-sunken text-secondary shadow-[inset_0_0_0_1px_var(--border)]")}>
-        <Glyph aria-hidden size={sm ? 12 : 16} strokeWidth={ICON_STROKE} />
+      <span data-account-glyph={accountGlyph(type)} className={cn(box, "inline-flex items-center justify-center rounded-pill bg-surface-sunken shadow-[inset_0_0_0_1px_var(--border)]")}>
+        <Asset3D name={GLYPH_ASSETS[accountGlyph(type)]} size={sm ? 14 : 22} />
       </span>
     );
   }

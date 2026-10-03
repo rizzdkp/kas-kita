@@ -2,6 +2,8 @@ import type { ReactNode } from "react";
 import { cn } from "@/components/ui/cn";
 import { ICON_STROKE } from "@/components/ui/icon";
 import { categoryIcon } from "@/components/transactions/category-icon";
+import { Asset3D } from "@/components/assets/asset-3d";
+import { categoryAsset } from "@/components/assets/category-assets";
 import { categoryTone, toneVars, type CategoryTone, type CategoryToneInput } from "./category-tones";
 
 type CategoryIconProps = CategoryToneInput & {
@@ -14,8 +16,9 @@ type CategoryIconProps = CategoryToneInput & {
   className?: string;
 };
 
-/** Ikon kategori berwarna dalam lingkaran tint; dekoratif karena nama kategori selalu tampil sebagai teks. */
+/** Aset 3D kategori di atas lingkaran tint; ikon Lucide berwarna bila kategori tidak dikenal. Dekoratif karena nama kategori selalu tampil sebagai teks. */
 export function CategoryIcon({ tone, size = "md", children, className, ...input }: CategoryIconProps) {
+  const asset = categoryAsset(input);
   const Glyph = categoryIcon(input.icon);
   const resolved = tone ?? categoryTone(input);
   const sm = size === "sm";
@@ -27,7 +30,11 @@ export function CategoryIcon({ tone, size = "md", children, className, ...input 
         className={cn("inline-flex items-center justify-center rounded-pill", sm ? "size-5" : "size-8")}
         style={toneVars(resolved)}
       >
-        <Glyph size={sm ? 12 : 16} strokeWidth={ICON_STROKE} />
+        {asset ? (
+          <Asset3D name={asset} size={sm ? 15 : 24} />
+        ) : (
+          <Glyph size={sm ? 12 : 16} strokeWidth={ICON_STROKE} />
+        )}
       </span>
       {children ? <span className="absolute -bottom-0.5 -right-0.5 inline-flex">{children}</span> : null}
     </span>

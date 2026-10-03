@@ -41,7 +41,7 @@ export function IllustrationsSection() {
         <ul className="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-6">
           {SPOTS.map(([name, Spot]) => (
             <li key={name} className="flex flex-col items-start gap-1">
-              <Spot {...colors} className="w-full max-w-[160px]" />
+              <Spot {...colors} eager className="w-full max-w-[160px]" />
               <span className="text-caption text-secondary">{name}</span>
             </li>
           ))}

@@ -1,6 +1,6 @@
 import type { AccountType } from "@/server/db/schema";
 
-/** Lencana institusi: monogram teks dengan warna merek dari token --inst-*; bukan logo resmi (docs/decisions/0012). */
+/** Lencana institusi: logo dari idn-finlogos bila ada (docs/decisions/0016), monogram warna merek --inst-* sebagai cadangan (0012). */
 export interface InstitutionMark {
   /** Monogram di lencana 32px, maksimal 4 huruf. */
   label: string;
@@ -42,6 +42,14 @@ const ALIASES: Record<string, string> = {
   "permata-bank": "permata",
   permatabank: "permata",
 };
+
+// berkas di public/brands/<token>.svg, disalin dari idn-finlogos 2.5.0 (CC BY-NC 4.0)
+const LOGOS = new Set(["bca", "jago", "gopay", "ovo", "mandiri", "bri", "bni", "dana", "shopeepay", "seabank", "jenius", "blu", "cimb", "permata"]);
+
+/** Path logo merek untuk tanda institusi; null bila belum ada logo dan monogram dipakai. */
+export function institutionLogo(mark: InstitutionMark | null): string | null {
+  return mark && LOGOS.has(mark.token) ? `/brands/${mark.token}.svg` : null;
+}
 
 export function institutionMark(slug: string | null | undefined): InstitutionMark | null {
   if (!slug) return null;

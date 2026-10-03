@@ -644,6 +644,11 @@ Tabel di bawah mencatat teks yang sudah dipakai di kode. Bagian dinamis ditulis 
 | Ekspor | Satu file zip berisi data.json (akun, transaksi, kategori, anggaran, tagihan, target, dan riwayat perubahan) beserta lampiran struk. Data login dan API key tidak ikut. |
 | Ekspor, tombol | Ekspor semua data |
 | Ekspor, lampiran hilang | Lampiran ini tidak ditemukan di penyimpanan saat ekspor. |
+| Tentang dan lisensi aset | Gambar dan logo di Kas Kita berasal dari koleksi terbuka berikut. |
+| Tentang, Fluent Emoji | Gambar 3D: Microsoft Fluent Emoji / Hak cipta Microsoft Corporation, lisensi MIT. Dipakai di kepala halaman, kategori, jenis akun, halaman masuk, dan state kosong. Diubah ke WebP ukuran 64, 128, dan 256 px tanpa mengubah gambarnya. |
+| Tentang, idn-finlogos | Logo bank dan e-wallet: idn-finlogos 2.5.0 / Koleksi oleh Hafidz Noor Fauzi, lisensi CC BY-NC 4.0, hanya untuk pemakaian non-komersial. Setiap logo adalah merek dagang pemiliknya dan dipakai hanya sebagai penanda akun, tanpa afiliasi atau dukungan dari pemilik merek. Berkas SVG hanya ditambah atribut namespace supaya bisa dimuat sebagai gambar. |
+| Tentang, tautan | Repositori Fluent Emoji / Teks lisensi MIT / Repositori idn-finlogos / Lisensi CC BY-NC 4.0 / Pemberitahuan merek dagang / (tab baru) (aria) |
+| Label gambar 3D bila tidak dekoratif (aria) | Gedung bank dan dompet koin / Kertas catatan dan pensil / Amplop anggaran dan koin / Jam weker dan struk tagihan / Tanda centang / Bendera tujuan dan koin / Piala dan konfeti / Tunas tumbuh dan koin / Map berisi lembar mutasi / Kotak surat tertutup / Antena tanpa sinyal / Rumah dengan kantong uang, kartu, dan koin |
 | Notifikasi | Kabar selalu muncul di panel Notifikasi. Aktifkan notifikasi perangkat supaya kabarnya juga sampai saat Kas Kita tertutup. |
 | Notifikasi, status | Memeriksa perangkat ini / Belum aktif di perangkat ini. / Aktif di perangkat ini. |
 | Notifikasi, privasi | Notifikasi perangkat tidak memuat nominal karena bisa terbaca di layar kunci. Detailnya ada di Kas Kita. |

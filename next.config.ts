@@ -13,7 +13,11 @@ const withSerwist = withSerwistInit({
   // antrean quick-add dikirim saat event online; reload otomatis memotong pengiriman itu
   reloadOnOnline: false,
   cacheOnNavigation: false,
-  additionalPrecacheEntries: [{ url: "/~offline", revision: offlineRevision }],
+  // gambar halaman offline ikut precache supaya tampil tanpa jaringan; isi berkas tidak pernah berubah
+  additionalPrecacheEntries: [
+    { url: "/~offline", revision: offlineRevision },
+    ...[128, 256].map((w) => ({ url: `/assets/3d/satellite-antenna-${w}.webp`, revision: "fluent-emoji-1" })),
+  ],
   // sw.js dan peta sumbernya tidak ikut precache dirinya sendiri
   globPublicPatterns: ["*.{png,svg,webmanifest}"],
 });

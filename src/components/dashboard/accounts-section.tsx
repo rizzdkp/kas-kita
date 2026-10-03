@@ -64,6 +64,7 @@ export function AccountsSection({ accounts, liquid, liabilities, netWorth, scope
       id="akun"
       className={className}
       title="Akun"
+      art="credit-card"
       action={
         <>
           <FormulaExplainer

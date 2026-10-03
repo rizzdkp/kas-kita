@@ -17,3 +17,5 @@ DESIGN dan komponen `EmptyState` semula menetapkan state kosong tanpa ilustrasi.
 - `EmptyState` punya prop opsional `illustration`; di layar kecil lebarnya 112 px supaya tombol aksi tetap terlihat.
 - Aturan "aksen tidak untuk dekorasi" (DESIGN 2.1) dilonggarkan khusus di dalam ilustrasi.
 - Ilustrasi baru wajib memakai primitif yang sama supaya sudut, bayangan, dan nada tetap satu sistem.
+
+Digantikan untuk ilustrasi oleh 0016 (aset unduhan).

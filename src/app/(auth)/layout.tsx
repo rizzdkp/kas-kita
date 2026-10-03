@@ -19,7 +19,7 @@ export default async function AuthLayout({ children }: { children: ReactNode }) 
       <AmbientField scope="all" meColor={first} partnerColor={second} />
       {/* kecil: ilustrasi jadi kepala di atas kartu; besar: panel kiri dengan satu kalimat nilai produk */}
       <div className="relative z-10 flex flex-col items-center justify-end gap-8 px-4 pt-6 sm:pt-12 lg:justify-center lg:px-12 lg:py-12">
-        <HouseholdHero decorative meColor={first} partnerColor={second} className="w-[140px] sm:w-[260px] lg:w-full lg:max-w-[480px]" />
+        <HouseholdHero decorative className="w-[128px] sm:w-[220px] lg:w-full lg:max-w-[400px]" />
         <p className="hidden max-w-[22ch] text-center text-title text-primary lg:block">Uang kalian berdua, dalam satu tempat.</p>
       </div>
       <div className="relative z-10 flex flex-col items-center justify-start px-4 pb-12 pt-6 lg:justify-center lg:py-12">

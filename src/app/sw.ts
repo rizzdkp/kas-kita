@@ -68,7 +68,8 @@ const serwist = new Serwist({
       matcher: ({ url, sameOrigin: same }) => same && /\.(?:png|svg|ico|webp|woff2)$/i.test(url.pathname),
       handler: new StaleWhileRevalidate({
         cacheName: "static-assets",
-        plugins: [new ExpirationPlugin({ maxEntries: 48, maxAgeSeconds: 30 * 24 * 60 * 60 })],
+        // aset 3D kategori, halaman, dan logo merek berjumlah ratusan berkas kecil
+        plugins: [new ExpirationPlugin({ maxEntries: 240, maxAgeSeconds: 30 * 24 * 60 * 60 })],
       }),
     },
     {

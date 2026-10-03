@@ -6,6 +6,7 @@ import { listCategories } from "@/server/queries/categories";
 import { AiSettingsForm } from "@/components/settings/ai-section";
 import { AppearanceSettings } from "@/components/settings/appearance-section";
 import { CategoriesManager } from "@/components/settings/categories-section";
+import { CreditsSection } from "@/components/settings/credits-section";
 import { NotificationsPushSection } from "@/components/settings/notifications-push-section";
 import { ExportAllLink } from "@/components/settings/export-link";
 import { PaydayForm } from "@/components/settings/payday-section";
@@ -28,6 +29,7 @@ const SECTIONS: readonly SettingsNavItem[] = [
   { id: "sesi", label: "Sesi" },
   { id: "ai", label: "AI" },
   { id: "ekspor", label: "Ekspor" },
+  { id: "tentang", label: "Tentang dan lisensi aset" },
 ];
 
 export default async function PengaturanPage() {
@@ -108,6 +110,14 @@ export default async function PengaturanPage() {
           description="Satu file zip berisi data.json (akun, transaksi, kategori, anggaran, tagihan, target, dan riwayat perubahan) beserta lampiran struk. Data login dan API key tidak ikut."
         >
           <ExportAllLink />
+        </SettingsSection>
+
+        <SettingsSection
+          id="tentang"
+          title="Tentang dan lisensi aset"
+          description="Gambar dan logo di Kas Kita berasal dari koleksi terbuka berikut."
+        >
+          <CreditsSection />
         </SettingsSection>
       </div>
     </div>

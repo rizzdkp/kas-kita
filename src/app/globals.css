@@ -12,6 +12,7 @@
   --color-canvas: var(--canvas);
   --color-surface: var(--surface);
   --color-surface-sunken: var(--surface-sunken);
+  --color-logo-tile: var(--logo-tile);
   --color-primary: var(--text-primary);
   --color-secondary: var(--text-secondary);
   --color-tertiary: var(--text-tertiary);

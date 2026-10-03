@@ -29,6 +29,7 @@ export function BillsSection({ bills, scope, people, className }: ListProps<{ bi
       id="tagihan-mendatang"
       className={className}
       title="Tagihan mendatang"
+      art="spiral-calendar"
       action={<SeeAllLink href={scopedHref("/tagihan", scope)}>Semua tagihan</SeeAllLink>}
     >
       {bills.length === 0 ? (
@@ -70,6 +71,7 @@ export function GoalsSection({ goals, scope, people, className }: ListProps<{ go
       id="target"
       className={className}
       title="Target"
+      art="bullseye"
       action={<SeeAllLink href={scopedHref("/target", scope)}>Semua target</SeeAllLink>}
     >
       {goals.length === 0 ? (

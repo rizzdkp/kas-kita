@@ -5,7 +5,7 @@ import { SectionCard } from "./section-card";
 /** Wawasan dari templat kalimat tetap; setiap angka disisipkan kode (F-AI-2 AC4). */
 export function InsightsSection({ insights }: { insights: Insight[] }) {
   return (
-    <SectionCard id="wawasan" title="Wawasan minggu ini">
+    <SectionCard id="wawasan" title="Wawasan minggu ini" art="light-bulb">
       {insights.length === 0 ? (
         <p className="text-small text-secondary">Belum ada transaksi 7 hari terakhir untuk dirangkum.</p>
       ) : (
