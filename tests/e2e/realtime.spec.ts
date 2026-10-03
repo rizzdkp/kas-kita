@@ -31,6 +31,10 @@ test("transaksi baru Rizz tampil di Transaksi Nadia dalam 5 detik", async ({ bro
   await nadia.goto("/transaksi?scope=all");
   await expect(nadia.getByRole("textbox", { name: "Catat transaksi" })).toBeVisible({ timeout: 60_000 });
   expect((await sse).status()).toBe(200);
+  // isian setengah jadi Nadia harus bertahan setelah router.refresh()
+  const nadiaBar = nadia.getByRole("textbox", { name: "Catat transaksi" });
+  await nadiaBar.fill("belanja sayur");
+  await nadia.locator("body").click({ position: { x: 5, y: 5 } });
 
   const rizzContext = await browser.newContext();
   await loginAs(rizzContext);
@@ -48,6 +52,7 @@ test("transaksi baru Rizz tampil di Transaksi Nadia dalam 5 detik", async ({ bro
 
   // tanpa goto/reload di halaman Nadia
   await expect(nadia.getByText(new RegExp(tag, "i")).first()).toBeVisible({ timeout: 5_000 });
+  await expect(nadiaBar).toHaveValue("belanja sayur");
 
   await rizzContext.close();
   await nadiaContext.close();

@@ -557,6 +557,13 @@ Tabel di bawah mencatat teks yang sudah dipakai di kode. Bagian dinamis ditulis 
 | Wawasan, anggaran cepat | Anggaran [nama] sudah terpakai [persen], padahal bulan baru berjalan [persen]. |
 | Wawasan, total minggu | Total pengeluaran 7 hari terakhir [Rp] dari [n] transaksi. |
 | Wawasan, tagihan | Tagihan [nama] [Rp] jatuh tempo [3 hari lagi]. |
+| Wawasan mingguan (job), kategori naik | Pengeluaran [nama] minggu lalu [Rp], naik [persen] dari rata-rata 4 minggu sebelumnya [Rp] per minggu. |
+| Wawasan mingguan (job), kategori baru | Pengeluaran [nama] minggu lalu [Rp], 4 minggu sebelumnya tidak ada. |
+| Wawasan mingguan (job), anggaran lewat | Anggaran wajib [nama] sudah lewat, terpakai [persen]. |
+| Wawasan mingguan (job), anggaran cepat | Anggaran wajib [nama] sudah terpakai [persen], padahal bulan baru berjalan [persen]. |
+| Wawasan mingguan (job), tagihan | Tagihan [nama] [Rp] jatuh tempo [12 Okt]. |
+| Wawasan mingguan (job), total minggu | Total pengeluaran minggu lalu [Rp] dari [n] transaksi. |
+| Wawasan mingguan (AI) | Kalimat AI hanya diterima dengan placeholder; angka, nama, dan tanggal disisipkan kode. Ditolak (digit, kata bilangan, %, Rp, tanda seru, emoji, sapaan) → templat di atas. |
 | Wawasan, tautan | Lihat transaksi |
 | Cara menghitung, judul | Cara menghitung [metrik] |
 | Cara menghitung, keterangan | Dihitung Kas Kita dari data kalian, bukan AI. |

@@ -57,13 +57,14 @@ test("wawasan dari job tampil di Ringkasan dengan angka dari kode dan tautan ke 
   await expect(section).toBeVisible({ timeout: 60_000 });
 
   // kalimat fixture AI dengan nominal dan jumlah yang disisipkan kode
-  const total = section.getByText(/^Sepanjang minggu lalu pengeluaran tercatat Rp [\d.]+ dalam [\d.]+ transaksi\.$/);
+  const TOTAL = /^Sepanjang minggu lalu pengeluaran tercatat Rp [\d.]+ dalam [\d.]+ transaksi\.$/;
+  const total = section.getByText(TOTAL);
   await expect(total).toBeVisible();
   const items = section.getByRole("listitem");
   expect(await items.count()).toBeLessThanOrEqual(3);
   await expect(section.getByText(/AI/)).toHaveCount(0);
 
-  const link = section.getByRole("listitem").filter({ has: total }).getByRole("link", { name: "Lihat transaksi" });
+  const link = section.getByRole("listitem").filter({ has: page.getByText(TOTAL) }).getByRole("link", { name: "Lihat transaksi" });
   const href = await link.getAttribute("href");
   expect(href).toMatch(/^\/transaksi\?jenis=expense&dari=\d{4}-\d{2}-\d{2}&sampai=\d{4}-\d{2}-\d{2}$/);
   await link.click();
