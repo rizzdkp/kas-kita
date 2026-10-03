@@ -21,4 +21,4 @@ Pemilik produk memutuskan transaksi yang dipecah dihitung per kategori split di 
 - Ekspor CSV tetap satu baris per transaksi, dengan kolom baru "Rincian kategori" berisi "Kategori A Rp x; Kategori B Rp y" untuk transaksi yang dipecah.
 - Kategori yang hanya dipakai split dihitung "sudah dipakai": tidak bisa dihapus (diarsipkan) dan jenisnya tidak bisa diganti.
 - Anggaran pada kategori sistem (Penyesuaian saldo) tidak pernah terpakai karena baris kategori mengecualikan kategori sistem, sama dengan aturan F-ACC-2 untuk pengeluaran.
-- Form ubah transaksi belum bisa mengubah split. Mengganti nominal transaksi yang dipecah ditolak trigger; mengganti kategori utamanya tidak mengubah agregasi karena split yang dihitung.
+- Form ubah transaksi belum bisa mengubah split. Mengganti nominal atau jenis transaksi yang dipecah ditolak mutasi dengan pesan COPY.md (lihat 0016); mengganti kategori utamanya tidak mengubah agregasi karena split yang dihitung.
