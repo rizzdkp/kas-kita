@@ -1,8 +1,14 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test, type BrowserContext, type Page } from "@playwright/test";
 import { loginAs } from "./helpers/session";
 
-// tanpa ini setOffline tidak berlaku untuk fetch dari service worker di Chromium, jadi "offline" tetap memakai jaringan
+// tanpa ini permintaan dari service worker tidak bisa dicegat Playwright
 process.env.PW_EXPERIMENTAL_SERVICE_WORKER_NETWORK_EVENTS = "1";
+
+// setOffline mengubah navigator.onLine, tapi fetch dari service worker setelah muat ulang tetap lolos; route memutus semuanya kecuali aset statis
+async function goOffline(context: BrowserContext) {
+  await context.setOffline(true);
+  await context.route(/^https?:\/\/[^/]+\/(?!_next\/static)/, (route) => route.abort("internetdisconnected"));
+}
 
 // service worker hanya dibangun di build produksi; di `next dev` spesifikasi ini dilewati
 test.beforeEach(async ({ request }) => {
@@ -60,7 +66,7 @@ test("offline: Ringkasan menampilkan data terakhir, halaman yang belum dibuka me
   await expect.poll(() => cachedPaths(page), { timeout: 15_000 }).toContain("/");
   const heroOnline = await page.getByTestId("hero-value").textContent();
 
-  await context.setOffline(true);
+  await goOffline(context);
   await page.reload();
   await expect(page.getByTestId("hero-value")).toHaveText(heroOnline ?? "");
   await expect(page.getByRole("status").filter({ hasText: "Offline. Yang tampil adalah data terakhir di perangkat ini." })).toBeVisible();
@@ -69,10 +75,8 @@ test("offline: Ringkasan menampilkan data terakhir, halaman yang belum dibuka me
   await expect(page.getByRole("heading", { name: "Kamu sedang offline" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Coba lagi" })).toBeVisible();
 
-  // antrean quick-add tetap bekerja di bawah service worker
-  await page.goto("/");
-  await expect(page.getByTestId("hero-value")).toBeVisible();
-  await context.setOffline(false);
+  await page.getByRole("button", { name: "Buka Ringkasan" }).click();
+  await expect(page.getByTestId("hero-value")).toHaveText(heroOnline ?? "");
 });
 
 test("API dan lampiran tidak pernah disimpan service worker", async ({ page, context }) => {
