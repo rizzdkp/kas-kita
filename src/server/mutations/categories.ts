@@ -2,7 +2,7 @@ import { and, eq, isNull, or, sql } from "drizzle-orm";
 import { z } from "zod";
 import type { Viewer } from "@/server/auth/viewer";
 import { db as defaultDb, type DbOrTx, type Tx } from "@/server/db/client";
-import { categories, transactions } from "@/server/db/schema";
+import { categories, transactionSplits, transactions } from "@/server/db/schema";
 import { DomainError, NotFoundError, ValidationError } from "@/server/errors";
 import { inTransaction, parseInput, versionSchema, pickProvided } from "./_shared";
 import { insertWithAudit, softDeleteWithAudit, updateWithAudit } from "./audit";
@@ -53,7 +53,11 @@ export async function updateCategory(viewer: Viewer, input: z.input<typeof updat
     const merged = { ...current, ...patch };
     await assertParent(tx, merged.parentId, merged.kind, id);
     if (patch.kind && patch.kind !== current.kind) {
-      const [used] = await tx.select({ n: sql<number>`count(*)::int` }).from(transactions).where(eq(transactions.categoryId, id));
+      // kategori yang dipakai rincian struk juga dianggap terpakai
+      const [used] = await tx
+        .select({ n: sql<number>`count(*)::int` })
+        .from(transactions)
+        .where(or(eq(transactions.categoryId, id), sql`exists (select 1 from ${transactionSplits} s where s.transaction_id = ${transactions.id} and s.category_id = ${id}::uuid)`));
       if ((used?.n ?? 0) > 0) throw new ValidationError("Jenis kategori yang sudah dipakai transaksi tidak bisa diganti");
     }
     return (await updateWithAudit(tx, categories, { id, expectedVersion: version, actorId: viewer.user.id, values: patch })).after;
@@ -86,7 +90,13 @@ export async function deleteCategory(viewer: Viewer, input: { id: string; versio
       .from(transactions)
       .innerJoin(categories, eq(categories.id, transactions.categoryId))
       .where(or(eq(categories.id, id), and(eq(categories.parentId, id), isNull(categories.deletedAt))));
-    if ((used?.n ?? 0) > 0) {
+    // kategori yang hanya dipakai rincian struk juga dianggap terpakai
+    const [usedBySplit] = await tx
+      .select({ n: sql<number>`count(*)::int` })
+      .from(transactionSplits)
+      .innerJoin(categories, eq(categories.id, transactionSplits.categoryId))
+      .where(or(eq(categories.id, id), and(eq(categories.parentId, id), isNull(categories.deletedAt))));
+    if ((used?.n ?? 0) + (usedBySplit?.n ?? 0) > 0) {
       throw new DomainError("category_in_use", "Kategori ini sudah dipakai transaksi. Arsipkan supaya riwayatnya tetap ada.");
     }
     return (await softDeleteWithAudit(tx, categories, { id, expectedVersion: version, actorId: viewer.user.id })).after;

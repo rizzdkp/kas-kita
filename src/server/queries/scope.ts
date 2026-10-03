@@ -1,8 +1,8 @@
-import { and, eq, inArray, isNull, or, sql, type AnyColumn, type SQL } from "drizzle-orm";
-import { alias } from "drizzle-orm/pg-core";
+import { and, eq, inArray, isNull, ne, or, sql, type AnyColumn, type SQL } from "drizzle-orm";
+import { alias, QueryBuilder } from "drizzle-orm/pg-core";
 import type { Scope } from "@/lib/scope";
 import type { Viewer } from "@/server/auth/viewer";
-import { accounts, transactions } from "@/server/db/schema";
+import { accounts, categories, transactionSplits, transactions } from "@/server/db/schema";
 
 // satu-satunya tempat filter pemilik (AGENTS.md aturan 2); Bersama (owner_id NULL) hanya di "all"
 
@@ -121,4 +121,56 @@ export function budgetInScope(scopeOwnerColumn: AnyColumn, viewer: Viewer, scope
   if (owners.all) return sql`true`;
   if (owners.ownerIds.length === 0) return sql`false`;
   return inArray(scopeOwnerColumn, owners.ownerIds.map((id) => budgetOwnerKey(id)));
+}
+
+const lineMainCategories = alias(categories, "line_main_categories");
+
+/**
+ * Baris kategori: sumber tunggal semua agregasi per kategori (keputusan 0015). Transaksi yang dihitung
+ * (terkonfirmasi, tidak dihapus, bukan transfer, kategori utamanya bukan kategori sistem) menghasilkan satu
+ * baris per split bila dipecah, selain itu satu baris dari kategori dan nominal transaksinya. Jumlah baris
+ * per transaksi sama dengan nominalnya karena trigger deferred transaction_splits_sum.
+ */
+export const categoryLines = new QueryBuilder()
+  .select({
+    transactionId: sql<string>`${transactions.id}`.as("line_transaction_id"),
+    categoryId: sql<string>`coalesce(${transactionSplits.categoryId}, ${transactions.categoryId})`.as("line_category_id"),
+    amount: sql<bigint>`coalesce(${transactionSplits.amount}, ${transactions.amount})`.as("line_amount"),
+    kind: sql<"income" | "expense">`${transactions.kind}`.as("line_kind"),
+    occurredAt: sql<string>`${transactions.occurredAt}`.as("line_occurred_at"),
+    accountId: sql<string>`${transactions.accountId}`.as("line_account_id"),
+    /** Pemilik akun asal; null = Bersama. */
+    ownerId: sql<string | null>`${accounts.ownerId}`.as("line_owner_id"),
+  })
+  .from(transactions)
+  .innerJoin(accounts, transactionJoins.fromAccount)
+  .innerJoin(lineMainCategories, eq(lineMainCategories.id, transactions.categoryId))
+  .leftJoin(transactionSplits, eq(transactionSplits.transactionId, transactions.id))
+  .where(and(countableTransaction(), ne(transactions.kind, "transfer"), sql`not ${lineMainCategories.isSystem}`))
+  .as("category_lines");
+
+/** Baris kategori dari akun di cakupan; Bersama hanya di Gabungan, sama dengan accountInScope. */
+export function lineInScope(viewer: Viewer, scope: Scope): SQL {
+  return ownerInScope(sql`${categoryLines.ownerId}`, viewer, scope);
+}
+
+/** Rentang waktu [start, end) atas baris kategori. */
+export function lineInRange(range: { start: Date; end: Date }): SQL {
+  return sql`${categoryLines.occurredAt} >= ${range.start.toISOString()}::timestamptz and ${categoryLines.occurredAt} < ${range.end.toISOString()}::timestamptz`;
+}
+
+/** Baris kategori milik satu pemilik akun; null = Bersama. */
+export function lineOwnedBy(ownerId: string | null): SQL {
+  return ownerId === null ? sql`${categoryLines.ownerId} is null` : sql`${categoryLines.ownerId} = ${ownerId}::uuid`;
+}
+
+/** Transaksi yang punya baris (kategori utama atau split) di salah satu kategori ini atau anaknya. */
+export function transactionHasCategory(categoryIds: string[]): SQL {
+  const ids = sql.join(categoryIds.map((id) => sql`${id}::uuid`), sql`, `);
+  return sql`exists (
+    select 1 from ${categories} hc
+    where (hc.id in (${ids}) or hc.parent_id in (${ids}))
+      and (hc.id = ${transactions.categoryId}
+        or exists (select 1 from ${transactionSplits} hs where hs.transaction_id = ${transactions.id} and hs.category_id = hc.id))
+  )`;
 }

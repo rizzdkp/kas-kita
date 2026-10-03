@@ -1,4 +1,4 @@
-import { and, eq, gte, isNull, lt, sql } from "drizzle-orm";
+import { and, eq, isNull, sql } from "drizzle-orm";
 import type { Scope } from "@/lib/scope";
 import type { Viewer } from "@/server/auth/viewer";
 import { db as defaultDb, type DbOrTx } from "@/server/db/client";
@@ -9,7 +9,7 @@ import type { Metric } from "@/server/metrics/types";
 import { sumFlows } from "./aggregates";
 import { listBills } from "./bills";
 import { billsDueBefore } from "./dashboard-inputs";
-import { accountInScope, budgetInScope, budgetOwnerIdFromKey, countableTransaction, transactionJoins } from "./scope";
+import { accountInScope, budgetInScope, budgetOwnerIdFromKey, categoryLines, countableTransaction, lineInRange, lineInScope, transactionJoins } from "./scope";
 
 function mandatoryKey(ownerId: string | null, categoryId: string): string {
   return `${ownerId ?? "shared"}:${categoryId}`;
@@ -45,31 +45,28 @@ async function dailyFlexibleExpense(
     );
   const mandatorySet = new Set(mandatory.map((b) => mandatoryKey(budgetOwnerIdFromKey(b.scopeOwner), b.categoryId)));
 
-  const day = sql<string>`to_char(${transactions.occurredAt} at time zone 'Asia/Jakarta', 'YYYY-MM-DD')`;
+  // per baris kategori: bagian split di kategori beranggaran wajib dikecualikan, sisanya tetap fleksibel
+  const day = sql<string>`to_char(${categoryLines.occurredAt} at time zone 'Asia/Jakarta', 'YYYY-MM-DD')`;
   const rows = await db
     .select({
       day,
-      ownerId: accounts.ownerId,
+      ownerId: categoryLines.ownerId,
       categoryId: categories.id,
       parentId: categories.parentId,
-      amount: sql<bigint>`sum(${transactions.amount})::bigint`,
+      amount: sql<bigint>`sum(${categoryLines.amount})::bigint`,
     })
-    .from(transactions)
-    .innerJoin(accounts, transactionJoins.fromAccount)
-    .innerJoin(categories, eq(categories.id, transactions.categoryId))
-    .leftJoin(billPayments, eq(billPayments.transactionId, transactions.id))
+    .from(categoryLines)
+    .innerJoin(categories, eq(categories.id, categoryLines.categoryId))
+    .leftJoin(billPayments, eq(billPayments.transactionId, categoryLines.transactionId))
     .where(
       and(
-        countableTransaction(),
-        eq(transactions.kind, "expense"),
-        accountInScope(viewer, scope),
-        gte(transactions.occurredAt, startOfKey(opts.windowStart)),
-        lt(transactions.occurredAt, startOfKey(opts.today)),
-        sql`not ${categories.isSystem}`,
+        sql`${categoryLines.kind} = 'expense'`,
+        lineInScope(viewer, scope),
+        lineInRange({ start: startOfKey(opts.windowStart), end: startOfKey(opts.today) }),
         isNull(billPayments.id),
       ),
     )
-    .groupBy(day, accounts.ownerId, categories.id);
+    .groupBy(day, categoryLines.ownerId, categories.id);
 
   const length = diffDaysKey(opts.windowStart, opts.today);
   const daily = Array.from({ length }, () => 0n);

@@ -1,4 +1,5 @@
-import { and, asc, eq, isNull } from "drizzle-orm";
+import { and, asc, eq, inArray, isNull } from "drizzle-orm";
+import { alias } from "drizzle-orm/pg-core";
 import { db as defaultDb, type DbOrTx } from "@/server/db/client";
 import { attachments, categories, transactionSplits, users } from "@/server/db/schema";
 
@@ -59,4 +60,32 @@ export async function listTransactionSplits(transactionId: string, db: DbOrTx = 
     .innerJoin(categories, eq(categories.id, transactionSplits.categoryId))
     .where(eq(transactionSplits.transactionId, transactionId));
   return rows.sort((a, b) => (a.amount === b.amount ? 0 : a.amount > b.amount ? -1 : 1));
+}
+
+const splitParents = alias(categories, "split_parent_categories");
+
+export interface SplitSummary {
+  categoryName: string;
+  parentCategoryName: string | null;
+  amount: bigint;
+}
+
+/** Rincian split untuk banyak transaksi sekaligus (kolom "Rincian kategori" di CSV), urut nominal terbesar. */
+export async function listSplitsForTransactions(transactionIds: string[], db: DbOrTx = defaultDb): Promise<Map<string, SplitSummary[]>> {
+  const result = new Map<string, SplitSummary[]>();
+  if (transactionIds.length === 0) return result;
+  const rows = await db
+    .select({
+      transactionId: transactionSplits.transactionId,
+      categoryName: categories.name,
+      parentCategoryName: splitParents.name,
+      amount: transactionSplits.amount,
+    })
+    .from(transactionSplits)
+    .innerJoin(categories, eq(categories.id, transactionSplits.categoryId))
+    .leftJoin(splitParents, eq(splitParents.id, categories.parentId))
+    .where(inArray(transactionSplits.transactionId, transactionIds));
+  rows.sort((a, b) => (a.amount === b.amount ? 0 : a.amount > b.amount ? -1 : 1));
+  for (const { transactionId, ...split } of rows) result.set(transactionId, [...(result.get(transactionId) ?? []), split]);
+  return result;
 }

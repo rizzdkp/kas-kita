@@ -279,7 +279,9 @@ Tabel di bawah mencatat teks yang sudah dipakai di kode. Bagian dinamis ditulis 
 | Konflik, nilai kosong | — |
 | Konflik, penanda | Berbeda |
 | Konflik, nilai tak dikenal | Akun lain / Kategori lain / orang lain |
-| Kolom CSV | Tanggal, Waktu, Jenis, Nominal, Akun, Akun tujuan, Kategori, Catatan, Diisi oleh, Tag, Status |
+| Baris, transaksi dipecah | dipecah ke [n] kategori |
+| Kolom CSV | Tanggal, Waktu, Jenis, Nominal, Akun, Akun tujuan, Kategori, Rincian kategori, Catatan, Diisi oleh, Tag, Status |
+| Rincian kategori di CSV | [kategori] [Rp]; [kategori] [Rp] (hanya transaksi yang dipecah; kosong selain itu) |
 | Status di CSV | Terkonfirmasi / Perlu dikonfirmasi |
 | Nama file CSV | kas-kita-transaksi-[tanggal]-sampai-[tanggal].csv / kas-kita-transaksi-sejak-[tanggal].csv |
 

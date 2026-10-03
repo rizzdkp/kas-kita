@@ -5,7 +5,7 @@ import type { Viewer } from "@/server/auth/viewer";
 import { db as defaultDb, type DbOrTx } from "@/server/db/client";
 import { accounts, categories, transactions } from "@/server/db/schema";
 import type { CategorySpendRow } from "@/server/metrics/category-breakdown";
-import { accountInScope, countableTransaction, toAccounts, transactionJoins } from "./scope";
+import { accountInScope, categoryLines, countableTransaction, lineInRange, lineInScope, toAccounts, transactionJoins } from "./scope";
 
 const parentCategories = alias(categories, "agg_parent_categories");
 
@@ -49,8 +49,9 @@ export async function sumFlows(viewer: Viewer, scope: Scope, range: InstantRange
   };
 }
 
-/** Pengeluaran per kategori dan per pemilik akun (untuk segmen Gabungan). */
-export async function expenseByCategory(
+/** Nominal per kategori dan per pemilik akun dari baris kategori (transaksi dipecah dihitung per split). */
+export async function lineTotalsByCategory(
+  kind: "income" | "expense",
   viewer: Viewer,
   scope: Scope,
   range: InstantRange,
@@ -64,43 +65,43 @@ export async function expenseByCategory(
       parentId: categories.parentId,
       parentName: parentCategories.name,
       parentIcon: parentCategories.icon,
-      ownerId: accounts.ownerId,
-      amount: sql<bigint>`sum(${transactions.amount})::bigint`,
+      ownerId: categoryLines.ownerId,
+      amount: sql<bigint>`sum(${categoryLines.amount})::bigint`,
     })
-    .from(transactions)
-    .innerJoin(accounts, transactionJoins.fromAccount)
-    .innerJoin(categories, eq(categories.id, transactions.categoryId))
+    .from(categoryLines)
+    .innerJoin(categories, eq(categories.id, categoryLines.categoryId))
     .leftJoin(parentCategories, eq(parentCategories.id, categories.parentId))
-    .where(
-      and(
-        countableTransaction(),
-        eq(transactions.kind, "expense"),
-        accountInScope(viewer, scope),
-        inRange(range),
-        notSystemCategory,
-      ),
-    )
-    .groupBy(categories.id, parentCategories.id, accounts.ownerId);
+    .where(and(sql`${categoryLines.kind} = ${kind}`, lineInScope(viewer, scope), lineInRange(range)))
+    .groupBy(categories.id, parentCategories.id, categoryLines.ownerId);
   return rows.map((r) => ({ ...r, amount: BigInt(r.amount) }));
 }
 
-/** Pengeluaran per pemilik akun dan kategori (dasar status anggaran). */
+/** Pengeluaran per kategori dan per pemilik akun (untuk segmen Gabungan). */
+export async function expenseByCategory(
+  viewer: Viewer,
+  scope: Scope,
+  range: InstantRange,
+  db: DbOrTx = defaultDb,
+): Promise<CategorySpendRow[]> {
+  return lineTotalsByCategory("expense", viewer, scope, range, db);
+}
+
+/** Pengeluaran per pemilik akun dan kategori (dasar status anggaran), per split bila transaksi dipecah. */
 export async function expenseByOwnerAndCategory(
   range: InstantRange,
   db: DbOrTx = defaultDb,
 ): Promise<Array<{ ownerId: string | null; categoryId: string; parentId: string | null; amount: bigint }>> {
   const rows = await db
     .select({
-      ownerId: accounts.ownerId,
+      ownerId: categoryLines.ownerId,
       categoryId: categories.id,
       parentId: categories.parentId,
-      amount: sql<bigint>`sum(${transactions.amount})::bigint`,
+      amount: sql<bigint>`sum(${categoryLines.amount})::bigint`,
     })
-    .from(transactions)
-    .innerJoin(accounts, transactionJoins.fromAccount)
-    .innerJoin(categories, eq(categories.id, transactions.categoryId))
-    .where(and(countableTransaction(), eq(transactions.kind, "expense"), inRange(range)))
-    .groupBy(accounts.ownerId, categories.id);
+    .from(categoryLines)
+    .innerJoin(categories, eq(categories.id, categoryLines.categoryId))
+    .where(and(sql`${categoryLines.kind} = 'expense'`, lineInRange(range)))
+    .groupBy(categoryLines.ownerId, categories.id);
   return rows.map((r) => ({ ...r, amount: BigInt(r.amount) }));
 }
 

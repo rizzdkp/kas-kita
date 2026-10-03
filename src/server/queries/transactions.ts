@@ -4,11 +4,11 @@ import { z } from "zod";
 import { SCOPES } from "@/lib/scope";
 import type { Viewer } from "@/server/auth/viewer";
 import { db as defaultDb, type DbOrTx } from "@/server/db/client";
-import { accounts, categories, tags, transactionTags, transactions, users, TRANSACTION_KINDS } from "@/server/db/schema";
+import { accounts, categories, tags, transactionSplits, transactionTags, transactions, users, TRANSACTION_KINDS } from "@/server/db/schema";
 import { NotFoundError, ValidationError } from "@/server/errors";
 import { addDaysKey, startOfKey } from "@/server/metrics/_time";
 import { getHistory, type HistoryEntry } from "./audit";
-import { toAccounts, transactionFlow, transactionInScope, transactionJoins, type CashFlow } from "./scope";
+import { toAccounts, transactionFlow, transactionHasCategory, transactionInScope, transactionJoins, type CashFlow } from "./scope";
 
 const parentCategories = alias(categories, "parent_categories");
 const creators = alias(users, "creators");
@@ -60,6 +60,8 @@ export interface TransactionListRow {
   categoryName: string | null;
   categoryIcon: string | null;
   parentCategoryName: string | null;
+  /** Jumlah kategori rincian bila transaksi dipecah dari struk; 0 = tidak dipecah. */
+  splitCount: number;
   createdBy: string;
   createdByName: string;
   updatedBy: string;
@@ -110,6 +112,7 @@ function selectFields(viewer: Viewer, scope: TransactionFilters["scope"]) {
     categoryName: categories.name,
     categoryIcon: categories.icon,
     parentCategoryName: parentCategories.name,
+    splitCount: sql<number>`(select count(*)::int from ${transactionSplits} where ${transactionSplits.transactionId} = ${transactions.id})`,
     createdBy: transactions.createdBy,
     createdByName: creators.displayName,
     updatedBy: transactions.updatedBy,
@@ -143,7 +146,7 @@ function filterConditions(viewer: Viewer, f: z.output<typeof transactionFiltersS
     conds.push(or(inArray(transactions.accountId, f.accountIds), inArray(transactions.toAccountId, f.accountIds))!);
   }
   if (f.categoryIds?.length) {
-    conds.push(or(inArray(transactions.categoryId, f.categoryIds), inArray(categories.parentId, f.categoryIds))!);
+    conds.push(transactionHasCategory(f.categoryIds));
   }
   if (f.kinds?.length) conds.push(inArray(transactions.kind, f.kinds));
   if (f.from) conds.push(gte(transactions.occurredAt, startOfKey(f.from)));

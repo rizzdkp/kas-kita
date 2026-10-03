@@ -30,6 +30,7 @@ function row(id: string, occurredAt: Date, flow: TransactionListRow["flow"], amo
     categoryName: null,
     categoryIcon: null,
     parentCategoryName: null,
+    splitCount: 0,
     createdBy: "u1",
     createdByName: "Rizz",
     updatedBy: "u1",

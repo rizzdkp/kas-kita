@@ -61,7 +61,7 @@ export function categoryBreakdown(rows: CategorySpendRow[]): Metric<CategoryTota
   inputs[inputKey(inputs, "Total")] = sumBigint(value.map((g) => g.total));
   return {
     value,
-    formula: "Pengeluaran per kategori = jumlah transaksi Pengeluaran periode ini per kategori induk",
+    formula: "Pengeluaran per kategori = jumlah transaksi Pengeluaran periode ini per kategori induk; transaksi yang dipecah dihitung per rincian kategorinya",
     inputs,
   };
 }

@@ -89,4 +89,11 @@ test("foto struk dipecah per kategori, tersimpan, lampiran terlihat di detail", 
   const thumb = detail.getByRole("img", { name: "Lampiran 1" });
   await expect(thumb).toBeVisible();
   await expect.poll(() => thumb.evaluate((img: HTMLImageElement) => img.naturalWidth)).toBeGreaterThan(0);
+
+  // keputusan 0015: struk ikut tampil di filter kategori rinciannya (Rumah, bukan kategori utama)
+  const rumah = sh(`psql "$DATABASE_URL" -At -c "select id from categories where name = 'Rumah' and deleted_at is null order by created_at limit 1"`);
+  await page.goto(`/transaksi?kategori=${rumah}&q=${encodeURIComponent("E2E Indomaret Merdeka Raya")}`);
+  const row = page.getByRole("button", { name: /E2E Indomaret Merdeka Raya/ }).first();
+  await expect(row).toBeVisible({ timeout: 30_000 });
+  await expect(row).toContainText("dipecah ke 4 kategori");
 });

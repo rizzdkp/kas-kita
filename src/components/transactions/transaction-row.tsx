@@ -23,7 +23,9 @@ export function rowText(row: TransactionListRow, people: People): RowText {
   if (row.kind !== "transfer") {
     return {
       title: row.note || row.categoryName || "Transaksi",
-      subtitle: [row.note ? category : null, row.accountName].filter(Boolean).join(" · "),
+      subtitle: [row.note ? category : null, row.splitCount > 1 ? `dipecah ke ${row.splitCount} kategori` : null, row.accountName]
+        .filter(Boolean)
+        .join(" · "),
       filledBy,
       signed: row.kind === "expense" ? -row.amount : row.amount,
       transfer: false,

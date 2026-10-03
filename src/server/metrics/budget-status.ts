@@ -30,7 +30,7 @@ export function budgetStatus(input: { amount: bigint; spent: bigint; month: stri
   return {
     value: { state, remaining: input.amount - input.spent, usedPercent, elapsedPercent, fasterThanUsual },
     formula:
-      "Terpakai = pengeluaran kategori bulan ini / anggaran. Mendekati mulai 80%, lewat di atas 100%. Laju lebih cepat dari biasa kalau persen terpakai melebihi persen hari berlalu lebih dari 15 poin",
+      "Terpakai = pengeluaran kategori bulan ini (transaksi yang dipecah dihitung per rincian kategorinya) / anggaran. Mendekati mulai 80%, lewat di atas 100%. Laju lebih cepat dari biasa kalau persen terpakai melebihi persen hari berlalu lebih dari 15 poin",
     inputs: {
       Anggaran: input.amount,
       Terpakai: input.spent,

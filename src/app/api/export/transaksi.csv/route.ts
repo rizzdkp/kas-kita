@@ -2,6 +2,7 @@ import { transactionFiltersFromLink } from "../_lib/filters";
 import { CSV_HEADER, csvFilename, csvLine, transactionCsvRow } from "../_lib/csv";
 import { parseTransactionSearchParams } from "@/components/reports/transaction-link";
 import { getViewerFromHeaders } from "@/server/auth/session";
+import { listSplitsForTransactions } from "@/server/queries/attachments";
 import { listTransactions } from "@/server/queries/transactions";
 
 export const dynamic = "force-dynamic";
@@ -29,7 +30,8 @@ export async function GET(request: Request): Promise<Response> {
         let cursor: string | null = null;
         do {
           const page = await listTransactions(viewer, filters, { cursor, limit: PAGE_SIZE });
-          controller.enqueue(encoder.encode(page.rows.map(transactionCsvRow).join("")));
+          const splits = await listSplitsForTransactions(page.rows.filter((r) => r.splitCount > 0).map((r) => r.id));
+          controller.enqueue(encoder.encode(page.rows.map((r) => transactionCsvRow(r, splits.get(r.id))).join("")));
           cursor = page.nextCursor;
         } while (cursor);
         controller.close();

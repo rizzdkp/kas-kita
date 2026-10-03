@@ -1,5 +1,4 @@
 import { and, eq, gte, lt, sql } from "drizzle-orm";
-import { alias } from "drizzle-orm/pg-core";
 import type { Scope } from "@/lib/scope";
 import type { Viewer } from "@/server/auth/viewer";
 import { db as defaultDb, type DbOrTx } from "@/server/db/client";
@@ -11,10 +10,9 @@ import { periodExpense } from "@/server/metrics/period-expense";
 import { periodIncome } from "@/server/metrics/period-income";
 import { savingsRate } from "@/server/metrics/savings-rate";
 import type { Metric } from "@/server/metrics/types";
-import { expenseByCategory, sumFlows, type InstantRange } from "./aggregates";
+import { expenseByCategory, lineTotalsByCategory, sumFlows, type InstantRange } from "./aggregates";
 import { accountInScope, countableTransaction, transactionJoins } from "./scope";
 
-const reportParents = alias(categories, "report_parent_categories");
 export const TREND_MONTHS = 12;
 
 export { formatMonthAxis, formatMonthLong, parseMonthParam, reportRanges, shiftMonth } from "@/components/reports/months";
@@ -22,33 +20,7 @@ export type { ReportRange, ReportRanges } from "@/components/reports/months";
 
 /** Pemasukan per kategori dan per pemilik akun; bentuknya sama dengan expenseByCategory. */
 export async function incomeByCategory(viewer: Viewer, scope: Scope, range: InstantRange, db: DbOrTx = defaultDb): Promise<CategorySpendRow[]> {
-  const rows = await db
-    .select({
-      categoryId: categories.id,
-      name: categories.name,
-      icon: categories.icon,
-      parentId: categories.parentId,
-      parentName: reportParents.name,
-      parentIcon: reportParents.icon,
-      ownerId: accounts.ownerId,
-      amount: sql<bigint>`sum(${transactions.amount})::bigint`,
-    })
-    .from(transactions)
-    .innerJoin(accounts, transactionJoins.fromAccount)
-    .innerJoin(categories, eq(categories.id, transactions.categoryId))
-    .leftJoin(reportParents, eq(reportParents.id, categories.parentId))
-    .where(
-      and(
-        countableTransaction(),
-        eq(transactions.kind, "income"),
-        accountInScope(viewer, scope),
-        gte(transactions.occurredAt, range.start),
-        lt(transactions.occurredAt, range.end),
-        sql`not ${categories.isSystem}`,
-      ),
-    )
-    .groupBy(categories.id, reportParents.id, accounts.ownerId);
-  return rows.map((r) => ({ ...r, amount: BigInt(r.amount) }));
+  return lineTotalsByCategory("income", viewer, scope, range, db);
 }
 
 export interface MonthFlow {
@@ -143,12 +115,12 @@ export async function getMonthlyReport(viewer: Viewer, scope: Scope, month: stri
     expenseCategories: withPrevious(
       categoryBreakdown(expenseRows),
       categoryBreakdown(prevExpenseRows).value,
-      `Pengeluaran per kategori = jumlah transaksi Pengeluaran ${label} per kategori induk. Pembanding: ${ranges.previous.label}`,
+      `Pengeluaran per kategori = jumlah transaksi Pengeluaran ${label} per kategori induk; transaksi yang dipecah dihitung per rincian kategorinya. Pembanding: ${ranges.previous.label}`,
     ),
     incomeCategories: withPrevious(
       categoryBreakdown(incomeRows),
       categoryBreakdown(prevIncomeRows).value,
-      `Pemasukan per kategori = jumlah transaksi Pemasukan ${label} per kategori induk. Pembanding: ${ranges.previous.label}`,
+      `Pemasukan per kategori = jumlah transaksi Pemasukan ${label} per kategori induk; transaksi yang dipecah dihitung per rincian kategorinya. Pembanding: ${ranges.previous.label}`,
     ),
     trend: {
       value: trend,
