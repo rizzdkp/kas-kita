@@ -780,6 +780,7 @@ Tabel di bawah mencatat teks yang sudah dipakai di kode. Bagian dinamis ditulis 
 | Situasi | Copy |
 |---|---|
 | Error server umum | Terjadi kesalahan di server. Coba lagi sebentar lagi. |
+| Ubah nominal atau jenis transaksi yang dipecah per kategori | Transaksi ini dipecah ke beberapa kategori, jadi nominal dan jenisnya tidak bisa diubah dari sini. Hapus transaksi lalu catat ulang dari foto struk, atau ubah kategori dan catatannya saja. |
 | Data tidak ditemukan | [Subjek] tidak ditemukan, mungkin sudah dihapus. Muat ulang halaman lalu coba lagi. |
 | Konflik edit, umum | [Subjek] baru diubah [nama] pukul [waktu]. Pilih versi yang dipakai. |
 | Subjek konflik dan tidak ditemukan | Transaksi ini, Akun ini, Kategori ini, Anggaran ini, Tagihan ini, Target ini, Setoran ini, Nilai ini, Pengguna ini, Data ini |

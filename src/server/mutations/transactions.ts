@@ -2,7 +2,7 @@ import { eq } from "drizzle-orm";
 import { z } from "zod";
 import type { Viewer } from "@/server/auth/viewer";
 import { db as defaultDb, type DbOrTx, type Tx } from "@/server/db/client";
-import { transactions } from "@/server/db/schema";
+import { transactionSplits, transactions } from "@/server/db/schema";
 import { DomainError, NotFoundError } from "@/server/errors";
 import { RESTORE_WINDOW_DAYS } from "@/server/queries/transactions";
 import { inTransaction, parseInput, versionSchema, pickProvided } from "./_shared";
@@ -118,6 +118,7 @@ export async function updateTransaction(viewer: Viewer, input: UpdateTransaction
     const merged = normalizeShape({ ...current, ...fields });
     assertShape(merged);
     await assertReferences(tx, [merged]);
+    await assertSplitsStillValid(tx, current, merged);
     const balanceChanged = BALANCE_FIELDS.some((f) => merged[f] !== current[f]);
     if (balanceChanged && !current.deletedAt) {
       await assertBalancesAllowed(tx, balanceEffects([merged as BalanceEffectSource]), [id]);
@@ -147,6 +148,17 @@ export async function updateTransaction(viewer: Viewer, input: UpdateTransaction
     }
     return result.after;
   });
+}
+
+// rincian split harus berjumlah sama dengan nominal (trigger deferred); tolak lebih awal dengan pesan yang jelas
+async function assertSplitsStillValid(tx: Tx, current: TransactionRow, merged: { amount: bigint; kind: string }): Promise<void> {
+  if (merged.amount === current.amount && merged.kind === current.kind) return;
+  const [split] = await tx.select({ id: transactionSplits.id }).from(transactionSplits).where(eq(transactionSplits.transactionId, current.id)).limit(1);
+  if (!split) return;
+  throw new DomainError(
+    "split_locked",
+    "Transaksi ini dipecah ke beberapa kategori, jadi nominal dan jenisnya tidak bisa diubah dari sini. Hapus transaksi lalu catat ulang dari foto struk, atau ubah kategori dan catatannya saja.",
+  );
 }
 
 export async function deleteTransaction(
